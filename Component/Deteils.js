@@ -32,7 +32,7 @@ const Deteils = ({ visible, setvisible, deteils }) => {
               justifyContent: "flex-end",
             }}
           >
-            <Text style={{ fontSize: 19 }}>deteils.name</Text>
+            <Text style={{ fontSize: 19 }}>{deteils.name}</Text>
             <Text
               style={{ fontWeight: "bold", color: "#3B3A7A", fontSize: 19 }}
             >
@@ -49,7 +49,7 @@ const Deteils = ({ visible, setvisible, deteils }) => {
               justifyContent: "flex-end",
             }}
           >
-            <Text style={{ fontSize: 19 }}>deteils.description</Text>
+            <Text style={{ fontSize: 19 }}>{deteils.desc}</Text>
             <Text
               style={{ fontWeight: "bold", color: "#3B3A7A", fontSize: 19 }}
             >
@@ -66,7 +66,7 @@ const Deteils = ({ visible, setvisible, deteils }) => {
               justifyContent: "flex-end",
             }}
           >
-            <Text style={{ fontSize: 19 }}>deteils.date</Text>
+            <Text style={{ fontSize: 19 }}>{deteils.time.substring(0, 10)}</Text>
             <Text
               style={{ fontWeight: "bold", color: "#3B3A7A", fontSize: 19 }}
             >
@@ -83,7 +83,7 @@ const Deteils = ({ visible, setvisible, deteils }) => {
               justifyContent: "flex-end",
             }}
           >
-            <Text style={{ fontSize: 19 }}>deteils.money</Text>
+            <Text style={{ fontSize: 19 }}>{deteils.valueTask}</Text>
             <Text
               style={{ fontWeight: "bold", color: "#3B3A7A", fontSize: 19 }}
             >

@@ -47,7 +47,7 @@ const Card = ({ total, url, cardHolder }) => {
       <View style={styles.cardFooter}>
         <View>
           <Text style={styles.cardHolderName}>Card holder</Text>
-          <Text style={styles.cardName}>MRS. {cardHolder} </Text>
+          <Text style={styles.cardName}>MR. {cardHolder} </Text>
         </View>
         <Image source={require("../assets/card_icon.png")} />
       </View>

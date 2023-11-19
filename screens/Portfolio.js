@@ -7,7 +7,7 @@ import axios from "axios";
 import { ContextGlobal } from "../Store";
 import { Ionicons } from "@expo/vector-icons";
 import { Modal } from "react-native";
-const API_URL = "http://192.168.43.79:3000/api";
+const API_URL = "http://192.168.1.66:3000/api";
 
 const Portfolio = ({ navigation }) => {
   const Context = useContext(ContextGlobal);
@@ -19,9 +19,10 @@ const Portfolio = ({ navigation }) => {
   useEffect(() => {
     async function fetchData() {
       try {
-        const response = await axios.get(`${API_URL}/child`);
+        const response = await axios.get(`${API_URL}/task/notCmopletaed`);
         if (response.data && Array.isArray(response.data)) {
-          setChaild(response.data);
+          setTasks(response.data)
+          
         } else {
           console.error("Invalid data format");
         }
@@ -42,7 +43,7 @@ const Portfolio = ({ navigation }) => {
     {
       type: "بدني",
       name: "ممارسة الرياضة",
-      date: "12/12/2026",
+      time: "12/12/2026",
       money: "24",
       ischecked: false,
       description: "بلا بلا بلا بلا ",
@@ -50,7 +51,7 @@ const Portfolio = ({ navigation }) => {
     {
       type: "بدني ",
       name: "ممارسة الرياضة aaaa",
-      date: "12/12/2026",
+      time: "12/12/2026",
       money: "24",
       ischecked: false,
       description: "بلا بلا بلا بلا ",
@@ -58,7 +59,7 @@ const Portfolio = ({ navigation }) => {
     {
       type: "بدني",
       name: "ممارسة الرياضة",
-      date: "12/12/2026",
+      time: "12/12/2026",
       money: "24",
       ischecked: false,
       description: "بلا بلا بلا بلا ",
@@ -66,7 +67,7 @@ const Portfolio = ({ navigation }) => {
     {
       type: "بدني",
       name: "ممارسة الرياضة",
-      date: "12/12/2026",
+      time: "12/12/2026",
       money: "24",
       ischecked: false,
       description: "بلا بلا بلا بلا ",
@@ -74,7 +75,7 @@ const Portfolio = ({ navigation }) => {
     {
       type: "بدني",
       name: "ممارسة الرياضة",
-      date: "12/12/2026",
+      time: "12/12/2026",
       money: "24",
       ischecked: false,
       description: "بلا بلا بلا بلا ",

@@ -16,7 +16,7 @@ import {
 import male from "../assets/male.png";
 import female from "../assets/female.png";
 import family from "../assets/family.png";
-const API_URL = "http://192.168.43.79:3000/api";
+const API_URL = "http://192.168.1.66:3000/api";
 
 import Transfer from "../Component/Transfer";
 import PropTransfer from "../Component/PropTransfer";
@@ -26,14 +26,18 @@ const Prices = ({ navigation }) => {
   const [chaild, setChaild] = useState([]);
   const [loading, setLoading] = useState(true);
   const token = Context.token;
-  const user = Context.user;
+  const user = Context.loggedInChild;
 
   useEffect(() => {
     async function fetchData() {
       try {
         const response = await axios.get(`${API_URL}/child`);
         if (response.data && Array.isArray(response.data)) {
-          setChaild(response.data);
+          const data = response.data.filter(e => {
+            console.log({pxy :e.parentId, pyx: user.parentId});
+            return e.parentId === user.parentId && e._id !== user._id;
+          })
+          setChaild(data);
         } else {
           console.error("Invalid data format");
         }
@@ -142,32 +146,10 @@ const Prices = ({ navigation }) => {
           }}
         />
       </View>
-      <View
-        style={{
-          flex: 1,
-          marginTop: 20,
-          marginRight: 30,
-        }}
-      >
-        <TouchableOpacity
-          onPress={() => {
-            navigation.navigate("CreateChild");
-          }}
-          style={{
-            flexDirection: "row",
-            justifyContent: "flex-end",
-            alignItems: "center",
-            gap: 10,
-          }}
-        >
-          <Text style={{ fontSize: 20, color: "#3B3A7A" }}>اضافة أخ</Text>
-          <Ionicons name="add-circle-outline" size={35} color={"#2C2B66D6"} />
-        </TouchableOpacity>
-      </View>
 
       <View style={{ flex: 3, padding: 10 }}>
         <View style={{ width: "100%", gap: 10 }}>
-          {[1].map((item, index) => (
+          {chaild.map((item, index) => (
             // <TouchableOpacity
             //   onPress={() =>
             //     navigation.navigate("ChildQr", {
@@ -178,8 +160,6 @@ const Prices = ({ navigation }) => {
             <TouchableOpacity
               onPress={() =>
                 navigation.navigate("ProfileChild", {
-                  token: token,
-                  IdChaild: item._id,
                   item: item,
                 })
               }
@@ -209,11 +189,11 @@ const Prices = ({ navigation }) => {
                 ) : (
                   <Image source={female} style={{ height: 70, width: 70 }} />
                 )}
-                <Text style={{ fontSize: 22, color: "#fff" }}>طلال</Text>
+                <Text style={{ fontSize: 22, color: "#fff" }}>{item.name}</Text>
               </View>
               <View>
-                <Text style={{ fontSize: 20, color: "#fff" }}>{item.name}</Text>
-                <Text style={{ fontSize: 20, color: "#fff" }}>100.00 SR</Text>
+                <Text style={{ fontSize: 20, color: "#fff" }}>{item.currentAccount}</Text>
+                <Text style={{ fontSize: 20, color: "#fff" }}>{item.savingAccount}</Text>
               </View>
             </TouchableOpacity>
           ))}

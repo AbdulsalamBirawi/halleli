@@ -22,7 +22,8 @@ const HomeScreen = ({ navigation }) => {
   const Context = useContext(ContextGlobal);
   const [isModalVisible, setModalVisible] = useState(false);
   const [isLogout, setisLogout] = useState(false);
-  const user = Context.user;
+  const user = Context.loggedInChild;
+
 
   const toggleModal = () => {
     setModalVisible(!isModalVisible);
@@ -77,12 +78,15 @@ const HomeScreen = ({ navigation }) => {
       {/* TouchableOpacity for navigating to VisaScreen */}
       <TouchableOpacity
         onPress={() => {
-          navigation.navigate("VisaScreen");
+          navigation.navigate("VisaScreen", {
+            item: user,
+            childData: JSON.stringify(user),
+          });
         }}
         style={styles.counterCard}
       >
         {/* Render the Card component with specific props */}
-        <Card url={icons2} total={500} />
+        <Card url={icons2} total={user.currentAccount} cardHolder={user.name} />
       </TouchableOpacity>
 
       {/* Text for the savings account */}
@@ -91,12 +95,15 @@ const HomeScreen = ({ navigation }) => {
       {/* TouchableOpacity for navigating to SavingsScreen */}
       <TouchableOpacity
         onPress={() => {
-          navigation.navigate("SavingsScreen");
+          navigation.navigate("SavingsScreen", {
+            item :user,
+            childData: {}
+          });
         }}
         style={styles.counterCard}
       >
         {/* Render the Card component with specific props */}
-        <Card url={icons} total={950} />
+        <Card url={icons} total={user.savingAccount} cardHolder={user.name} />
       </TouchableOpacity>
       <View
         style={{

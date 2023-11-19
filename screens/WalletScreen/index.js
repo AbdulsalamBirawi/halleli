@@ -9,18 +9,11 @@ import { styles } from "./style"; // Importing styles from an external file
 
 // WalletScreen component that displays various elements
 const WalletScreen = ({ route, navigation }) => {
-  const { IdChaild, token, item, childData } = route.params;
+  const { item, childData } = route.params;
   const child = JSON.parse(childData);
   // Data for displaying wallet transactions
   const data = [
-    { title: "شراء لعبة ", date: "اليوم", price: 50, total: 500 },
-    {
-      title: "شراء حلويات ",
-      date: "01-06-2023",
-      price: 30,
-      total: 550,
-    },
-    { title: "شراء لعبة ", date: "25-05-2023", price: 70, total: 580 },
+    
   ];
 
   return (
@@ -47,8 +40,8 @@ const WalletScreen = ({ route, navigation }) => {
       <View style={styles.counterCard}>
         <Card
           url={icons2}
-          total={child?.child?.currentAccount}
-          cardHolder={child?.child?.name}
+          total={child?.child?.currentAccount || item.currentAccount}
+          cardHolder={child?.child?.name || item.name}
         />
       </View>
       {/* Text for displaying the latest transfers */}

@@ -3,7 +3,7 @@ import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as SecureStore from "expo-secure-store";
 
-const API_URL = "http://192.168.43.79:3000/api";
+const API_URL = "http://192.168.1.66:3000/api";
 export const ContextGlobal = React.createContext();
 
 const ContextData = (props) => {
@@ -14,11 +14,15 @@ const ContextData = (props) => {
   const [auth, setAuth] = useState(false);
   const [open, setOpen] = useState(false);
   const [user, setUser] = useState([]);
+  const [loggedInChild, setLoggedInChild] = useState(null);
   const [isFirstTime, setIsFirstTime] = useState(true);
   const [isParent, setIsParent] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [child, setChild] = useState(null);
 
   async function getData() {
     try {
+
       const retrievedValue = await SecureStore.getItemAsync("auth");
 
       setToken(retrievedValue);
@@ -50,28 +54,34 @@ const ContextData = (props) => {
     }
   }
 
-  const getChild = async () => {
+  const getChild = async (user) => {
     try {
       const response = await axios.get(`${API_URL}/child`);
+
       if (response.data && Array.isArray(response.data)) {
         const finalChild = response.data.filter(
           (item) => item.parentId == user._id
         );
-        setChaild(response.data);
+        console.log({response: response.data, user: {od: user._id, id: user._id}});
+        setChaild(finalChild);
       } else {
         console.error("Invalid data format");
       }
     } catch (error) {
       console.error("Error fetching data:", error);
     } finally {
-      setLoading(false);
+      //setLoading(false);
     }
   };
 
   useEffect(() => {
-    getData();
+    (async () => {
 
-    getme();
+      await getData();
+      if (token){
+        await getme();
+      }
+    })();
   }, [token]);
 
   const handleLogin = async ({ email, password }) => {
@@ -113,19 +123,11 @@ const ContextData = (props) => {
         config
       );
 
-      const response2 = await axios.get(`${API_URL}/child`);
-      if (response2.data && Array.isArray(response2.data)) {
-        const finalChild = response2.data.filter(
-          (item) => item.parentId == user._id
-        );
-        if (finalChild.length > 0) {
-          setIsFirstTime(false);
-        }
-      }
-
-      setUser(response.data);
+      await getChild(response.data)
+      setUser(response.data); 
+      setIsFirstTime(response.data.firstTime)
       setIsParent(true);
-
+      setIsLoading(false);
       return response.data;
     } catch (error) {
       console.error("حدث خطأ أثناء  :", error);
@@ -168,6 +170,14 @@ const ContextData = (props) => {
         user,
         isFirstTime,
         isParent,
+        isLoading,
+        chaild,
+        setIsParent,
+        loggedInChild, 
+        setLoggedInChild,
+        setIsLoading,
+        child, 
+        setChild
       }}
     >
       {props.children}

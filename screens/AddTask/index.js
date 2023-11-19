@@ -6,14 +6,24 @@ import {
   Image,
   Modal,
 } from "react-native";
-import React, { useState } from "react";
+import DatePicker from '@react-native-community/datetimepicker';
+
+import React, { useContext, useState } from "react";
 import { Input } from "../../Component/TextInput";
 import female from "../../assets/female.png";
 import SetPrices from "../../Component/setPrices";
 import { ScrollView } from "react-native";
 import { CheckBox } from "react-native-elements";
 import { Button } from "../../Component/Button";
-export default function AddTask() {
+import { ContextGlobal } from "../../Store";
+import { useNavigation } from '@react-navigation/native';
+import {DeviceEventEmitter} from "react-native"
+
+import axios from "axios";
+export default function AddTask({setReload}) {
+  const navigation = useNavigation();
+  
+
   // const PROP = [
   //   {
   //     key: "female",
@@ -34,14 +44,19 @@ export default function AddTask() {
     { label: "تطوعية", value: 3 },
   ];
   const [selectedValue, setSelectedValue] = useState(null);
+  const [selectedChild, setSelectedChild] = useState(null);
   const [isModalVisible, setModalVisible] = useState(false);
   const [submited, setsubmited] = useState(false);
   const [newTask, setNewTask] = useState({
     taskType: null,
     taskName: "",
     mony: "",
-    date: "",
+    date: new Date(),
   });
+  const context = useContext(ContextGlobal);
+  const isChild = !context.isParent;
+  const childrens = context.chaild;
+  const [showDatePicker, setShowDatePicker] = useState(false);
   const toggleModal = () => {
     setModalVisible(!isModalVisible);
     setsubmited(false);
@@ -50,7 +65,30 @@ export default function AddTask() {
     setSelectedValue(value === selectedValue ? null : value);
     setNewTask({ ...newTask, taskType: selectedValue });
   };
-  const handelSubmit = () => {
+  const currentDate = new Date();
+
+  const handleDateChange = (e, date) => {
+    setShowDatePicker(false);
+    console.log({date});
+    if (date !== undefined) {
+      setNewTask({ ...newTask, date: date });
+    }
+  };
+  const handelSubmit =async () => {
+    if (isChild) {
+      const data = {desc: newTask.desc, typeTask: selectedValue, name: newTask.taskName, time: newTask.date, valueTask: newTask.mony, childId: context.loggedInChild._id};
+      await axios.post('http://192.168.1.66:3000/api/requesttask', data);
+      DeviceEventEmitter.emit('tasks->reload', {reload: true});
+      navigation.goBack(); 
+      setsubmited(true);
+      return;
+    }
+    const data = {desc: newTask.desc, typeTask: selectedValue, name: newTask.taskName, time: newTask.date, valueTask: newTask.mony, childId: selectedChild};
+    await axios.post('http://192.168.1.66:3000/api/task', data, {headers: {
+      Authorization: "Bearer " + context.token,
+    },})
+    navigation.goBack(); 
+    DeviceEventEmitter.emit('tasks->reload', {reload: true});
     setsubmited(true);
   };
   return (
@@ -89,7 +127,7 @@ export default function AddTask() {
         >
           {options.map((option) => (
             <CheckBox
-              key={option.value}
+              key={option.label}
               title={option.label}
               checked={option.value === selectedValue}
               onPress={() => handleCheckboxChange(option.value)}
@@ -124,6 +162,16 @@ export default function AddTask() {
           backColor={"#fff"}
         />
       </View>
+      <View style={{ marginTop: 20, marginTop: 20 }}>
+        <Text style={{ textAlign: "right", color: "#3B3A7A", fontSize: 22 }}>
+ وصف المهمة
+        </Text>
+        <Input
+          onChangeText={(e) => setNewTask({ ...newTask, desc: e })}
+          placeholder={"وصف"}
+          backColor={"#fff"}
+        />
+      </View>
 
       {/*  */}
       <View style={{ marginTop: 10 }}>
@@ -131,6 +179,7 @@ export default function AddTask() {
           المبلغ المستحق
         </Text>
         <Input
+          keyboardType='phone-pad'
           onChangeText={(e) => setNewTask({ ...newTask, mony: e })}
           placeholder={"المبلغ المستحق"}
           backColor={"#fff"}
@@ -141,12 +190,31 @@ export default function AddTask() {
           اخر موعد لانجاز المهمة{" "}
         </Text>
         <Input
-          onChangeText={(e) => setNewTask({ ...newTask, date: e })}
-          placeholder={"اخر موعد لانجاز المهمة"}
-          backColor={"#fff"}
-        />
+        value={newTask.date.toISOString().split('T')[0]}
+        placeholder="اختر تاريخ"
+        style={{ borderBottomWidth: 1, marginBottom: 10 }}
+        onFocus={() => setShowDatePicker(true)}
+        
+      />
+        {showDatePicker && <DatePicker
+          minimumDate={new Date()}
+          value={newTask.date}
+          mode="date"
+          display="default"
+          onChange={handleDateChange}
+        />}
       </View>
-
+      {!isChild && <View>
+      <Text style={{ textAlign: "right", color: "#3B3A7A", fontSize: 22 }}>
+              اختر الطفل
+        </Text>
+            {childrens.map(option =>  <CheckBox
+              key={option._id}
+              title={option.name}
+              checked={option._id === selectedChild}
+              onPress={() => {setSelectedChild(option._id === selectedChild ? null :option._id)}}
+            />)}
+      </View>}
       <TouchableOpacity
         style={{
           justifyContent: "center",

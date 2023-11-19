@@ -8,17 +8,10 @@ import icons from "../../assets/card_visa_bg.png";
 import { styles } from "./style"; // Importing styles from an external file
 
 // SavingsScreen component that displays various elements
-const SavingsScreen = () => {
-  // Data for displaying savings transactions
+const SavingsScreen = ({route, navigation}) => {
+  const { item, childData } = route.params;
   const data = [
-    { title: "إضافة رصيد", date: "اليوم", price: 30, total: 500 },
-    {
-      title: "إضافة رصيد",
-      date: "01-06-2023",
-      price: 30,
-      total: 550,
-    },
-    { title: "إضافة رصيد", date: "25-05-2023", price: 70, total: 580 },
+  
   ];
 
   return (
@@ -29,21 +22,14 @@ const SavingsScreen = () => {
           <Ionicons name="ios-settings-outline" size={24} color="black" />
           <Ionicons name="notifications-outline" size={24} color="black" />
         </View>
-        <Text style={{ textAlign: "right", fontSize: 30, padding: 10 }}>
-          اهلا بك ... ريما!
-        </Text>
-      </View>
-      {/* Horizontal lines */}
-      <View style={{ flexDirection: "row" }}>
-        <View style={styles.viewLine} />
-        <View style={styles.viewLined} />
+        
       </View>
       {/* Text for the savings account */}
       <Text style={styles.textCom}>الحساب الادخار</Text>
 
       {/* Display the savings card */}
       <View style={styles.counterCard}>
-        <Card url={icons} total={950} />
+        <Card cardHolder={item?.name} url={icons} total={item?.savingAccount} />
       </View>
       {/* Text for displaying the latest transfers */}
       <Text style={styles.textNewCome}>احدث التحويلات</Text>

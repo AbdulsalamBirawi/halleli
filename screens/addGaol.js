@@ -1,10 +1,14 @@
-import { View, Text, TouchableOpacity, TextInput } from "react-native";
+import { View, Text, TouchableOpacity, TextInput, DeviceEventEmitter } from "react-native";
 import { CheckBox } from "react-native-elements";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Input } from "../Component/TextInput";
 import { Button } from "../Component/Button";
 import RadioButton from "../Component/RadioButton";
 import CheckboxGroup from "react-native-checkbox-group";
+import { ContextGlobal } from "../Store";
+import axios from "axios";
+import { useNavigation } from '@react-navigation/native';
+const API_URL = "http://192.168.1.66:3000/api";
 
 export default function AddGoal() {
   const [newGoal, setnewGoal] = useState({
@@ -21,13 +25,27 @@ export default function AddGoal() {
     { label: "عالية", value: 3 },
   ];
 
+  const context = useContext(ContextGlobal);
+  const navigate = useNavigation();
   const [selectedValue, setSelectedValue] = useState(null);
-
   const handleCheckboxChange = (value) => {
     setSelectedValue(value === selectedValue ? null : value);
     setnewGoal({ ...newGoal, typeGoal: selectedValue });
   };
-  console.log(newGoal);
+  const handleSubmit = async () => {
+
+    const data = {
+      typeGoal: newGoal.typeGoal || selectedValue,
+      name : newGoal.name,
+      valueGoal: newGoal.valueGoal,
+      childId: context.loggedInChild._id
+    };
+    console.log({data});
+    await axios.post(`${API_URL}/goal`, data)
+    navigate.goBack();
+    DeviceEventEmitter.emit('goal->reload', {reload: true})
+    
+  }
   return (
     <View
       style={{
@@ -85,9 +103,10 @@ export default function AddGoal() {
       {/*  */}
       <View style={{ marginTop: 10 }}>
         <Text style={{ textAlign: "right", color: "#fff", fontSize: 22 }}>
-          اسم هدفك{" "}
+        القيمة
         </Text>
         <Input
+        keyboardType='numeric'
           onChangeText={(e) => setnewGoal({ ...newGoal, valueGoal: e })}
           placeholder={"قيمة الهدف"}
           backColor={"#fff"}
@@ -131,6 +150,7 @@ export default function AddGoal() {
           borderRadius: 20,
           marginTop: 100,
         }}
+        onPress={() => handleSubmit()}
       >
         <Text>حفظ الهدف</Text>
       </TouchableOpacity>

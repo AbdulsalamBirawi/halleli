@@ -57,10 +57,14 @@ function RooteTab() {
   // }
   const Context = useContext(ContextGlobal);
   const user = Context.user;
+  const isLoading = Context.isLoading;
   // const Parent = Context.Parent;
-  const Parent = false;
-  // Context.isParent;
+  const Parent = Context.isParent;
+  if (isLoading) {
+    return <View></View>   
+  }
   return (
+    
     <Tab.Navigator
       screenOptions={{
         tabBarStyle: { direction: "rtl" }, // تحديد اتجاه العرض
@@ -280,7 +284,7 @@ function RooteStack() {
         name="ScannerScreen"
         component={ScannerScreen}
         options={({ navigation, route }) => ({
-          title: "ResetPass",
+          title: "Scanner",
           headerShown: true,
           headerTitleAlign: "center",
           headerTitleStyle: {

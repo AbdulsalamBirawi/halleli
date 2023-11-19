@@ -8,7 +8,7 @@ import { ContextGlobal } from "../Store";
 import male from "../assets/male.png";
 import female from "../assets/female.png";
 import { Input } from "../Component/TextInput";
-const API_URL = "http://192.168.43.79:3000/api";
+const API_URL = "http://192.168.1.66:3000/api";
 
 const Transaction = ({ navigation }) => {
   const Context = useContext(ContextGlobal);

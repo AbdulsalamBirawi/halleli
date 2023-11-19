@@ -7,12 +7,13 @@ import {
   Modal,
   StyleSheet,
   ScrollView,
+  DeviceEventEmitter,
 } from "react-native";
 import { Button } from "../Component/Button";
 import axios from "axios";
 import { ContextGlobal } from "../Store";
 import { Ionicons } from "@expo/vector-icons";
-const API_URL = "http://192.168.43.79:3000/api";
+const API_URL = "http://192.168.1.66:3000/api";
 import { Input } from "../Component/TextInput";
 const Goal = ({ navigation }) => {
   const Context = useContext(ContextGlobal);
@@ -22,7 +23,9 @@ const Goal = ({ navigation }) => {
   const [chaild, setChaild] = useState([]);
   const [loading, setLoading] = useState(true);
   const [goal, setGoal] = useState(false);
-
+  const [goals, setGoals] = useState([]);
+  const [reload, setReload] = useState(false);
+  const user = Context.loggedInChild;
   const toggleModal = () => {
     setModalVisible(!modalVisible);
   };
@@ -30,9 +33,18 @@ const Goal = ({ navigation }) => {
   useEffect(() => {
     async function fetchData() {
       try {
-        const response = await axios.get(`${API_URL}/child`);
+        const response = await axios.get(`${API_URL}/goal`);
         if (response.data && Array.isArray(response.data)) {
-          setChaild(response.data);
+          const options = [
+            { label: "منخفضة", value: 1 },
+            { label: "متوسطة", value: 2 },
+            { label: "عالية", value: 3 },
+          ];
+          setGoals(response.data.map(e => ({
+            ...e,
+            typeGoal: options.find(x => x.value === e.typeGoal)?.value
+
+          })));
         } else {
           console.error("Invalid data format");
         }
@@ -42,18 +54,26 @@ const Goal = ({ navigation }) => {
         setLoading(false);
       }
     }
+    DeviceEventEmitter.addListener('goal->reload', ()=> {
+      setReload(e => !e);
+    });
 
     fetchData();
-  }, []);
+    return () => {
+      DeviceEventEmitter.removeAllListeners();
+    }
+  }, [reload]);
   const token = Context.token;
-  const user = Context.user;
   const finalChild = chaild.filter((item) => item.parentId == user._id);
 
   const handelSubmit = () => {
     setGoal(true);
   };
-  const handelDeletGoal = () => {
+  const handelDeletGoal = async () => {
+    await axios.delete(`${API_URL}/goal/${deleteGoal}`);
+    setReload(e => !e);
     setdeleteGoal(false);
+    
   };
 
   const handelClose = () => {
@@ -76,8 +96,9 @@ const Goal = ({ navigation }) => {
       }}
     >
       <View style={{ flex: 3, padding: 10, gap: 10 }}>
-        {[1, 2, 3].map((item, index) => (
+        {goals.map((item, index) => (
           <View
+          key={item._id}
             style={{
               flexDirection: "row",
               height: 100,
@@ -92,7 +113,7 @@ const Goal = ({ navigation }) => {
               paddingVertical: 20,
             }}
           >
-            <TouchableOpacity onPress={() => setdeleteGoal(true)}>
+            <TouchableOpacity onPress={() => setdeleteGoal(item._id)}>
               <Ionicons size={25} color={"white"} name="close-circle" />
             </TouchableOpacity>
             <TouchableOpacity
@@ -106,11 +127,12 @@ const Goal = ({ navigation }) => {
                 width: "80%",
               }}
             >
-              <Text style={{ color: "#fff", fontSize: 20 }}>3000</Text>
+              <Text style={{ color: "#fff", fontSize: 20 }}>{item.valueGoal}</Text>
               <View>
-                <Text style={{ color: "#fff", fontSize: 20 }}>دراجة</Text>
+                <Text style={{ color: "#fff", fontSize: 20 }}>{item.name}</Text>
                 <Text style={{ color: "#fff", fontSize: 20 }}>
-                  أولوية عالية
+                {item.typeGoal}
+
                 </Text>
               </View>
             </TouchableOpacity>
@@ -268,7 +290,7 @@ const Goal = ({ navigation }) => {
         <Modal
           animationType="slide"
           transparent={true}
-          visible={deleteGoal}
+          visible={!!deleteGoal}
           onRequestClose={() => toggleModal(null)}
         >
           <View

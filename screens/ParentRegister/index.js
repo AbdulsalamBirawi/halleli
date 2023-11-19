@@ -16,7 +16,7 @@ import user from "../../assets/user.png";
 import Loader from "../../Component/Loader";
 import SuccessTost from "../../Component/SuccessTost";
 
-const API_URL = "http://192.168.43.79:3000/api";
+const API_URL = "http://192.168.1.66:3000/api";
 
 const ParentRegister = ({ navigation }) => {
   const PROP = [
@@ -148,7 +148,7 @@ const ParentRegister = ({ navigation }) => {
           <FontAwesome name="lock" size={25} color="#AAAA" />
         </Input>
 
-        <RadioButton PROP={PROP} onValueChange={(text) => setGender(text)} />
+        
 
         <Button Title={"تسجيل جديد "} onPress={handleLogin} />
       </View>

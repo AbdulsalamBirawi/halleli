@@ -1,10 +1,11 @@
 import { View, Text, Image } from "react-native";
-import React from "react";
+import React, { useState } from "react";
 import { Button } from "../../Component/Button";
 import { Input } from "../../Component/TextInput";
 import Ellipse from "../../assets/Ellipse.png";
 
 const Welcome = ({ navigation }) => {
+  const [token, setToken] = useState('');
   return (
     <View style={{ flex: 1, padding: 10, backgroundColor: "#fff" }}>
       <Image
@@ -40,6 +41,7 @@ const Welcome = ({ navigation }) => {
           Title={"تسجيل الدخول بالباركود"}
           onPress={() => navigation.navigate("ScannerScreen")}
         />
+        
       </View>
     </View>
   );

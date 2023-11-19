@@ -16,7 +16,7 @@ import {
 import male from "../../assets/male.png";
 import female from "../../assets/female.png";
 import family from "../../assets/family.png";
-const API_URL = "http://192.168.43.79:3000/api";
+const API_URL = "http://192.168.1.66:3000/api";
 
 const AddChild = ({ navigation }) => {
   const Context = useContext(ContextGlobal);

@@ -16,7 +16,7 @@ import { ContextGlobal } from "../Store/index";
 
 import { Input } from "./TextInput";
 import axios from "axios";
-const Transfer = ({ visible = false, Title, childId }) => {
+const Transfer = ({ visible = false, Title, childId, setVisible, setReload }) => {
   const { width, height } = useWindowDimensions();
   const Context = useContext(ContextGlobal);
   const [mony, setMony] = useState("");
@@ -24,12 +24,14 @@ const Transfer = ({ visible = false, Title, childId }) => {
   const setOpen = Context.setOpen;
   const payToChild = async () => {
     const res = await axios.post(
-      `http://192.168.43.79:3000/api/transaction/fromFather/${childId}`,
+      `http://192.168.1.66:3000/api/transaction/fromFather/${childId}`,
       {
         amount: mony,
       }
     );
-    console.log(res);
+    setVisible(false);
+    setReload(p => !p);
+    setMony(undefined);
   };
 
   return (

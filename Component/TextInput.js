@@ -21,7 +21,8 @@ export function Input({
   inputs,
   backColor,
   onChange,
-
+  editable,
+defaultValue,
   onFocus = () => {},
   ...props
 }) {
@@ -49,10 +50,12 @@ export function Input({
         {/* <Image source={Icon} style={{ height: 30, width: 30 }} /> */}
         {props.children}
         <TextInput
+        defaultValue={defaultValue}
           autoCapitalize="none"
           autoCorrect
+          editable={editable}
           onFocus={() => {
-            //   // onFocus();
+             onFocus();
             setIsFocused(true);
           }}
           onBlur={() => {

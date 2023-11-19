@@ -21,11 +21,12 @@ const ProfileChild = ({ route, navigation }) => {
   const open = Context.open;
   const setOpen = Context.setOpen;
   const [child, setChild] = useState(undefined);
-
+  const [reload, setReload] = useState(false);
   const getChildById = async () => {
     const res = await axios.get(
-      `http://192.168.43.79:3000/api/child/child/${IdChaild}`
+      `http://192.168.1.66:3000/api/child/child/${IdChaild}`
     );
+    console.log({res: res.data});
     const Child = res.data;
     console.log(Child);
     setChild(Child);
@@ -33,11 +34,12 @@ const ProfileChild = ({ route, navigation }) => {
 
   useEffect(() => {
     getChildById();
-  }, []);
+  }, [reload]);
 
   return (
     <ScrollView style={[styles.container]}>
-      <Transfer childId={IdChaild} visible={open} />
+      
+      <Transfer setReload={setReload} setVisible={setOpen} childId={IdChaild} visible={open} />
       <Image
         source={Ellipse}
         style={{
