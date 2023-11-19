@@ -13,7 +13,7 @@ import { Button } from "../Component/Button";
 import axios from "axios";
 import { ContextGlobal } from "../Store";
 import { Ionicons } from "@expo/vector-icons";
-const API_URL = "http://192.168.1.66:3000/api";
+const API_URL = "http://192.168.112.211:3000/api";
 import { Input } from "../Component/TextInput";
 const Goal = ({ navigation }) => {
   const Context = useContext(ContextGlobal);
@@ -25,6 +25,9 @@ const Goal = ({ navigation }) => {
   const [goal, setGoal] = useState(false);
   const [goals, setGoals] = useState([]);
   const [reload, setReload] = useState(false);
+  const [accountType, setaccountType] = useState("");
+  const [GoalId, setGoalId] = useState("");
+  const [ammuntToAdd, setammuntToAdd] = useState(null);
   const user = Context.loggedInChild;
   const toggleModal = () => {
     setModalVisible(!modalVisible);
@@ -40,11 +43,12 @@ const Goal = ({ navigation }) => {
             { label: "متوسطة", value: 2 },
             { label: "عالية", value: 3 },
           ];
-          setGoals(response.data.map(e => ({
-            ...e,
-            typeGoal: options.find(x => x.value === e.typeGoal)?.value
-
-          })));
+          setGoals(
+            response.data.map((e) => ({
+              ...e,
+              typeGoal: options.find((x) => x.value === e.typeGoal)?.value,
+            }))
+          );
         } else {
           console.error("Invalid data format");
         }
@@ -54,36 +58,44 @@ const Goal = ({ navigation }) => {
         setLoading(false);
       }
     }
-    DeviceEventEmitter.addListener('goal->reload', ()=> {
-      setReload(e => !e);
+    DeviceEventEmitter.addListener("goal->reload", () => {
+      setReload((e) => !e);
     });
 
     fetchData();
     return () => {
       DeviceEventEmitter.removeAllListeners();
-    }
+    };
   }, [reload]);
   const token = Context.token;
   const finalChild = chaild.filter((item) => item.parentId == user._id);
 
   const handelSubmit = () => {
     setGoal(true);
+    ChangeGoalValue();
   };
   const handelDeletGoal = async () => {
     await axios.delete(`${API_URL}/goal/${deleteGoal}`);
-    setReload(e => !e);
+    setReload((e) => !e);
     setdeleteGoal(false);
-    
+  };
+  const handelPress = (GoalId) => {
+    setGoalId(GoalId);
+    setGoal(false);
+    setModalVisible(true);
+  };
+  const ChangeGoalValue = async () => {
+    const res = await axios.put(`${API_URL}/goal/updatedGoalValue/${GoalId}`, {
+      accountType: accountType,
+      amount: ammuntToAdd,
+    });
+    setReload((e) => !e);
+    console.log(res);
   };
 
   const handelClose = () => {
     setModalVisible(false);
     setGoal(false);
-  };
-
-  const handelPress = () => {
-    setGoal(false);
-    setModalVisible(true);
   };
 
   return (
@@ -98,7 +110,7 @@ const Goal = ({ navigation }) => {
       <View style={{ flex: 3, padding: 10, gap: 10 }}>
         {goals.map((item, index) => (
           <View
-          key={item._id}
+            key={item._id}
             style={{
               flexDirection: "row",
               height: 100,
@@ -118,7 +130,7 @@ const Goal = ({ navigation }) => {
             </TouchableOpacity>
             <TouchableOpacity
               onPress={() => {
-                handelPress();
+                handelPress(item._id);
               }}
               style={{
                 flexDirection: "row",
@@ -127,12 +139,18 @@ const Goal = ({ navigation }) => {
                 width: "80%",
               }}
             >
-              <Text style={{ color: "#fff", fontSize: 20 }}>{item.valueGoal}</Text>
+              <Text style={{ color: "#fff", fontSize: 20 }}>
+                {item.valueGoal}
+              </Text>
               <View>
                 <Text style={{ color: "#fff", fontSize: 20 }}>{item.name}</Text>
                 <Text style={{ color: "#fff", fontSize: 20 }}>
-                {item.typeGoal}
-
+                  {/* {item.typeGoal} */}
+                  {item.typeGoal == 1
+                    ? "عالية"
+                    : item.typeGoal == 2
+                    ? "متوسطة"
+                    : "منخفضة"}
                 </Text>
               </View>
             </TouchableOpacity>
@@ -184,28 +202,30 @@ const Goal = ({ navigation }) => {
                   style={{ display: "flex", flexDirection: "row", gap: 10 }}
                 >
                   <TouchableOpacity
+                    onPress={() => setaccountType("savingAccount")}
                     style={{
                       backgroundColor: "#3B3A7A",
                       paddingHorizontal: 30,
                       borderRadius: 10,
                       display: "block",
+                      paddingVertical: 10,
                       alignItems: "center",
                     }}
                   >
                     <Text style={{ color: "white" }}>حساب الادخار</Text>
-                    <Text style={{ color: "white" }}>200</Text>
                   </TouchableOpacity>
                   <TouchableOpacity
+                    onPress={() => setaccountType("currentAccount")}
                     style={{
                       backgroundColor: "#5A5859",
                       paddingHorizontal: 30,
                       borderRadius: 10,
                       display: "block",
+                      paddingVertical: 10,
                       alignItems: "center",
                     }}
                   >
                     <Text style={{ color: "white" }}>حساب الجاري</Text>
-                    <Text style={{ color: "white" }}>200</Text>
                   </TouchableOpacity>
                 </View>
                 <Text
@@ -220,7 +240,10 @@ const Goal = ({ navigation }) => {
                 >
                   اختر المبلغ المراد اضافته
                 </Text>
-                <Input placeholder={"المبلغ"}></Input>
+                <Input
+                  onChangeText={(e) => setammuntToAdd(e)}
+                  placeholder={"المبلغ"}
+                ></Input>
                 <View
                   style={{
                     display: "flex",

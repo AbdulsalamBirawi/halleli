@@ -1,5 +1,12 @@
 import React, { useState } from "react";
-import { Text, View, TouchableOpacity, Image, Modal, DeviceEventEmitter } from "react-native";
+import {
+  Text,
+  View,
+  TouchableOpacity,
+  Image,
+  Modal,
+  DeviceEventEmitter,
+} from "react-native";
 import female from "../../assets/female.png";
 import Ellipse from "../../assets/Ellipse.png";
 import {
@@ -19,10 +26,10 @@ import axios from "axios";
 import { useEffect } from "react";
 import { useContext } from "react";
 import { ContextGlobal } from "../../Store";
-import DatePicker from '@react-native-community/datetimepicker';
+import DatePicker from "@react-native-community/datetimepicker";
 
 export default RootTask = ({ navigation }) => {
-  const api = "http://192.168.1.66:3000/api";
+  const api = "http://192.168.112.211:3000/api";
   const options = [
     { label: "بدنية", value: 1 },
     { label: "عقلية", value: 2 },
@@ -30,7 +37,6 @@ export default RootTask = ({ navigation }) => {
   ];
   const context = useContext(ContextGlobal);
   const user = context.user;
-
 
   const [editTask, setEditTask] = useState({
     taskType: null,
@@ -45,7 +51,7 @@ export default RootTask = ({ navigation }) => {
   const [editTypeTask, setEditTypeTask] = useState(null);
   const [tasks, setTasks] = useState([]);
   const [reload, setReload] = useState(false);
-  const [ showDatePicker , setShowDatePicker] = useState(false);
+  const [showDatePicker, setShowDatePicker] = useState(false);
   const [latestsTasks, setLatestTasks] = useState([]);
   const [submited, setsubmited] = useState({
     edit: false,
@@ -57,46 +63,51 @@ export default RootTask = ({ navigation }) => {
   });
   const [requestTasksData, setrequestTasksData] = useState([]);
 
-  
   const getRequestTasks = async () => {
     const res = await axios.get(`${api}/requesttask`);
     const requsetTasks = res.data;
-    console.log({requsetTasks});
+    console.log({ requsetTasks });
     // console.log(requsetTasks);
     setrequestTasksData(requsetTasks);
   };
 
   const getTasks = async () => {
     const res = await axios.get(`${api}/task`, {
-      headers: {Authorization: "Bearer " + context.token,}
+      headers: { Authorization: "Bearer " + context.token },
     });
-    const sortedTasks = res.data.map(e => ({
-      ...e,
-      typeTask: options.find(x => x.value === e.typeTask)?.label,
-      child: e.childId.name
-    })).sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+    const sortedTasks = res.data
+      .map((e) => ({
+        ...e,
+        typeTask: options.find((x) => x.value === e.typeTask)?.label,
+        child: e.childId.name,
+      }))
+      .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
     setTasks(sortedTasks);
 
-    const {data} = await axios.get(`${api}/task/notCmopletaed`, {
-      headers: {Authorization: "Bearer " + context.token,}
+    const { data } = await axios.get(`${api}/task/notCmopletaed`, {
+      headers: { Authorization: "Bearer " + context.token },
     });
-    setLatestTasks(data.map(e => ({
-      ...e,
-      typeTask: options.find(x => x.value === e.typeTask).label,
-      child: e.childId.name
-    }).sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))))
-  }
+    setLatestTasks(
+      data.map((e) =>
+        ({
+          ...e,
+          typeTask: options.find((x) => x.value === e.typeTask).label,
+          child: e.childId.name,
+        }.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)))
+      )
+    );
+  };
 
   useEffect(() => {
-    DeviceEventEmitter.addListener('tasks->reload',d=> {
-      console.log({d});
-      setReload(r =>!r);
-    })
+    DeviceEventEmitter.addListener("tasks->reload", (d) => {
+      console.log({ d });
+      setReload((r) => !r);
+    });
     getRequestTasks();
-    getTasks()
+    getTasks();
     return () => {
       DeviceEventEmitter.removeAllListeners();
-    }
+    };
   }, [reload]);
 
   const handleCheckboxChange = (value) => {
@@ -104,25 +115,31 @@ export default RootTask = ({ navigation }) => {
     //setediteTask({ ...editTask, taskType: editTypeTask });
   };
 
-  const handelDeletTask =async () => {
-    console.log({deletTask});
+  const handelDeletTask = async () => {
+    console.log({ deletTask });
     const id = deletTask;
     await axios.delete(`${api}/task/${id}`, {
-      headers: {Authorization: "Bearer " + context.token,}
+      headers: { Authorization: "Bearer " + context.token },
     });
-    setReload(r => !r);
+    setReload((r) => !r);
     setdeletTask(false);
     setsubmited({ ...submited, delet: true });
   };
   const handelEditeTask = async () => {
-
     const newTask = editeTask;
-    const data = {desc: newTask.desc || viewTask.desc, typeTask: editTypeTask, name: newTask.taskName || viewTask.name, time: newTask.date|| viewTask.time, valueTask: newTask.mony|| viewTask.valueTask, childId: editeTask.childId._id};
+    const data = {
+      desc: newTask.desc || viewTask.desc,
+      typeTask: editTypeTask,
+      name: newTask.taskName || viewTask.name,
+      time: newTask.date || viewTask.time,
+      valueTask: newTask.mony || viewTask.valueTask,
+      childId: editeTask.childId._id,
+    };
     const id = viewTask._id;
     await axios.put(`${api}/task/${id}`, data, {
-      headers: {Authorization: "Bearer " + context.token,}
-    })
-    setReload(r => !r)
+      headers: { Authorization: "Bearer " + context.token },
+    });
+    setReload((r) => !r);
     setediteTask(false);
 
     setsubmited({ ...submited, edit: true });
@@ -130,12 +147,12 @@ export default RootTask = ({ navigation }) => {
   const [viewTask, setViewTask] = useState({});
   const handleDateChange = (e, date) => {
     setShowDatePicker(false);
-    console.log({date});
+    console.log({ date });
     if (date !== undefined) {
       setediteTask({ ...editeTask, date: date });
     }
   };
-  
+
   return (
     <View>
       <Deteils visible={visible} setvisible={setVisible} deteils={viewTask} />
@@ -204,7 +221,6 @@ export default RootTask = ({ navigation }) => {
                 <TouchableOpacity
                   onPress={() => {
                     setVisible(true);
-                    
                   }}
                   style={{
                     height: 100,
@@ -246,12 +262,10 @@ export default RootTask = ({ navigation }) => {
                   </View>
                   <View style={{ gap: 2 }}>
                     <TouchableOpacity
-                      onPress={async () =>
-                        {
-                          await axios.get(`${api}/requesttask/${item._id}`);
-                          setReload(r => !r);
-                    }
-                      }
+                      onPress={async () => {
+                        await axios.get(`${api}/requesttask/${item._id}`);
+                        setReload((r) => !r);
+                      }}
                       style={{
                         height: 30,
                         width: 40,
@@ -264,12 +278,10 @@ export default RootTask = ({ navigation }) => {
                       <Text style={{ color: "#fff" }}>قبول</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
-                      onPress={async () =>
-                        {
-                          await axios.delete(`${api}/requesttask/${item._id}`);
-                          setReload(r => !r);
-                        }
-                      }
+                      onPress={async () => {
+                        await axios.delete(`${api}/requesttask/${item._id}`);
+                        setReload((r) => !r);
+                      }}
                       style={{
                         height: 30,
                         width: 40,
@@ -368,47 +380,49 @@ export default RootTask = ({ navigation }) => {
                 resizeMode: "contain",
               }}
             /> */}
-            {latestsTasks.length > 0 && (<View style={{ flex: 1.5, gap: 10 }}>
-              <Text style={{ textAlign: "right", fontSize: 20 }}>
-                احدث المهام المنجزة
-              </Text>
-              {latestsTasks.map((item, index) => (
-                <View
-                  style={{
-                    height: 100,
-                    width: "100%",
-                    borderWidth: 1,
-                    flexDirection: "row-reverse",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                    padding: 10,
-                    borderRadius: 10,
-                    backgroundColor: "lightgreen",
-                  }}
-                >
+            {latestsTasks.length > 0 && (
+              <View style={{ flex: 1.5, gap: 10 }}>
+                <Text style={{ textAlign: "right", fontSize: 20 }}>
+                  احدث المهام المنجزة
+                </Text>
+                {latestsTasks.map((item, index) => (
                   <View
-                    style={{ justifyContent: "center", alignItems: "center" }}
+                    style={{
+                      height: 100,
+                      width: "100%",
+                      borderWidth: 1,
+                      flexDirection: "row-reverse",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                      padding: 10,
+                      borderRadius: 10,
+                      backgroundColor: "lightgreen",
+                    }}
                   >
-                    <Image
-                      source={female}
-                      style={{ height: 70, width: 70, resizeMode: "contain" }}
-                    />
-                  </View>
-                  <View style={{}}>
-                    <Text style={{ fontSize: 23, textAlign: "right" }}>
-                      {item.child}
-                    </Text>
-
-                    <Text
-                      style={{ fontSize: 18, width: 200, textAlign: "right" }}
+                    <View
+                      style={{ justifyContent: "center", alignItems: "center" }}
                     >
-                      {item.desc}
-                    </Text>
+                      <Image
+                        source={female}
+                        style={{ height: 70, width: 70, resizeMode: "contain" }}
+                      />
+                    </View>
+                    <View style={{}}>
+                      <Text style={{ fontSize: 23, textAlign: "right" }}>
+                        {item.child}
+                      </Text>
+
+                      <Text
+                        style={{ fontSize: 18, width: 200, textAlign: "right" }}
+                      >
+                        {item.desc}
+                      </Text>
+                    </View>
+                    <View style={{ gap: 2 }}></View>
                   </View>
-                  <View style={{ gap: 2 }}></View>
-                </View>
-              ))}
-            </View>)}
+                ))}
+              </View>
+            )}
             <View style={{ flex: 2, gap: 10 }}>
               <Text style={{ textAlign: "right", fontSize: 20 }}>
                 المهام المستندة
@@ -464,7 +478,10 @@ export default RootTask = ({ navigation }) => {
                       <Text style={{ color: "#fff" }}>حدف</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
-                      onPress={() => {setediteTask(item); setViewTask(item)}}
+                      onPress={() => {
+                        setediteTask(item);
+                        setViewTask(item);
+                      }}
                       style={{
                         height: 30,
                         width: 40,
@@ -643,7 +660,10 @@ export default RootTask = ({ navigation }) => {
                           <CheckBox
                             key={option.value}
                             title={option.label}
-                            checked={option.value === (editTypeTask) || (option.label === editeTask?.typeTask)}
+                            checked={
+                              option.value === editTypeTask ||
+                              option.label === editeTask?.typeTask
+                            }
                             onPress={() => handleCheckboxChange(option.value)}
                           />
                         ))}
@@ -660,14 +680,13 @@ export default RootTask = ({ navigation }) => {
                         اسم المهمة{" "}
                       </Text>
                       <Input
-                        onChangeText={(e) =>
-                          {setediteTask(x => {
-                            console.log({asdadsad: x});
-                            return { ...x, taskName: e }
-                          })
-                          console.log({editeTask});
-                          }
-                        }
+                        onChangeText={(e) => {
+                          setediteTask((x) => {
+                            console.log({ asdadsad: x });
+                            return { ...x, taskName: e };
+                          });
+                          console.log({ editeTask });
+                        }}
                         defaultValue={editeTask?.name}
                         placeholder={"اسم المهمة"}
                         backColor={"#fff"}
@@ -685,10 +704,9 @@ export default RootTask = ({ navigation }) => {
                       </Text>
                       <Input
                         onChangeText={(e) =>
-                          setediteTask(x => {
-                            console.log({'asdasdas': x});
-                            return { ...x, desc: e }
-
+                          setediteTask((x) => {
+                            console.log({ asdasdas: x });
+                            return { ...x, desc: e };
                           })
                         }
                         defaultValue={editeTask?.desc}
@@ -727,20 +745,26 @@ export default RootTask = ({ navigation }) => {
                       >
                         اخر موعد لانجاز المهمة{" "}
                       </Text>
-                      
-                     <Input
-                        defaultValue={new Date(editeTask?.time || Date.now())?.toISOString()?.split('T')?.[0]}
+
+                      <Input
+                        defaultValue={
+                          new Date(editeTask?.time || Date.now())
+                            ?.toISOString()
+                            ?.split("T")?.[0]
+                        }
                         placeholder="اختر تاريخ"
                         style={{ borderBottomWidth: 1, marginBottom: 10 }}
                         onFocus={() => setShowDatePicker(true)}
-                  />
-                    {showDatePicker && <DatePicker
-                      minimumDate={new Date() }
-                      value={new Date(editeTask?.date || Date.now())}
-                      mode="date"
-                      display="default"
-                      onChange={handleDateChange}
-                    />}
+                      />
+                      {showDatePicker && (
+                        <DatePicker
+                          minimumDate={new Date()}
+                          value={new Date(editeTask?.date || Date.now())}
+                          mode="date"
+                          display="default"
+                          onChange={handleDateChange}
+                        />
+                      )}
                     </View>
 
                     <View

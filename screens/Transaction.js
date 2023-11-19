@@ -8,30 +8,57 @@ import { ContextGlobal } from "../Store";
 import male from "../assets/male.png";
 import female from "../assets/female.png";
 import { Input } from "../Component/TextInput";
-const API_URL = "http://192.168.1.66:3000/api";
+const API_URL = "http://192.168.112.211:3000/api";
 
 const Transaction = ({ navigation }) => {
   const Context = useContext(ContextGlobal);
-
   const [chaild, setChaild] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [BroId, setBroId] = useState("");
   const [isModalVisible, setModalVisible] = useState(false);
+  const [monyToBrother, setmonyToBrother] = useState(0);
   const [isTrans, setisTrans] = useState(false);
+  const [toCurrentAccount, settoCurrentAccount] = useState(false);
+  const [toCurrentAccountValue, settoCurrentAccountValue] = useState(null);
+  const [toSavingAccountValue, settoSavingAccountValue] = useState(null);
   const token = Context.token;
-  const user = Context.user;
-  const toggleModal = () => {
+  const user = Context.loggedInChild;
+  const toggleModal = (BroId) => {
     setModalVisible(!isModalVisible);
+    setBroId(BroId);
     setisTrans(false);
   };
   const handelTrans = () => {
+    transntionToBrother(BroId);
     setisTrans(true);
+  };
+  const transntionToBrother = async (broId) => {
+    const res = await axios.post(`${API_URL}/transaction`, {
+      sender: user._id,
+      receiver: broId,
+      amount: monyToBrother,
+    });
+
+    console.log(res);
+  };
+  const transferInternal = async () => {
+    const res = await axios.post(`${API_URL}/transaction/${user._id}`, {
+      from: toCurrentAccount ? "savingAccount" : "currentAccount",
+      to: toCurrentAccount ? "currentAccount" : "savingAccount",
+      amount: toCurrentAccount ? toCurrentAccountValue : toSavingAccountValue,
+    });
+    console.log(res);
   };
   useEffect(() => {
     async function fetchData() {
       try {
         const response = await axios.get(`${API_URL}/child`);
         if (response.data && Array.isArray(response.data)) {
-          setChaild(response.data);
+          const data = response.data.filter((e) => {
+            console.log({ pxy: e.parentId, pyx: user.parentId });
+            return e.parentId === user.parentId && e._id !== user._id;
+          });
+          setChaild(data);
         } else {
           console.error("Invalid data format");
         }
@@ -99,7 +126,7 @@ const Transaction = ({ navigation }) => {
       >
         <View style={{ flexDirection: "row", gap: 5, padding: 10 }}></View>
         <Text style={{ textAlign: "right", fontSize: 30, padding: 10 }}>
-          اهلا بك ... ريما!
+          اهلا بك ... {user.name}!
         </Text>
       </View>
       {/* Horizontal lines */}
@@ -125,22 +152,10 @@ const Transaction = ({ navigation }) => {
       <View style={{ flex: 3, padding: 10, marginVertical: 30 }}>
         <View style={{ width: "100%", gap: 10 }}>
           {chaild.map((item, index) => (
-            // <TouchableOpacity
-            //   onPress={() =>
-            //     navigation.navigate("ChildQr", {
-            //       token: token,
-            //       IdChaild: item._id,
-            //     })
-            //   }
             <TouchableOpacity
-              // onPress={() =>
-              //   navigation.navigate("ProfileChild", {
-              //     token: token,
-              //     IdChaild: item._id,
-              //     item: item,
-              //   })
-              // }
-              onPress={() => toggleModal()}
+              onPress={() => {
+                toggleModal(item._id);
+              }}
               key={index} // Add a key for each item in the map
               style={{
                 height: 80,
@@ -164,8 +179,29 @@ const Transaction = ({ navigation }) => {
               </View>
             </TouchableOpacity>
           ))}
+          <Button
+            onPress={() => settoCurrentAccount(false)}
+            Title={"التحويل الى حساب الادخار"}
+          />
+          <Button
+            onPress={() => settoCurrentAccount(true)}
+            Title={"التحويل الى حساب الجاري"}
+          />
+          {toCurrentAccount ? (
+            <View>
+              <Text>التحويل الى الحساب الجاري </Text>
+              <Input onChangeText={(e) => settoCurrentAccountValue(e)} />
+            </View>
+          ) : (
+            <View>
+              <Text>التحويل الى الحساب الادخار </Text>
+              <Input onChangeText={(e) => settoSavingAccountValue(e)} />
+            </View>
+          )}
+          <Button Title={"تحويل"} onPress={() => transferInternal()} />
         </View>
       </View>
+
       <View
         style={{
           flex: 1,
@@ -177,7 +213,7 @@ const Transaction = ({ navigation }) => {
           animationType="slide"
           transparent={true}
           visible={isModalVisible}
-          onRequestClose={() => toggleModal(null)}
+          onRequestClose={() => toggleModal()}
         >
           <View
             style={{
@@ -233,7 +269,7 @@ const Transaction = ({ navigation }) => {
                 </Text>
                 <View>
                   <Input
-                    // onChangeText={(e) => setNewTask({ ...newTask, taskName: e })}
+                    onChangeText={(e) => setmonyToBrother(e)}
                     placeholder={"المبلغ التحويل"}
                     backColor={"#fff"}
                   />

@@ -7,7 +7,7 @@ import axios from "axios";
 import { ContextGlobal } from "../Store";
 import { Ionicons } from "@expo/vector-icons";
 import { Modal } from "react-native";
-const API_URL = "http://192.168.1.66:3000/api";
+const API_URL = "http://192.168.112.211:3000/api";
 
 const Portfolio = ({ navigation }) => {
   const Context = useContext(ContextGlobal);
@@ -15,14 +15,16 @@ const Portfolio = ({ navigation }) => {
   const [chaild, setChaild] = useState([]);
   const [loading, setLoading] = useState(true);
   const token = Context.token;
-  const user = Context.user;
+  const user = Context.loggedInChild;
+  const [reload, setReload] = useState(false);
   useEffect(() => {
     async function fetchData() {
       try {
-        const response = await axios.get(`${API_URL}/task/notCmopletaed`);
+        const response = await axios.get(
+          `${API_URL}/task/notCmopletaed?child=${user._id}`
+        );
         if (response.data && Array.isArray(response.data)) {
-          setTasks(response.data)
-          
+          setTasks(response.data);
         } else {
           console.error("Invalid data format");
         }
@@ -34,11 +36,13 @@ const Portfolio = ({ navigation }) => {
     }
 
     fetchData();
-  }, []);
+  }, [reload]);
 
   const finalChild = chaild.filter((item) => item.parentId == user._id);
   const [isModalVisible, setModalVisible] = useState(false);
   const [selectedTaskIndex, setSelectedTaskIndex] = useState(null);
+  const [taskId, settaskId] = useState("");
+  console.log(selectedTaskIndex);
   const [tasks, setTasks] = useState([
     {
       type: "بدني",
@@ -81,17 +85,22 @@ const Portfolio = ({ navigation }) => {
       description: "بلا بلا بلا بلا ",
     },
   ]);
-  const handleCheckboxToggle = (index) => {
-    const updatedTasks = tasks.map((item, i) =>
-      i === index ? { ...item, ischecked: !item.ischecked } : item
-    );
+  const handleCheckboxToggle = (TaskId) => {
+    // const updatedTasks = tasks.map((item, i) =>
+    //   i === index ? { ...item, ischecked: !item.ischecked } : item
+    // );
+    completeTask(TaskId);
 
     // You can use the updatedTasks array for any further processing or set it to state
-    setTasks(updatedTasks);
 
     // Other existing logic for the modal and checkbox
   };
 
+  const completeTask = async (taskId) => {
+    const res = await axios.get(`${API_URL}/task/${taskId}`);
+    setReload((r) => !r);
+    console.log(res);
+  };
   const toggleModal = (index) => {
     setSelectedTaskIndex(index);
     setModalVisible(!isModalVisible);
@@ -150,10 +159,21 @@ const Portfolio = ({ navigation }) => {
                 justifyContent: "space-between",
               }}
             >
-              <CheckBox
-                checked={item.ischecked}
-                onPress={() => handleCheckboxToggle(index)}
-              />
+              {/* <CheckBox
+                checked={item.status}
+                onPress={}
+              /> */}
+              <TouchableOpacity
+                style={{
+                  backgroundColor: "white",
+                  paddingHorizontal: 5,
+                  padding: 7,
+                  borderRadius: 10,
+                }}
+                onPress={() => handleCheckboxToggle(item._id)}
+              >
+                <Text style={{ color: "#3B3A7A", fontSize: 20 }}>اكتملت</Text>
+              </TouchableOpacity>
               <TouchableOpacity
                 style={{
                   width: "80%",
@@ -165,7 +185,7 @@ const Portfolio = ({ navigation }) => {
                 onPress={() => toggleModal(index)}
               >
                 <View>
-                  <Text style={{ color: "#fff" }}>{item.money} SAR</Text>
+                  <Text style={{ color: "#fff" }}>{item.valueTask} SAR</Text>
                 </View>
                 <View style={{}}>
                   <Text
@@ -237,13 +257,13 @@ const Portfolio = ({ navigation }) => {
                   اسم المهمة: {tasks[selectedTaskIndex]?.name}
                 </Text>
                 <Text style={{ fontSize: 20, color: "#3B3A7A" }}>
-                  تفاصيل المهمة : {tasks[selectedTaskIndex]?.description}
+                  تفاصيل المهمة : {tasks[selectedTaskIndex]?.desc}
                 </Text>
                 <Text style={{ fontSize: 20, color: "#3B3A7A" }}>
-                  الوقت النهائي : {tasks[selectedTaskIndex]?.date}
+                  الوقت النهائي : {Date(tasks[selectedTaskIndex]?.time)}
                 </Text>
                 <Text style={{ fontSize: 20, color: "#3B3A7A" }}>
-                  المبلغ المستحق : {tasks[selectedTaskIndex]?.money}
+                  المبلغ المستحق : {tasks[selectedTaskIndex]?.valueTask}
                 </Text>
               </View>
               <Button Title={"اغلاق"} onPress={() => toggleModal(null)} />

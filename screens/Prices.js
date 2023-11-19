@@ -16,7 +16,7 @@ import {
 import male from "../assets/male.png";
 import female from "../assets/female.png";
 import family from "../assets/family.png";
-const API_URL = "http://192.168.1.66:3000/api";
+const API_URL = "http://192.168.112.211:3000/api";
 
 import Transfer from "../Component/Transfer";
 import PropTransfer from "../Component/PropTransfer";
@@ -25,6 +25,7 @@ const Prices = ({ navigation }) => {
 
   const [chaild, setChaild] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [isBrother, setisBrother] = useState(false);
   const token = Context.token;
   const user = Context.loggedInChild;
 
@@ -33,10 +34,10 @@ const Prices = ({ navigation }) => {
       try {
         const response = await axios.get(`${API_URL}/child`);
         if (response.data && Array.isArray(response.data)) {
-          const data = response.data.filter(e => {
-            console.log({pxy :e.parentId, pyx: user.parentId});
+          const data = response.data.filter((e) => {
+            console.log({ pxy: e.parentId, pyx: user.parentId });
             return e.parentId === user.parentId && e._id !== user._id;
-          })
+          });
           setChaild(data);
         } else {
           console.error("Invalid data format");
@@ -113,14 +114,6 @@ const Prices = ({ navigation }) => {
               navigation.navigate("PerentLogout");
             }}
           />
-          <Ionicons
-            name="notifications-outline"
-            size={24}
-            color="black"
-            onPress={() => {
-              navigation.navigate("AddChild");
-            }}
-          />
         </View>
         <Text style={{ textAlign: "right", fontSize: 30, padding: 10 }}>
           أخوتي
@@ -158,11 +151,13 @@ const Prices = ({ navigation }) => {
             //     })
             //   }
             <TouchableOpacity
-              onPress={() =>
+              onPress={() => {
+                setisBrother(true);
                 navigation.navigate("ProfileChild", {
                   item: item,
-                })
-              }
+                  isBrother: isBrother,
+                });
+              }}
               key={index} // Add a key for each item in the map
               style={{
                 height: 80,
@@ -192,8 +187,12 @@ const Prices = ({ navigation }) => {
                 <Text style={{ fontSize: 22, color: "#fff" }}>{item.name}</Text>
               </View>
               <View>
-                <Text style={{ fontSize: 20, color: "#fff" }}>{item.currentAccount}</Text>
-                <Text style={{ fontSize: 20, color: "#fff" }}>{item.savingAccount}</Text>
+                <Text style={{ fontSize: 20, color: "#fff" }}>
+                  {item.currentAccount}
+                </Text>
+                <Text style={{ fontSize: 20, color: "#fff" }}>
+                  {item.savingAccount}
+                </Text>
               </View>
             </TouchableOpacity>
           ))}

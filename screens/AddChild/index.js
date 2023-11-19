@@ -16,13 +16,14 @@ import {
 import male from "../../assets/male.png";
 import female from "../../assets/female.png";
 import family from "../../assets/family.png";
-const API_URL = "http://192.168.1.66:3000/api";
+const API_URL = "http://192.168.112.211:3000/api";
 
 const AddChild = ({ navigation }) => {
   const Context = useContext(ContextGlobal);
 
   const [chaild, setChaild] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [isBrother, setisBrother] = useState(false);
   const token = Context.token;
   const user = Context.user;
 
@@ -166,13 +167,15 @@ const AddChild = ({ navigation }) => {
             //     })
             //   }
             <TouchableOpacity
-              onPress={() =>
+              onPress={() => {
+                setisBrother(false);
                 navigation.navigate("ProfileChild", {
                   token: token,
                   IdChaild: item._id,
                   item: item,
-                })
-              }
+                  isBrother: isBrother,
+                });
+              }}
               key={index} // Add a key for each item in the map
               style={{
                 height: 80,
@@ -192,7 +195,9 @@ const AddChild = ({ navigation }) => {
               )}
               <View>
                 <Text style={{ fontSize: 20, color: "#fff" }}>{item.name}</Text>
-                <Text style={{ fontSize: 20, color: "#fff" }}>100.00 SR</Text>
+                <Text style={{ fontSize: 20, color: "#fff" }}>
+                  {item.currentAccount} SR
+                </Text>
               </View>
             </TouchableOpacity>
           ))}

@@ -5,7 +5,7 @@ import { ContextGlobal } from "../../Store";
 import SuccessTost from "../../Component/SuccessTost";
 import axios from "axios";
 
-const API_URL = "http://192.168.1.66:3000/api";
+const API_URL = "http://192.168.112.211:3000/api";
 
 export default function ScannerScreen({ navigation }) {
   const [hasPermission, setHasPermission] = useState(null);
@@ -15,7 +15,6 @@ export default function ScannerScreen({ navigation }) {
 
   const Context = useContext(ContextGlobal);
   const saveData = Context.saveData;
-  
 
   useEffect(() => {
     async function fetchData() {
@@ -32,7 +31,6 @@ export default function ScannerScreen({ navigation }) {
         setLoder(false);
       }
     }
-    
 
     fetchData();
   }, []);
@@ -49,8 +47,8 @@ export default function ScannerScreen({ navigation }) {
     setScanned(true);
     // alert(`Bar code with type ${type} and data ${data} has been scanned!`);
     const datas = JSON.parse(data);
-    console.log({datas});
-    const childs = chaild.filter((chaild) => chaild._id=== datas.IdChaild);
+    console.log({ datas });
+    const childs = chaild.filter((chaild) => chaild._id === datas.IdChaild);
     Context.setIsLoading(false);
     if (childs) {
       Context.setIsParent(false);

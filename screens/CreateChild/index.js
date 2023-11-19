@@ -11,7 +11,7 @@ import { Input } from "../../Component/TextInput";
 import RadioButton from "../../Component/RadioButton";
 import Ellipse from "../../assets/Ellipse.png";
 import Loader from "../../Component/Loader";
-export const API_URL = "http://192.168.1.66:3000/api";
+export const API_URL = "http://192.168.112.211:3000/api";
 import axios from "axios";
 import { ContextGlobal } from "../../Store";
 

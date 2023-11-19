@@ -3,7 +3,7 @@ import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as SecureStore from "expo-secure-store";
 
-const API_URL = "http://192.168.1.66:3000/api";
+const API_URL = "http://192.168.112.211:3000/api";
 export const ContextGlobal = React.createContext();
 
 const ContextData = (props) => {
@@ -22,7 +22,6 @@ const ContextData = (props) => {
 
   async function getData() {
     try {
-
       const retrievedValue = await SecureStore.getItemAsync("auth");
 
       setToken(retrievedValue);
@@ -62,7 +61,10 @@ const ContextData = (props) => {
         const finalChild = response.data.filter(
           (item) => item.parentId == user._id
         );
-        console.log({response: response.data, user: {od: user._id, id: user._id}});
+        console.log({
+          response: response.data,
+          user: { od: user._id, id: user._id },
+        });
         setChaild(finalChild);
       } else {
         console.error("Invalid data format");
@@ -76,9 +78,8 @@ const ContextData = (props) => {
 
   useEffect(() => {
     (async () => {
-
       await getData();
-      if (token){
+      if (token) {
         await getme();
       }
     })();
@@ -123,9 +124,9 @@ const ContextData = (props) => {
         config
       );
 
-      await getChild(response.data)
-      setUser(response.data); 
-      setIsFirstTime(response.data.firstTime)
+      await getChild(response.data);
+      setUser(response.data);
+      setIsFirstTime(response.data.firstTime);
       setIsParent(true);
       setIsLoading(false);
       return response.data;
@@ -173,11 +174,11 @@ const ContextData = (props) => {
         isLoading,
         chaild,
         setIsParent,
-        loggedInChild, 
+        loggedInChild,
         setLoggedInChild,
         setIsLoading,
-        child, 
-        setChild
+        child,
+        setChild,
       }}
     >
       {props.children}

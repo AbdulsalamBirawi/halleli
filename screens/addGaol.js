@@ -1,4 +1,10 @@
-import { View, Text, TouchableOpacity, TextInput, DeviceEventEmitter } from "react-native";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  TextInput,
+  DeviceEventEmitter,
+} from "react-native";
 import { CheckBox } from "react-native-elements";
 import React, { useContext, useState } from "react";
 import { Input } from "../Component/TextInput";
@@ -7,8 +13,8 @@ import RadioButton from "../Component/RadioButton";
 import CheckboxGroup from "react-native-checkbox-group";
 import { ContextGlobal } from "../Store";
 import axios from "axios";
-import { useNavigation } from '@react-navigation/native';
-const API_URL = "http://192.168.1.66:3000/api";
+import { useNavigation } from "@react-navigation/native";
+const API_URL = "http://192.168.112.211:3000/api";
 
 export default function AddGoal() {
   const [newGoal, setnewGoal] = useState({
@@ -33,19 +39,17 @@ export default function AddGoal() {
     setnewGoal({ ...newGoal, typeGoal: selectedValue });
   };
   const handleSubmit = async () => {
-
     const data = {
       typeGoal: newGoal.typeGoal || selectedValue,
-      name : newGoal.name,
+      name: newGoal.name,
       valueGoal: newGoal.valueGoal,
-      childId: context.loggedInChild._id
+      childId: context.loggedInChild._id,
     };
-    console.log({data});
-    await axios.post(`${API_URL}/goal`, data)
+    console.log({ data });
+    await axios.post(`${API_URL}/goal`, data);
     navigate.goBack();
-    DeviceEventEmitter.emit('goal->reload', {reload: true})
-    
-  }
+    DeviceEventEmitter.emit("goal->reload", { reload: true });
+  };
   return (
     <View
       style={{
@@ -103,10 +107,10 @@ export default function AddGoal() {
       {/*  */}
       <View style={{ marginTop: 10 }}>
         <Text style={{ textAlign: "right", color: "#fff", fontSize: 22 }}>
-        القيمة
+          القيمة
         </Text>
         <Input
-        keyboardType='numeric'
+          keyboardType="numeric"
           onChangeText={(e) => setnewGoal({ ...newGoal, valueGoal: e })}
           placeholder={"قيمة الهدف"}
           backColor={"#fff"}

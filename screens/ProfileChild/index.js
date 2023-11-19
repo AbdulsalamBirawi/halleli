@@ -16,7 +16,7 @@ import { ContextGlobal } from "../../Store/index";
 import axios from "axios";
 // HomeScreen component that displays various elements
 const ProfileChild = ({ route, navigation }) => {
-  const { IdChaild, token, item } = route.params;
+  const { IdChaild, token, item, isBrother } = route.params;
   const Context = useContext(ContextGlobal);
   const open = Context.open;
   const setOpen = Context.setOpen;
@@ -24,9 +24,9 @@ const ProfileChild = ({ route, navigation }) => {
   const [reload, setReload] = useState(false);
   const getChildById = async () => {
     const res = await axios.get(
-      `http://192.168.1.66:3000/api/child/child/${IdChaild}`
+      `http://192.168.112.211:3000/api/child/child/${IdChaild}`
     );
-    console.log({res: res.data});
+    console.log({ res: res.data });
     const Child = res.data;
     console.log(Child);
     setChild(Child);
@@ -38,8 +38,12 @@ const ProfileChild = ({ route, navigation }) => {
 
   return (
     <ScrollView style={[styles.container]}>
-      
-      <Transfer setReload={setReload} setVisible={setOpen} childId={IdChaild} visible={open} />
+      <Transfer
+        setReload={setReload}
+        setVisible={setOpen}
+        childId={IdChaild}
+        visible={open}
+      />
       <Image
         source={Ellipse}
         style={{
@@ -111,11 +115,7 @@ const ProfileChild = ({ route, navigation }) => {
         style={styles.counterCard}
       >
         {/* Render the Card component with specific props */}
-        <Card
-          url={icons2}
-          total={child?.child?.currentAccount}
-          cardHolder={child?.child?.name}
-        />
+        <Card url={icons2} total={item.currentAccount} cardHolder={item.name} />
       </TouchableOpacity>
 
       {/* Text for the savings account */}
@@ -129,57 +129,55 @@ const ProfileChild = ({ route, navigation }) => {
         style={styles.counterCard}
       >
         {/* Render the Card component with specific props */}
-        <Card
-          url={icons}
-          total={child?.child?.savingAccount}
-          cardHolder={child?.child?.name}
-        />
+        <Card url={icons} total={item.savingAccount} cardHolder={item.name} />
       </TouchableOpacity>
-      <View
-        style={{
-          flexDirection: "row",
-          justifyContent: "space-between",
-          padding: 20,
-          marginTop: 10,
-          gap: 10,
-        }}
-      >
-        <TouchableOpacity
-          onPress={() => {
-            setOpen(true);
-          }}
+      {isBrother == false && (
+        <View
           style={{
-            height: 50,
-            width: "50%",
-            backgroundColor: "#3B3A7A",
-            justifyContent: "center",
-            alignItems: "center",
-            borderRadius: 20,
             flexDirection: "row",
-            gap: 5,
+            justifyContent: "space-between",
+            padding: 20,
+            marginTop: 10,
+            gap: 10,
           }}
         >
-          <Text style={{ color: "#fff" }}>تحويل المصروف الشهري</Text>
-          <Image source={transfer} />
-        </TouchableOpacity>
-        <TouchableOpacity
-          onPress={() => {
-            setOpen(true);
-          }}
-          style={{
-            height: 50,
-            width: "50%",
-            backgroundColor: "#3B3A7A",
-            justifyContent: "center",
-            alignItems: "center",
-            borderRadius: 20,
-            flexDirection: "row",
-          }}
-        >
-          <Text style={{ color: "#fff" }}>تحويل مبلغ</Text>
-          <Image source={set} />
-        </TouchableOpacity>
-      </View>
+          <TouchableOpacity
+            onPress={() => {
+              setOpen(true);
+            }}
+            style={{
+              height: 50,
+              width: "50%",
+              backgroundColor: "#3B3A7A",
+              justifyContent: "center",
+              alignItems: "center",
+              borderRadius: 20,
+              flexDirection: "row",
+              gap: 5,
+            }}
+          >
+            <Text style={{ color: "#fff" }}>تحويل المصروف الشهري</Text>
+            <Image source={transfer} />
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              setOpen(true);
+            }}
+            style={{
+              height: 50,
+              width: "50%",
+              backgroundColor: "#3B3A7A",
+              justifyContent: "center",
+              alignItems: "center",
+              borderRadius: 20,
+              flexDirection: "row",
+            }}
+          >
+            <Text style={{ color: "#fff" }}>تحويل مبلغ</Text>
+            <Image source={set} />
+          </TouchableOpacity>
+        </View>
+      )}
     </ScrollView>
   );
 };
