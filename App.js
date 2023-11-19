@@ -61,10 +61,9 @@ function RooteTab() {
   // const Parent = Context.Parent;
   const Parent = Context.isParent;
   if (isLoading) {
-    return <View></View>   
+    return <View></View>;
   }
   return (
-    
     <Tab.Navigator
       screenOptions={{
         tabBarStyle: { direction: "rtl" }, // تحديد اتجاه العرض
