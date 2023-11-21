@@ -83,7 +83,7 @@ export default function AddTask({ setReload }) {
         valueTask: newTask.mony,
         childId: context.loggedInChild._id,
       };
-      await axios.post("http://192.168.112.211:3000/api/requesttask", data);
+      await axios.post("http://192.168.43.79:3000/api/requesttask", data);
       DeviceEventEmitter.emit("tasks->reload", { reload: true });
       navigation.goBack();
       setsubmited(true);
@@ -97,7 +97,7 @@ export default function AddTask({ setReload }) {
       valueTask: newTask.mony,
       childId: selectedChild,
     };
-    await axios.post("http://192.168.112.211:3000/api/task", data, {
+    await axios.post("http://192.168.43.79:3000/api/task", data, {
       headers: {
         Authorization: "Bearer " + context.token,
       },

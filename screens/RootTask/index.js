@@ -9,14 +9,7 @@ import {
 } from "react-native";
 import female from "../../assets/female.png";
 import Ellipse from "../../assets/Ellipse.png";
-import {
-  AntDesign,
-  Entypo,
-  MaterialIcons,
-  Ionicons,
-  FontAwesome,
-  FontAwesome5,
-} from "@expo/vector-icons";
+import { Ionicons } from "@expo/vector-icons";
 import Deteils from "../../Component/Deteils";
 import { ScrollView } from "react-native";
 import { CheckBox } from "react-native-elements";
@@ -29,7 +22,7 @@ import { ContextGlobal } from "../../Store";
 import DatePicker from "@react-native-community/datetimepicker";
 
 export default RootTask = ({ navigation }) => {
-  const api = "http://192.168.112.211:3000/api";
+  const api = "http://192.168.43.79:3000/api";
   const options = [
     { label: "بدنية", value: 1 },
     { label: "عقلية", value: 2 },

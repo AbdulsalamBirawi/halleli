@@ -1,14 +1,22 @@
 import React, { useEffect, useState, useContext } from "react";
-import { View, Text, Image, TouchableOpacity, Modal } from "react-native";
+import {
+  View,
+  Text,
+  Image,
+  TouchableOpacity,
+  Modal,
+  DeviceEventEmitter,
+} from "react-native";
 import { Button } from "../Component/Button";
 import Ellipse from "../assets/Ellipse.png";
 import Loader from "../Component/Loader";
 import axios from "axios";
 import { ContextGlobal } from "../Store";
 import male from "../assets/male.png";
+import { Picker } from "@react-native-picker/picker";
 import female from "../assets/female.png";
 import { Input } from "../Component/TextInput";
-const API_URL = "http://192.168.112.211:3000/api";
+const API_URL = "http://192.168.43.79:3000/api";
 
 const Transaction = ({ navigation }) => {
   const Context = useContext(ContextGlobal);
@@ -18,9 +26,16 @@ const Transaction = ({ navigation }) => {
   const [isModalVisible, setModalVisible] = useState(false);
   const [monyToBrother, setmonyToBrother] = useState(0);
   const [isTrans, setisTrans] = useState(false);
+  const [isInternaltransSucsess, setisInternaltransSucsess] = useState(false);
   const [toCurrentAccount, settoCurrentAccount] = useState(false);
   const [toCurrentAccountValue, settoCurrentAccountValue] = useState(null);
-  const [toSavingAccountValue, settoSavingAccountValue] = useState(null);
+  const [reload, setReload] = useState(false);
+  const [internalTransferModel, setinternalTransferModel] = useState(false);
+  const [selectedAccountType, setSelectedAccountType] =
+    useState("savingAccount");
+  const [selectedTransferAccount, setSelectedTransferAccount] =
+    useState("currentAccount");
+
   const token = Context.token;
   const user = Context.loggedInChild;
   const toggleModal = (BroId) => {
@@ -28,9 +43,17 @@ const Transaction = ({ navigation }) => {
     setBroId(BroId);
     setisTrans(false);
   };
+  const internalToggleModel = () => {
+    setinternalTransferModel(!internalTransferModel);
+    setisInternaltransSucsess(false);
+  };
   const handelTrans = () => {
     transntionToBrother(BroId);
     setisTrans(true);
+  };
+  const handelinternal = () => {
+    setisInternaltransSucsess(true);
+    transferInternal();
   };
   const transntionToBrother = async (broId) => {
     const res = await axios.post(`${API_URL}/transaction`, {
@@ -43,11 +66,13 @@ const Transaction = ({ navigation }) => {
   };
   const transferInternal = async () => {
     const res = await axios.post(`${API_URL}/transaction/${user._id}`, {
-      from: toCurrentAccount ? "savingAccount" : "currentAccount",
-      to: toCurrentAccount ? "currentAccount" : "savingAccount",
-      amount: toCurrentAccount ? toCurrentAccountValue : toSavingAccountValue,
+      from: selectedAccountType,
+      to: selectedTransferAccount,
+      amount: toCurrentAccountValue,
     });
     console.log(res);
+    console.log(selectedAccountType);
+    console.log(selectedTransferAccount);
   };
   useEffect(() => {
     async function fetchData() {
@@ -68,8 +93,14 @@ const Transaction = ({ navigation }) => {
         setLoading(false);
       }
     }
+    // DeviceEventEmitter.addListener("goal->reload", () => {
+    //   setReload((e) => !e);
+    // });
 
     fetchData();
+    // return () => {
+    //   DeviceEventEmitter.removeAllListeners();
+    // };
   }, []);
 
   const finalChild = chaild.filter((item) => item.parentId == user._id);
@@ -91,31 +122,6 @@ const Transaction = ({ navigation }) => {
           resizeMode: "contain",
         }}
       />
-      {/* <View
-        style={{
-          flex: 1,
-          marginTop: 20,
-          marginRight: 30,
-        }}
-      >
-        <Text style={{ textAlign: "right", fontSize: 35, color: "#3B3A7A" }}>
-          مرحبا محمد ..
-        </Text>
-        <TouchableOpacity
-          onPress={() => {
-            navigation.navigate("CreateChild");
-          }}
-          style={{
-            flexDirection: "row",
-            justifyContent: "flex-end",
-            alignItems: "center",
-            gap: 10,
-          }}
-        >
-          <Text style={{ fontSize: 20, color: "#3B3A7A" }}>اضافة المزيد</Text>
-          <Ionicons name="add-circle-outline" size={35} color={"#2C2B66D6"} />
-        </TouchableOpacity>
-      </View> */}
       <View
         style={{
           flexDirection: "row",
@@ -179,7 +185,7 @@ const Transaction = ({ navigation }) => {
               </View>
             </TouchableOpacity>
           ))}
-          <Button
+          {/* <Button
             onPress={() => settoCurrentAccount(false)}
             Title={"التحويل الى حساب الادخار"}
           />
@@ -197,8 +203,13 @@ const Transaction = ({ navigation }) => {
               <Text>التحويل الى الحساب الادخار </Text>
               <Input onChangeText={(e) => settoSavingAccountValue(e)} />
             </View>
-          )}
-          <Button Title={"تحويل"} onPress={() => transferInternal()} />
+          )} */}
+          <Button
+            Title={"تحويل بين الحسابات"}
+            onPress={
+              () => setinternalTransferModel(true) /*transferInternal()*/
+            }
+          />
         </View>
       </View>
 
@@ -297,6 +308,154 @@ const Transaction = ({ navigation }) => {
                   </TouchableOpacity>
                   <TouchableOpacity
                     onPress={() => toggleModal(null)}
+                    style={{
+                      backgroundColor: "red",
+                      paddingHorizontal: 40,
+                      paddingVertical: 10,
+                      borderRadius: 10,
+                    }}
+                  >
+                    <Text style={{ color: "white", fontSize: 15 }}>اغلاق</Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            )}
+          </View>
+        </Modal>
+      </View>
+
+      {/* <Modal
+        animationType="slide"
+        transparent={true}
+        visible={internalTransferModel}
+        onRequestClose={() => setinternalTransferModel(false)}
+      >
+        <View
+          style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+        >
+          <Button Title={"تحويل"} />
+          <Button Title={"إلغاء"} onPress={setinternalTransferModel(false)} />
+        </View>
+      </Modal> */}
+
+      <View
+        style={{
+          flex: 1,
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={internalTransferModel}
+          onRequestClose={() => internalToggleModel()}
+        >
+          <View
+            style={{
+              flex: 1,
+              justifyContent: "center",
+              alignItems: "center",
+              // backgroundColor: "white",
+            }}
+          >
+            {isInternaltransSucsess && (
+              <View
+                style={{
+                  backgroundColor: "white",
+                  padding: 20,
+                  borderRadius: 10,
+                  elevation: 5,
+                }}
+              >
+                <Text
+                  style={{
+                    textAlign: "center",
+                    fontWeight: "600",
+                    fontSize: 20,
+                    marginVertical: 20,
+                  }}
+                >
+                  تم التحويل بنجاح
+                </Text>
+                <Button
+                  onPress={() => internalToggleModel()}
+                  Title={"استمرار"}
+                />
+              </View>
+            )}
+            {isInternaltransSucsess == false && (
+              <View
+                style={{
+                  backgroundColor: "white",
+                  padding: 20,
+                  borderRadius: 10,
+                  elevation: 5,
+                }}
+              >
+                <Text
+                  style={{
+                    color: "#3B3A7A",
+                    fontSize: 20,
+                    marginVertical: 10,
+                    fontWeight: "600",
+                  }}
+                >
+                  التحويل بين الحسابات
+                </Text>
+
+                <View>
+                  <Text>اختر نوع الحساب:</Text>
+
+                  <Picker
+                    selectedValue={selectedAccountType}
+                    onValueChange={(itemValue) =>
+                      setSelectedAccountType(itemValue)
+                    }
+                  >
+                    <Picker.Item label="حساب الادخار" value="savingAccount" />
+                    <Picker.Item label="حساب الجاري" value="currentAccount" />
+                  </Picker>
+
+                  <Text>اختر حساب النقل:</Text>
+
+                  <Picker
+                    selectedValue={selectedTransferAccount}
+                    onValueChange={(itemValue) =>
+                      setSelectedTransferAccount(itemValue)
+                    }
+                  >
+                    <Picker.Item label="حساب الادخار" value="savingAccount" />
+                    <Picker.Item label="حساب الجاري" value="currentAccount" />
+                  </Picker>
+                </View>
+                <View>
+                  <Text>المبلغ</Text>
+                  <Input onChangeText={(e) => settoCurrentAccountValue(e)} />
+                </View>
+                <View
+                  style={{
+                    flexDirection: "row",
+                    width: "100%",
+                    gap: 20,
+                    marginVertical: 20,
+                    marginLeft: 35,
+                    alignItems: "center",
+                  }}
+                >
+                  <TouchableOpacity
+                    onPress={() => handelinternal()}
+                    style={{
+                      backgroundColor: "#3B3A7A",
+                      paddingHorizontal: 40,
+                      paddingVertical: 10,
+                      borderRadius: 10,
+                    }}
+                  >
+                    <Text style={{ color: "white", fontSize: 15 }}>ارسال</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={() => internalToggleModel(null)}
                     style={{
                       backgroundColor: "red",
                       paddingHorizontal: 40,

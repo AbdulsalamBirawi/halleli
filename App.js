@@ -99,7 +99,7 @@ function RooteTab() {
             tabBarIcon: ({ focused }) => {
               return (
                 <Ionicons
-                  name="settings"
+                  name="people-outline"
                   size={24}
                   color={focused ? "#2C2B66D6" : "#111"}
                 />

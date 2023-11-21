@@ -7,7 +7,7 @@ import axios from "axios";
 import { ContextGlobal } from "../Store";
 import { Ionicons } from "@expo/vector-icons";
 import { Modal } from "react-native";
-const API_URL = "http://192.168.112.211:3000/api";
+const API_URL = "http://192.168.43.79:3000/api";
 
 const Portfolio = ({ navigation }) => {
   const Context = useContext(ContextGlobal);
@@ -17,26 +17,26 @@ const Portfolio = ({ navigation }) => {
   const token = Context.token;
   const user = Context.loggedInChild;
   const [reload, setReload] = useState(false);
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        const response = await axios.get(
-          `${API_URL}/task/notCmopletaed?child=${user._id}`
-        );
-        if (response.data && Array.isArray(response.data)) {
-          setTasks(response.data);
-        } else {
-          console.error("Invalid data format");
-        }
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      } finally {
-        setLoading(false);
-      }
-    }
+  // useEffect(() => {
+  //   async function fetchData() {
+  //     try {
+  //       const response = await axios.get(
+  //         `${API_URL}/task/notCmopletaed?child=${user._id}`
+  //       );
+  //       if (response.data && Array.isArray(response.data)) {
+  //         setTasks(response.data);
+  //       } else {
+  //         console.error("Invalid data format");
+  //       }
+  //     } catch (error) {
+  //       console.error("Error fetching data:", error);
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   }
 
-    fetchData();
-  }, [reload]);
+  //   fetchData();
+  // }, [reload]);
 
   const finalChild = chaild.filter((item) => item.parentId == user._id);
   const [isModalVisible, setModalVisible] = useState(false);
@@ -53,7 +53,7 @@ const Portfolio = ({ navigation }) => {
       description: "بلا بلا بلا بلا ",
     },
     {
-      type: "بدني ",
+      type: "عقلي ",
       name: "ممارسة الرياضة aaaa",
       time: "12/12/2026",
       money: "24",
@@ -69,7 +69,7 @@ const Portfolio = ({ navigation }) => {
       description: "بلا بلا بلا بلا ",
     },
     {
-      type: "بدني",
+      type: "عقلي",
       name: "ممارسة الرياضة",
       time: "12/12/2026",
       money: "24",
@@ -151,7 +151,8 @@ const Portfolio = ({ navigation }) => {
               style={{
                 height: 80,
                 width: "100%",
-                backgroundColor: "#3B3A7A",
+                backgroundColor:
+                  item.type == "بدني" ? "green" : "red" /*"#3B3A7A"*/,
                 alignItems: "center",
                 borderRadius: 20,
                 flexDirection: "row",
@@ -159,11 +160,11 @@ const Portfolio = ({ navigation }) => {
                 justifyContent: "space-between",
               }}
             >
-              {/* <CheckBox
+              <CheckBox
                 checked={item.status}
-                onPress={}
-              /> */}
-              <TouchableOpacity
+                onPress={() => handleCheckboxToggle(item._id)}
+              />
+              {/* <TouchableOpacity
                 style={{
                   backgroundColor: "white",
                   paddingHorizontal: 5,
@@ -173,7 +174,7 @@ const Portfolio = ({ navigation }) => {
                 onPress={() => handleCheckboxToggle(item._id)}
               >
                 <Text style={{ color: "#3B3A7A", fontSize: 20 }}>اكتملت</Text>
-              </TouchableOpacity>
+              </TouchableOpacity> */}
               <TouchableOpacity
                 style={{
                   width: "80%",
@@ -191,7 +192,7 @@ const Portfolio = ({ navigation }) => {
                   <Text
                     style={{ fontSize: 20, color: "#fff", textAlign: "right" }}
                   >
-                    {item.type}
+                    {item.type} {console.log(item.type)}
                   </Text>
                   <Text
                     style={{ fontSize: 20, color: "#fff", textAlign: "right" }}

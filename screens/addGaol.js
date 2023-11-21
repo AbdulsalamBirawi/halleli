@@ -14,7 +14,7 @@ import CheckboxGroup from "react-native-checkbox-group";
 import { ContextGlobal } from "../Store";
 import axios from "axios";
 import { useNavigation } from "@react-navigation/native";
-const API_URL = "http://192.168.112.211:3000/api";
+const API_URL = "http://192.168.43.79:3000/api";
 
 export default function AddGoal() {
   const [newGoal, setnewGoal] = useState({

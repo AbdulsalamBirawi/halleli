@@ -16,7 +16,7 @@ import user from "../../assets/user.png";
 import Loader from "../../Component/Loader";
 import SuccessTost from "../../Component/SuccessTost";
 
-const API_URL = "http://192.168.112.211:3000/api";
+const API_URL = "http://192.168.43.79:3000/api";
 
 const ParentRegister = ({ navigation }) => {
   const PROP = [

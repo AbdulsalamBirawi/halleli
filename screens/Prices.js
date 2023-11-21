@@ -16,7 +16,7 @@ import {
 import male from "../assets/male.png";
 import female from "../assets/female.png";
 import family from "../assets/family.png";
-const API_URL = "http://192.168.112.211:3000/api";
+const API_URL = "http://192.168.43.79:3000/api";
 
 import Transfer from "../Component/Transfer";
 import PropTransfer from "../Component/PropTransfer";

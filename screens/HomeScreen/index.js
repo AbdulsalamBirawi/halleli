@@ -24,14 +24,13 @@ const HomeScreen = ({ navigation }) => {
   const [isLogout, setisLogout] = useState(false);
   const user = Context.loggedInChild;
 
-
   const toggleModal = () => {
     setModalVisible(!isModalVisible);
     setisLogout(false);
   };
   const handelLogout = () => {
     setisLogout(true);
-    navigation.navigate("ParentLogin");
+    navigation.navigate("ChildLogin");
   };
   return (
     <ScrollView style={[styles.container]}>
@@ -52,14 +51,6 @@ const HomeScreen = ({ navigation }) => {
             color="black"
             onPress={() => {
               setModalVisible(true);
-            }}
-          />
-          <Ionicons
-            name="ios-settings-outline"
-            size={24}
-            color="black"
-            onPress={() => {
-              navigation.navigate("PerentLogout");
             }}
           />
         </View>
@@ -96,8 +87,8 @@ const HomeScreen = ({ navigation }) => {
       <TouchableOpacity
         onPress={() => {
           navigation.navigate("SavingsScreen", {
-            item :user,
-            childData: {}
+            item: user,
+            childData: {},
           });
         }}
         style={styles.counterCard}
