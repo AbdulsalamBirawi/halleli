@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from "react";
-import { View, Text, Image, TouchableOpacity } from "react-native";
+import { View, Text, Image, TouchableOpacity, Modal } from "react-native";
 import { Button } from "../Component/Button";
 import Ellipse from "../assets/Ellipse.png";
 import Loader from "../Component/Loader";
@@ -15,17 +15,26 @@ import {
 } from "@expo/vector-icons";
 import male from "../assets/male.png";
 import female from "../assets/female.png";
-import family from "../assets/family.png";
-const API_URL = "http://192.168.43.79:3000/api";
-
-import Transfer from "../Component/Transfer";
 import PropTransfer from "../Component/PropTransfer";
+
+const API_URL = "http://192.168.43.79:3000/api";
 const Prices = ({ navigation }) => {
+  const toggleModal = () => {
+    setModalVisible(!isModalVisible);
+    setisLogout(false);
+  };
+  const handelLogout = () => {
+    setisLogout(true);
+    navigation.navigate("ChildLogin");
+  };
+
   const Context = useContext(ContextGlobal);
 
   const [chaild, setChaild] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isBrother, setisBrother] = useState(false);
+  const [isLogout, setisLogout] = useState(false);
+  const [isModalVisible, setModalVisible] = useState(false);
   const token = Context.token;
   const user = Context.loggedInChild;
 
@@ -107,11 +116,11 @@ const Prices = ({ navigation }) => {
       >
         <View style={{ flexDirection: "row", gap: 5, padding: 10 }}>
           <Ionicons
-            name="ios-settings-outline"
+            name="log-out-outline"
             size={24}
             color="black"
             onPress={() => {
-              navigation.navigate("PerentLogout");
+              setModalVisible(true);
             }}
           />
         </View>
@@ -155,7 +164,7 @@ const Prices = ({ navigation }) => {
                 setisBrother(true);
                 navigation.navigate("ProfileChild", {
                   item: item,
-                  isBrother: isBrother,
+                  isBrother: true,
                 });
               }}
               key={index} // Add a key for each item in the map
@@ -166,7 +175,7 @@ const Prices = ({ navigation }) => {
                 alignItems: "center",
                 borderRadius: 20,
                 flexDirection: "row",
-                paddingHorizontal: 10,
+                padding: 20,
                 justifyContent: "space-between",
                 direction: "rtl",
               }}
@@ -198,6 +207,86 @@ const Prices = ({ navigation }) => {
           ))}
         </View>
       </View>
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={isModalVisible}
+        onRequestClose={() => toggleModal(null)}
+      >
+        <View
+          style={{
+            flex: 1,
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <View
+            style={{
+              backgroundColor: "white",
+              padding: 20,
+              borderRadius: 10,
+              elevation: 10,
+            }}
+          >
+            <View>
+              <Text
+                style={{
+                  color: "#3B3A7A",
+                  fontSize: 20,
+                  fontWeight: "600",
+                  marginVertical: 20,
+                  marginBottom: 50,
+                  textAlign: "center",
+                }}
+              >
+                تسجيل الخروج
+              </Text>
+              <Text
+                style={{
+                  color: "#3B3A7A",
+                  fontSize: 20,
+                  marginVertical: 20,
+                  marginBottom: 50,
+                  textAlign: "center",
+                }}
+              >
+                هل انت متأكد من تسجيل خروجك ؟
+              </Text>
+              <View
+                style={{
+                  flexDirection: "row",
+                  width: "100%",
+                  justifyContent: "space-around",
+                  alignItems: "center",
+                }}
+              >
+                <TouchableOpacity
+                  onPress={() => handelLogout()}
+                  style={{
+                    backgroundColor: "green",
+                    paddingHorizontal: 40,
+                    paddingVertical: 10,
+                    borderRadius: 10,
+                  }}
+                >
+                  <Text style={{ color: "white", fontSize: 15 }}>تأكيد</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => toggleModal(null)}
+                  style={{
+                    backgroundColor: "red",
+                    paddingHorizontal: 40,
+                    paddingVertical: 10,
+                    borderRadius: 10,
+                  }}
+                >
+                  <Text style={{ color: "white", fontSize: 15 }}>اغلاق</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 };

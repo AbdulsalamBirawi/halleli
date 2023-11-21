@@ -65,34 +65,35 @@ export default RootTask = ({ navigation }) => {
   };
 
   const getTasks = async () => {
-    const res = await axios.get(`${api}/task`, {
+    const res = await axios.get(`${api}/task/parentTasks`, {
       headers: { Authorization: "Bearer " + context.token },
     });
     const sortedTasks = res.data
       .map((e) => ({
         ...e,
         typeTask: options.find((x) => x.value === e.typeTask)?.label,
-        child: e.childId.name,
+        child: e.childId?.name,
       }))
       .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
     setTasks(sortedTasks);
 
-    const { data } = await axios.get(`${api}/task/notCmopletaed`, {
+    const { data } = await axios.get(`${api}/task/Cmopletaed`, {
       headers: { Authorization: "Bearer " + context.token },
     });
     setLatestTasks(
-      data.map((e) =>
-        ({
+      data
+        .map((e) => ({
           ...e,
           typeTask: options.find((x) => x.value === e.typeTask).label,
-          child: e.childId.name,
-        }.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)))
-      )
+          child: e.childId?.name,
+        }))
+        .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
     );
   };
 
   useEffect(() => {
     DeviceEventEmitter.addListener("tasks->reload", (d) => {
+      // transfer->internal
       console.log({ d });
       setReload((r) => !r);
     });
@@ -234,7 +235,7 @@ export default RootTask = ({ navigation }) => {
                       source={female}
                       style={{ height: 50, width: 50, resizeMode: "contain" }}
                     />
-                    <Text style={{ fontSize: 23 }}>{item.childId.name}</Text>
+                    <Text style={{ fontSize: 23 }}>{item.childId?.name}</Text>
                   </View>
                   <View style={{}}>
                     <Text
@@ -420,75 +421,82 @@ export default RootTask = ({ navigation }) => {
               <Text style={{ textAlign: "right", fontSize: 20 }}>
                 المهام المستندة
               </Text>
-              {tasks.map((item, index) => (
-                <TouchableOpacity
-                  onPress={() => {
-                    setVisible(true);
-                    setViewTask(item);
-                  }}
-                  style={{
-                    height: 100,
-                    width: "100%",
-                    borderWidth: 1,
-                    flexDirection: "row-reverse",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                    padding: 10,
-                    borderRadius: 10,
-                  }}
-                >
-                  <View
-                    style={{ justifyContent: "center", alignItems: "center" }}
+              <ScrollView>
+                {tasks.map((item, index) => (
+                  <TouchableOpacity
+                    onPress={() => {
+                      setVisible(true);
+                      setViewTask(item);
+                    }}
+                    style={{
+                      height: 100,
+                      width: "100%",
+                      borderWidth: 1,
+                      flexDirection: "row-reverse",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                      marginBottom: index == tasks.length - 1 ? 100 : 20,
+                      padding: 10,
+                      borderRadius: 10,
+                    }}
                   >
-                    <Image
-                      source={female}
-                      style={{ height: 70, width: 70, resizeMode: "contain" }}
-                    />
-                  </View>
-                  <View style={{}}>
-                    <Text style={{ fontSize: 23, textAlign: "right" }}>
-                      {item.child}
-                    </Text>
+                    <View
+                      style={{ justifyContent: "center", alignItems: "center" }}
+                    >
+                      <Image
+                        source={female}
+                        style={{ height: 70, width: 70, resizeMode: "contain" }}
+                      />
+                    </View>
+                    <View style={{}}>
+                      <Text style={{ fontSize: 23, textAlign: "right" }}>
+                        {item.child}
+                      </Text>
 
-                    <Text
-                      style={{ fontSize: 18, width: 200, textAlign: "right" }}
-                    >
-                      {item.desc}
-                    </Text>
-                  </View>
-                  <View style={{ gap: 2 }}>
-                    <TouchableOpacity
-                      onPress={() => setdeletTask(item._id)}
+                      <Text
+                        style={{ fontSize: 18, width: 200, textAlign: "right" }}
+                      >
+                        {item.desc}
+                      </Text>
+                    </View>
+                    <View
                       style={{
-                        height: 30,
-                        width: 40,
-                        backgroundColor: "green",
-                        borderRadius: 10,
-                        justifyContent: "center",
-                        alignItems: "center",
+                        gap: 2,
                       }}
                     >
-                      <Text style={{ color: "#fff" }}>حدف</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                      onPress={() => {
-                        setediteTask(item);
-                        setViewTask(item);
-                      }}
-                      style={{
-                        height: 30,
-                        width: 40,
-                        backgroundColor: "black",
-                        borderRadius: 10,
-                        justifyContent: "center",
-                        alignItems: "center",
-                      }}
-                    >
-                      <Text style={{ color: "#fff" }}>تعديل</Text>
-                    </TouchableOpacity>
-                  </View>
-                </TouchableOpacity>
-              ))}
+                      <TouchableOpacity
+                        onPress={() => setdeletTask(item._id)}
+                        style={{
+                          height: 30,
+                          width: 40,
+                          backgroundColor: "green",
+                          borderRadius: 10,
+                          justifyContent: "center",
+                          alignItems: "center",
+                        }}
+                      >
+                        <Text style={{ color: "#fff" }}>حدف</Text>
+                      </TouchableOpacity>
+                      <TouchableOpacity
+                        onPress={() => {
+                          setediteTask(item);
+                          setViewTask(item);
+                        }}
+                        style={{
+                          height: 30,
+                          width: 40,
+                          backgroundColor: "black",
+                          borderRadius: 10,
+                          justifyContent: "center",
+                          alignItems: "center",
+                        }}
+                      >
+                        <Text style={{ color: "#fff" }}>تعديل</Text>
+                      </TouchableOpacity>
+                    </View>
+                  </TouchableOpacity>
+                ))}
+              </ScrollView>
 
               <View
                 style={{

@@ -32,6 +32,11 @@ const ContextData = (props) => {
     }
   }
 
+  const refreshChild = async () => {
+    const res = await axios.get(`${API_URL}/child/child/${loggedInChild._id}`);
+    const data = res.data.child;
+    setLoggedInChild(data);
+  };
   // save in  storage
   // Storing data in SecureStore
   async function saveData(value) {
@@ -179,6 +184,7 @@ const ContextData = (props) => {
         setIsLoading,
         child,
         setChild,
+        refreshChild,
       }}
     >
       {props.children}

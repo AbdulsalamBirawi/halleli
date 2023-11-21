@@ -35,6 +35,7 @@ const Transaction = ({ navigation }) => {
     useState("savingAccount");
   const [selectedTransferAccount, setSelectedTransferAccount] =
     useState("currentAccount");
+  const [relode, setrelode] = useState(false);
 
   const token = Context.token;
   const user = Context.loggedInChild;
@@ -61,6 +62,8 @@ const Transaction = ({ navigation }) => {
       receiver: broId,
       amount: monyToBrother,
     });
+    setrelode((r) => !r);
+    Context.refreshChild();
 
     console.log(res);
   };
@@ -70,6 +73,7 @@ const Transaction = ({ navigation }) => {
       to: selectedTransferAccount,
       amount: toCurrentAccountValue,
     });
+    DeviceEventEmitter.emit("transfer->internal", { reload: true });
     console.log(res);
     console.log(selectedAccountType);
     console.log(selectedTransferAccount);
@@ -101,7 +105,7 @@ const Transaction = ({ navigation }) => {
     // return () => {
     //   DeviceEventEmitter.removeAllListeners();
     // };
-  }, []);
+  }, [relode]);
 
   const finalChild = chaild.filter((item) => item.parentId == user._id);
 
@@ -181,7 +185,9 @@ const Transaction = ({ navigation }) => {
               )}
               <View>
                 <Text style={{ fontSize: 20, color: "#fff" }}>{item.name}</Text>
-                <Text style={{ fontSize: 20, color: "#fff" }}>100.00 SR</Text>
+                <Text style={{ fontSize: 20, color: "#fff" }}>
+                  {item.currentAccount}
+                </Text>
               </View>
             </TouchableOpacity>
           ))}

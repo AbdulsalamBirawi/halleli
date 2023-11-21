@@ -14,6 +14,7 @@ import Loader from "../../Component/Loader";
 export const API_URL = "http://192.168.43.79:3000/api";
 import axios from "axios";
 import { ContextGlobal } from "../../Store";
+import { CheckBox } from "react-native-elements";
 
 const CreateChild = () => {
   const Context = useContext(ContextGlobal);
@@ -22,7 +23,16 @@ const CreateChild = () => {
   const [dateBirth, setDateBirth] = useState("");
   const [gender, setGender] = useState("");
   const [loder, setLoder] = useState(false);
+  const [selectedValue, setSelectedValue] = useState(null);
   const token = Context.token;
+  const handleCheckboxChange = (value) => {
+    setSelectedValue(value === selectedValue ? null : value);
+    setGender(value);
+  };
+  const options = [
+    { label: "ذكر", value: "male" },
+    { label: "انثى", value: "female" },
+  ];
   const handleLogin = async () => {
     let config = {
       headers: {
@@ -110,6 +120,24 @@ const CreateChild = () => {
         >
           <Fontisto name="date" size={25} color="#AAAA" />
         </Input>
+
+        <View
+          style={{
+            justifyContent: "center",
+            flexDirection: "row",
+            alignItems: "center",
+            paddingVertical: 10,
+          }}
+        >
+          {options.map((option) => (
+            <CheckBox
+              key={option.value}
+              title={option.label}
+              checked={option.value === selectedValue}
+              onPress={() => handleCheckboxChange(option.value)}
+            />
+          ))}
+        </View>
 
         <Button Title={" إضافة الطفل "} onPress={handleLogin} />
       </View>

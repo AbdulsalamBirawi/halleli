@@ -17,26 +17,26 @@ const Portfolio = ({ navigation }) => {
   const token = Context.token;
   const user = Context.loggedInChild;
   const [reload, setReload] = useState(false);
-  // useEffect(() => {
-  //   async function fetchData() {
-  //     try {
-  //       const response = await axios.get(
-  //         `${API_URL}/task/notCmopletaed?child=${user._id}`
-  //       );
-  //       if (response.data && Array.isArray(response.data)) {
-  //         setTasks(response.data);
-  //       } else {
-  //         console.error("Invalid data format");
-  //       }
-  //     } catch (error) {
-  //       console.error("Error fetching data:", error);
-  //     } finally {
-  //       setLoading(false);
-  //     }
-  //   }
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const response = await axios.get(
+          `${API_URL}/task/notCmopletaed?childId=${user._id}`
+        );
+        if (response.data && Array.isArray(response.data)) {
+          setTasks(response.data);
+        } else {
+          console.error("Invalid data format");
+        }
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      } finally {
+        setLoading(false);
+      }
+    }
 
-  //   fetchData();
-  // }, [reload]);
+    fetchData();
+  }, [reload]);
 
   const finalChild = chaild.filter((item) => item.parentId == user._id);
   const [isModalVisible, setModalVisible] = useState(false);
@@ -99,6 +99,7 @@ const Portfolio = ({ navigation }) => {
   const completeTask = async (taskId) => {
     const res = await axios.get(`${API_URL}/task/${taskId}`);
     setReload((r) => !r);
+    await Context.refreshChild();
     console.log(res);
   };
   const toggleModal = (index) => {
@@ -152,11 +153,17 @@ const Portfolio = ({ navigation }) => {
                 height: 80,
                 width: "100%",
                 backgroundColor:
-                  item.type == "بدني" ? "green" : "red" /*"#3B3A7A"*/,
+                  item.type == "بدني"
+                    ? "rgba(96, 96, 96, 0.7)"
+                    : "عقلي"
+                    ? "#3B3A7A"
+                    : "rgba(84, 141, 84, 0.8)",
                 alignItems: "center",
                 borderRadius: 20,
                 flexDirection: "row",
-                paddingHorizontal: 20,
+
+                paddingHorizontal: 30,
+
                 justifyContent: "space-between",
               }}
             >
@@ -180,6 +187,7 @@ const Portfolio = ({ navigation }) => {
                   width: "80%",
                   flexDirection: "row",
                   height: 80,
+
                   justifyContent: "space-between",
                   alignItems: "center",
                 }}

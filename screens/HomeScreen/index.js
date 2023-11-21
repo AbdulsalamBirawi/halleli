@@ -7,7 +7,7 @@ import {
   ScrollView,
   Modal,
 } from "react-native";
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Card from "../../Component/VisaCard"; // Importing the Card component
 import { Entypo, Feather, AntDesign, Ionicons } from "@expo/vector-icons";
 import icons from "../../assets/card_visa_bg.png";
@@ -16,6 +16,7 @@ import { styles } from "./style"; // Importing styles from an external file
 import Ellipse from "../../assets/Ellipse.png";
 import { ContextGlobal } from "../../Store";
 import { Button } from "../../Component/Button";
+import { DeviceEventEmitter } from "react-native";
 
 // HomeScreen component that displays various elements
 const HomeScreen = ({ navigation }) => {
@@ -23,6 +24,16 @@ const HomeScreen = ({ navigation }) => {
   const [isModalVisible, setModalVisible] = useState(false);
   const [isLogout, setisLogout] = useState(false);
   const user = Context.loggedInChild;
+  const refreshchild = Context.refreshChild;
+
+  useEffect(() => {
+    DeviceEventEmitter.addListener("transfer->internal", (e) => {
+      refreshchild();
+    });
+    return () => {
+      DeviceEventEmitter.removeAllListeners();
+    };
+  }, []);
 
   const toggleModal = () => {
     setModalVisible(!isModalVisible);

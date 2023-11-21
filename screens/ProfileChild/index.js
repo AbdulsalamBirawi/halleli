@@ -17,6 +17,7 @@ import axios from "axios";
 // HomeScreen component that displays various elements
 const ProfileChild = ({ route, navigation }) => {
   const { IdChaild, token, item, isBrother } = route.params;
+  console.log(isBrother);
   const Context = useContext(ContextGlobal);
   const open = Context.open;
   const setOpen = Context.setOpen;
@@ -75,7 +76,11 @@ const ProfileChild = ({ route, navigation }) => {
             alignItems: "center",
           }}
         >
-          <Ionicons name="qr-code-outline" size={50} color="#3B3A7A" />
+          {!isBrother ? (
+            <Ionicons name="qr-code-outline" size={50} color="#3B3A7A" />
+          ) : (
+            <View></View>
+          )}
         </TouchableOpacity>
         <View
           style={{
@@ -86,11 +91,11 @@ const ProfileChild = ({ route, navigation }) => {
             alignItems: "center",
           }}
         >
-          {item.gender == "male" ? (
-            <Image source={male} style={{ height: 70, width: 70 }} />
+          {/* {item.gender == "male" ? (
+            <Image source={male} style={{ height: 60, width: 60 }} />
           ) : (
-            <Image source={female} style={{ height: 70, width: 70 }} />
-          )}
+            <Image source={female} style={{ height: 60, width: 60 }} />
+          )} */}
           <Text style={{ textAlign: "left" }}>{item.name}</Text>
         </View>
       </View>
@@ -105,12 +110,14 @@ const ProfileChild = ({ route, navigation }) => {
       {/* TouchableOpacity for navigating to VisaScreen */}
       <TouchableOpacity
         onPress={() => {
-          navigation.navigate("VisaScreen", {
-            token: token,
-            IdChaild: item._id,
-            item: item,
-            childData: JSON.stringify(child),
-          });
+          if (!isBrother) {
+            navigation.navigate("VisaScreen", {
+              token: token,
+              IdChaild: item._id,
+              item: item,
+              childData: JSON.stringify(child),
+            });
+          }
         }}
         style={styles.counterCard}
       >
@@ -124,7 +131,14 @@ const ProfileChild = ({ route, navigation }) => {
       {/* TouchableOpacity for navigating to SavingsScreen */}
       <TouchableOpacity
         onPress={() => {
-          navigation.navigate("SavingsScreen");
+          if (!isBrother) {
+            navigation.navigate("SavingsScreen", {
+              token: token,
+              IdChaild: item._id,
+              item: item,
+              childData: JSON.stringify(child),
+            });
+          }
         }}
         style={styles.counterCard}
       >
