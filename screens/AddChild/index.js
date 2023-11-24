@@ -1,22 +1,22 @@
 import React, { useEffect, useState, useContext } from "react";
-import { View, Text, Image, TouchableOpacity, ScrollView } from "react-native";
+import {
+  View,
+  Text,
+  Image,
+  TouchableOpacity,
+  ScrollView,
+  DeviceEventEmitter,
+} from "react-native";
 import { Button } from "../../Component/Button";
 import Ellipse from "../../assets/Ellipse.png";
 import Loader from "../../Component/Loader";
 import axios from "axios";
 import { ContextGlobal } from "../../Store";
-import {
-  AntDesign,
-  Entypo,
-  MaterialIcons,
-  Ionicons,
-  FontAwesome,
-  FontAwesome5,
-} from "@expo/vector-icons";
+import { Ionicons } from "@expo/vector-icons";
 import male from "../../assets/male.png";
 import female from "../../assets/female.png";
-import family from "../../assets/family.png";
-const API_URL = "http://192.168.43.79:3000/api";
+
+const API_URL = "http://192.168.1.5:3000/api";
 
 const AddChild = ({ navigation }) => {
   const Context = useContext(ContextGlobal);
@@ -36,6 +36,7 @@ const AddChild = ({ navigation }) => {
             (item) => item.parentId == user._id
           );
           setChaild(finalChild);
+          console.log(finalChild, "final child");
         } else {
           console.error("Invalid data format");
         }
@@ -45,10 +46,15 @@ const AddChild = ({ navigation }) => {
         setLoading(false);
       }
     }
-
     fetchData();
+    DeviceEventEmitter.addListener("creat->child", (e) => {
+      fetchData();
+    });
+    return () => {
+      DeviceEventEmitter.removeAllListeners();
+    };
   }, []);
-
+  console.log(chaild, "childs");
   return (
     <ScrollView
       style={{
@@ -159,13 +165,6 @@ const AddChild = ({ navigation }) => {
       <View style={{ flex: 3, padding: 10 }}>
         <View style={{ width: "100%", gap: 10 }}>
           {chaild.map((item, index) => (
-            // <TouchableOpacity
-            //   onPress={() =>
-            //     navigation.navigate("ChildQr", {
-            //       token: token,
-            //       IdChaild: item._id,
-            //     })
-            //   }
             <TouchableOpacity
               onPress={() => {
                 setisBrother(false);
@@ -194,7 +193,9 @@ const AddChild = ({ navigation }) => {
                 <Image source={female} style={{ height: 70, width: 70 }} />
               )}
               <View>
-                <Text style={{ fontSize: 20, color: "#fff" }}>{item.name}</Text>
+                <Text style={{ fontSize: 20, color: "#fff" }}>
+                  {item?.name}
+                </Text>
                 <Text style={{ fontSize: 20, color: "#fff" }}>
                   {item.currentAccount} SR
                 </Text>

@@ -16,7 +16,7 @@ import { ContextGlobal } from "../../Store";
 import logo from "../../assets/Group9.png";
 import SuccessTost from "../../Component/SuccessTost";
 
-const API_URL = "http://192.168.43.79:3000/api";
+const API_URL = "http://192.168.1.5:3000/api";
 
 const ParentLogin = ({ navigation }) => {
   const Context = useContext(ContextGlobal);
@@ -103,6 +103,7 @@ const ParentLogin = ({ navigation }) => {
         <Input
           placeholder={"البريد الالكتروني"}
           // Icon={"email"}
+
           value={email}
           onChangeText={(text) => setEmail(text.toLowerCase())}
         >

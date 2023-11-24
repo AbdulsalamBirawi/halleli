@@ -1,4 +1,4 @@
-import { View, Text, Image } from "react-native";
+import { View, Text, Image, DeviceEventEmitter } from "react-native";
 import React, { useState, useContext } from "react";
 import {
   Entypo,
@@ -8,17 +8,15 @@ import {
 } from "@expo/vector-icons";
 import { Button } from "../../Component/Button";
 import { Input } from "../../Component/TextInput";
-import RadioButton from "../../Component/RadioButton";
 import Ellipse from "../../assets/Ellipse.png";
 import Loader from "../../Component/Loader";
-export const API_URL = "http://192.168.43.79:3000/api";
+export const API_URL = "http://192.168.1.5:3000/api";
 import axios from "axios";
 import { ContextGlobal } from "../../Store";
 import { CheckBox } from "react-native-elements";
 
 const CreateChild = () => {
   const Context = useContext(ContextGlobal);
-
   const [name, setName] = useState("");
   const [dateBirth, setDateBirth] = useState("");
   const [gender, setGender] = useState("");
@@ -50,7 +48,7 @@ const CreateChild = () => {
         },
         config
       );
-
+      DeviceEventEmitter.emit("creat->child", { reload: true });
       console.log(response.data);
 
       setLoder(true);

@@ -1,13 +1,8 @@
-import {
-  StyleSheet,
-  TextInput,
-  View,
-  Text,
-  Animated,
-  Image,
-} from "react-native";
-import { Entypo, MaterialIcons, AntDesign } from "@expo/vector-icons";
-import { useState, useContext } from "react";
+import React, { useState } from "react";
+import { ToastAndroid } from "react-native";
+import { Alert } from "react-native";
+import { StyleSheet, TextInput, View, Text } from "react-native";
+
 export function Input({
   keyboardType,
   value,
@@ -22,13 +17,24 @@ export function Input({
   backColor,
   onChange,
   editable,
-defaultValue,
+  defaultValue,
   onFocus = () => {},
+  required = true, // Add a required prop
   ...props
 }) {
   const [IsFocused, setIsFocused] = useState(false);
-  const [hidePassword, setHidePassword] = useState(password);
   const [lan, setLan] = useState(false);
+
+  const handleBlur = () => {
+    setIsFocused(false);
+
+    // Check if the value is empty when the field loses focus
+
+    if (required && value == undefined) {
+      // Perform your error handling, e.g., show an error message
+    }
+    console.log(value);
+  };
 
   return (
     <>
@@ -45,22 +51,17 @@ defaultValue,
           },
         ]}
       >
-        {/* {auth && <Text>+972</Text>} */}
-        {/* <MaterialIcons name={Icon} size={25} color="#AAAA" /> */}
-        {/* <Image source={Icon} style={{ height: 30, width: 30 }} /> */}
         {props.children}
         <TextInput
-        defaultValue={defaultValue}
+          defaultValue={defaultValue}
           autoCapitalize="none"
           autoCorrect
           editable={editable}
           onFocus={() => {
-             onFocus();
+            onFocus();
             setIsFocused(true);
           }}
-          onBlur={() => {
-            setIsFocused(false);
-          }}
+          onBlur={handleBlur} // Call the handleBlur function
           style={{
             height: 40,
             width: "83%",
@@ -70,32 +71,19 @@ defaultValue,
           value={value}
           keyboardType={keyboardType}
           onChangeText={onChangeText}
-          secureTextEntry={hidePassword}
+          secureTextEntry={password}
           onChange={onChange}
-          // {...props}
         />
-        {/* {inputs == "" ? null : (
-          <MaterialIcons name={"check-circle"} size={25} color="green" />
-        )} */}
-
-        {/* {password && (
-          <Entypo
-            onPress={() => setHidePassword(!hidePassword)}
-            name={hidePassword ? "eye-with-line" : "eye"}
-            size={25}
-            color={"#AAAA"}
-            style={{}}
-          />
-        )} */}
       </View>
 
       {error && (
         <Text
           style={{
             marginTop: 7,
-            color: "red",
-            fontSize: 10,
+            color: "white",
+            fontSize: 15,
             marginLeft: 10,
+            fontWeight: 500,
             fontWeight: "300",
           }}
         >

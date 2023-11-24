@@ -25,6 +25,7 @@ const HomeScreen = ({ navigation }) => {
   const [isLogout, setisLogout] = useState(false);
   const user = Context.loggedInChild;
   const refreshchild = Context.refreshChild;
+  const setUser = Context.setLoggedInChild;
 
   useEffect(() => {
     DeviceEventEmitter.addListener("transfer->internal", (e) => {
@@ -41,6 +42,7 @@ const HomeScreen = ({ navigation }) => {
   };
   const handelLogout = () => {
     setisLogout(true);
+    setUser(null);
     navigation.navigate("ChildLogin");
   };
   return (
@@ -78,35 +80,19 @@ const HomeScreen = ({ navigation }) => {
       <Text style={styles.textCom}>الحساب الجاري</Text>
 
       {/* TouchableOpacity for navigating to VisaScreen */}
-      <TouchableOpacity
-        onPress={() => {
-          navigation.navigate("VisaScreen", {
-            item: user,
-            childData: JSON.stringify(user),
-          });
-        }}
-        style={styles.counterCard}
-      >
+      <View style={styles.counterCard}>
         {/* Render the Card component with specific props */}
         <Card url={icons2} total={user.currentAccount} cardHolder={user.name} />
-      </TouchableOpacity>
+      </View>
 
       {/* Text for the savings account */}
       <Text style={styles.textCom}>الحساب الادخار</Text>
 
       {/* TouchableOpacity for navigating to SavingsScreen */}
-      <TouchableOpacity
-        onPress={() => {
-          navigation.navigate("SavingsScreen", {
-            item: user,
-            childData: {},
-          });
-        }}
-        style={styles.counterCard}
-      >
+      <View style={styles.counterCard}>
         {/* Render the Card component with specific props */}
         <Card url={icons} total={user.savingAccount} cardHolder={user.name} />
-      </TouchableOpacity>
+      </View>
       <View
         style={{
           flex: 1,

@@ -53,7 +53,7 @@ export default function AddTask({ setReload }) {
     date: new Date(),
   });
   const context = useContext(ContextGlobal);
-  const isChild = !context.isParent;
+  const isChild = false;
   const childrens = context.chaild;
   const [showDatePicker, setShowDatePicker] = useState(false);
   const toggleModal = () => {
@@ -83,7 +83,7 @@ export default function AddTask({ setReload }) {
         valueTask: newTask.mony,
         childId: context.loggedInChild._id,
       };
-      await axios.post("http://192.168.43.79:3000/api/requesttask", data);
+      await axios.post("http://192.168.1.5:3000/api/requesttask", data);
       DeviceEventEmitter.emit("tasks->reload", { reload: true });
       navigation.goBack();
       setsubmited(true);
@@ -97,7 +97,7 @@ export default function AddTask({ setReload }) {
       valueTask: newTask.mony,
       childId: selectedChild,
     };
-    await axios.post("http://192.168.43.79:3000/api/task", data, {
+    await axios.post("http://192.168.1.5:3000/api/task", data, {
       headers: {
         Authorization: "Bearer " + context.token,
       },
@@ -106,6 +106,7 @@ export default function AddTask({ setReload }) {
     DeviceEventEmitter.emit("tasks->reload", { reload: true });
     setsubmited(true);
   };
+  console.log(childrens);
   return (
     <ScrollView
       style={{
@@ -132,7 +133,7 @@ export default function AddTask({ setReload }) {
           marginTop: 20,
         }}
       >
-        <View
+        {/* <View
           style={{
             justifyContent: "center",
             flexDirection: "row",
@@ -148,7 +149,8 @@ export default function AddTask({ setReload }) {
               onPress={() => handleCheckboxChange(option.value)}
             />
           ))}
-        </View>
+        </View> */}
+
         <View
           style={{
             justifyContent: "center",
@@ -175,6 +177,7 @@ export default function AddTask({ setReload }) {
           onChangeText={(e) => setNewTask({ ...newTask, taskName: e })}
           placeholder={"اسم المهمة"}
           backColor={"#fff"}
+          error={newTask.taskName ? false : <Text>the name is empty</Text>}
         />
       </View>
       <View style={{ marginTop: 20, marginTop: 20 }}>
@@ -185,6 +188,7 @@ export default function AddTask({ setReload }) {
           onChangeText={(e) => setNewTask({ ...newTask, desc: e })}
           placeholder={"وصف"}
           backColor={"#fff"}
+          error={newTask.desc ? false : <Text>the description is empty</Text>}
         />
       </View>
 
@@ -198,6 +202,7 @@ export default function AddTask({ setReload }) {
           onChangeText={(e) => setNewTask({ ...newTask, mony: e })}
           placeholder={"المبلغ المستحق"}
           backColor={"#fff"}
+          error={newTask.mony ? false : <Text>the value is empty</Text>}
         />
       </View>
       <View style={{ marginTop: 10 }}>
@@ -209,6 +214,7 @@ export default function AddTask({ setReload }) {
           placeholder="اختر تاريخ"
           style={{ borderBottomWidth: 1, marginBottom: 10 }}
           onFocus={() => setShowDatePicker(true)}
+          error={newTask.date ? false : <Text>the date is empty</Text>}
         />
         {showDatePicker && (
           <DatePicker

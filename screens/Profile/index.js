@@ -16,7 +16,7 @@ import { ContextGlobal } from "../../Store";
 import logo from "../../assets/Group9.png";
 import SuccessTost from "../../Component/SuccessTost";
 
-const API_URL = "http://192.168.43.79:3000/api";
+const API_URL = "http://192.168.1.5:3000/api";
 
 const Profile = ({ navigation }) => {
   const Context = useContext(ContextGlobal);
@@ -39,13 +39,10 @@ const Profile = ({ navigation }) => {
     handleLogin({ email, password });
   };
   const updateUserInfo = async () => {
-    const res = await axios.post(
-      `http://192.168.43.79:3000/api/users/newpass`,
-      {
-        email: email,
-        password: password,
-      }
-    );
+    const res = await axios.post(`http://192.168.1.5:3000/api/users/newpass`, {
+      email: email,
+      password: password,
+    });
     console.log(res);
   };
 

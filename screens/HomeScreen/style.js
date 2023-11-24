@@ -34,7 +34,7 @@ export const styles = StyleSheet.create({
   counterCard: {
     justifyContent: "center",
     alignItems: "center",
-    marginTop: 20,
+    marginVertical: 20,
   },
   textNewCome: {
     textAlign: "right",

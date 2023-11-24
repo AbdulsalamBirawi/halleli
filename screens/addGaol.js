@@ -14,7 +14,8 @@ import CheckboxGroup from "react-native-checkbox-group";
 import { ContextGlobal } from "../Store";
 import axios from "axios";
 import { useNavigation } from "@react-navigation/native";
-const API_URL = "http://192.168.43.79:3000/api";
+import { ScrollView } from "react-native";
+const API_URL = "http://192.168.1.5:3000/api";
 
 export default function AddGoal() {
   const [newGoal, setnewGoal] = useState({
@@ -51,7 +52,7 @@ export default function AddGoal() {
     DeviceEventEmitter.emit("goal->reload", { reload: true });
   };
   return (
-    <View
+    <ScrollView
       style={{
         flex: 1,
         backgroundColor: "#3B3A7A",
@@ -92,7 +93,7 @@ export default function AddGoal() {
           </View>
         ))}
       </View> */}
-      <View style={{ marginTop: 20, marginTop: 100 }}>
+      <View style={{ marginTop: 100 }}>
         <Text style={{ textAlign: "right", color: "#fff", fontSize: 22 }}>
           اسم هدفك{" "}
         </Text>
@@ -101,6 +102,7 @@ export default function AddGoal() {
           onChangeText={(e) => setnewGoal({ ...newGoal, name: e })}
           placeholder={"اسم الهدف"}
           backColor={"#fff"}
+          error={newGoal.name ? false : <Text>the name is empty</Text>}
         />
       </View>
 
@@ -114,6 +116,7 @@ export default function AddGoal() {
           onChangeText={(e) => setnewGoal({ ...newGoal, valueGoal: e })}
           placeholder={"قيمة الهدف"}
           backColor={"#fff"}
+          error={newGoal.valueGoal ? false : <Text>the value is empty</Text>}
         />
       </View>
       <Text
@@ -150,7 +153,7 @@ export default function AddGoal() {
           alignItems: "center",
           backgroundColor: "#fff",
           padding: 15,
-          margin: 10,
+          marginBottom: 30,
           borderRadius: 20,
           marginTop: 100,
         }}
@@ -158,6 +161,6 @@ export default function AddGoal() {
       >
         <Text>حفظ الهدف</Text>
       </TouchableOpacity>
-    </View>
+    </ScrollView>
   );
 }

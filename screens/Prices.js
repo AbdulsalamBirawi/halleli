@@ -16,8 +16,9 @@ import {
 import male from "../assets/male.png";
 import female from "../assets/female.png";
 import PropTransfer from "../Component/PropTransfer";
+import { ScrollView } from "react-native";
 
-const API_URL = "http://192.168.43.79:3000/api";
+const API_URL = "http://192.168.1.5:3000/api";
 const Prices = ({ navigation }) => {
   const toggleModal = () => {
     setModalVisible(!isModalVisible);
@@ -150,7 +151,7 @@ const Prices = ({ navigation }) => {
       </View>
 
       <View style={{ flex: 3, padding: 10 }}>
-        <View style={{ width: "100%", gap: 10 }}>
+        <ScrollView style={{ width: "100%", gap: 10 }}>
           {chaild.map((item, index) => (
             // <TouchableOpacity
             //   onPress={() =>
@@ -174,6 +175,7 @@ const Prices = ({ navigation }) => {
                 backgroundColor: "#3B3A7A",
                 alignItems: "center",
                 borderRadius: 20,
+                marginBottom: 10,
                 flexDirection: "row",
                 padding: 20,
                 justifyContent: "space-between",
@@ -205,7 +207,7 @@ const Prices = ({ navigation }) => {
               </View>
             </TouchableOpacity>
           ))}
-        </View>
+        </ScrollView>
       </View>
       <Modal
         animationType="slide"

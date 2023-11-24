@@ -16,7 +16,8 @@ import male from "../assets/male.png";
 import { Picker } from "@react-native-picker/picker";
 import female from "../assets/female.png";
 import { Input } from "../Component/TextInput";
-const API_URL = "http://192.168.43.79:3000/api";
+import { ScrollView } from "react-native";
+const API_URL = "http://192.168.1.5:3000/api";
 
 const Transaction = ({ navigation }) => {
   const Context = useContext(ContextGlobal);
@@ -159,39 +160,51 @@ const Transaction = ({ navigation }) => {
           }}
         />
       </View>
-      <View style={{ flex: 3, padding: 10, marginVertical: 30 }}>
-        <View style={{ width: "100%", gap: 10 }}>
-          {chaild.map((item, index) => (
-            <TouchableOpacity
-              onPress={() => {
-                toggleModal(item._id);
-              }}
-              key={index} // Add a key for each item in the map
-              style={{
-                height: 80,
-                width: "100%",
-                backgroundColor: "#3B3A7A",
-                alignItems: "center",
-                borderRadius: 20,
-                flexDirection: "row",
-                paddingHorizontal: 10,
-                justifyContent: "space-between",
-              }}
-            >
-              {item.gender == "male" ? (
-                <Image source={male} style={{ height: 70, width: 70 }} />
-              ) : (
-                <Image source={female} style={{ height: 70, width: 70 }} />
-              )}
-              <View>
-                <Text style={{ fontSize: 20, color: "#fff" }}>{item.name}</Text>
-                <Text style={{ fontSize: 20, color: "#fff" }}>
-                  {item.currentAccount}
-                </Text>
-              </View>
-            </TouchableOpacity>
-          ))}
-          {/* <Button
+      <View style={{ marginVertical: 10 }}>
+        <Button
+          Title={"تحويل بين الحسابات"}
+          onPress={() => setinternalTransferModel(true) /*transferInternal()*/}
+        />
+      </View>
+      <ScrollView style={{ width: "100%", gap: 5 }}>
+        {chaild.map((item, index) => (
+          <TouchableOpacity
+            onPress={() => {
+              toggleModal(item._id);
+            }}
+            key={index} // Add a key for each item in the map
+            style={{
+              height: 80,
+              width: "100%",
+              marginVertical: 10,
+              backgroundColor: "#3B3A7A",
+              alignItems: "center",
+              borderRadius: 20,
+              flexDirection: "row",
+              paddingHorizontal: 10,
+              justifyContent: "space-between",
+            }}
+          >
+            {item.gender == "male" ? (
+              <Image source={male} style={{ height: 70, width: 70 }} />
+            ) : (
+              <Image source={female} style={{ height: 70, width: 70 }} />
+            )}
+            <View>
+              <Text
+                style={{ fontSize: 20, textAlign: "center", color: "#fff" }}
+              >
+                {item.name}
+              </Text>
+              <Text
+                style={{ fontSize: 20, textAlign: "center", color: "#fff" }}
+              >
+                {item.currentAccount}
+              </Text>
+            </View>
+          </TouchableOpacity>
+        ))}
+        {/* <Button
             onPress={() => settoCurrentAccount(false)}
             Title={"التحويل الى حساب الادخار"}
           />
@@ -210,14 +223,7 @@ const Transaction = ({ navigation }) => {
               <Input onChangeText={(e) => settoSavingAccountValue(e)} />
             </View>
           )} */}
-          <Button
-            Title={"تحويل بين الحسابات"}
-            onPress={
-              () => setinternalTransferModel(true) /*transferInternal()*/
-            }
-          />
-        </View>
-      </View>
+      </ScrollView>
 
       <View
         style={{
