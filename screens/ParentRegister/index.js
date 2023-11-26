@@ -16,7 +16,7 @@ import user from "../../assets/user.png";
 import Loader from "../../Component/Loader";
 import SuccessTost from "../../Component/SuccessTost";
 
-const API_URL = "http://192.168.1.5:3000/api";
+const API_URL = "http://192.168.1.2:3000/api";
 
 const ParentRegister = ({ navigation }) => {
   const PROP = [
@@ -105,6 +105,7 @@ const ParentRegister = ({ navigation }) => {
           Icon={user}
           value={name}
           onChangeText={(text) => setName(text)}
+          error={name ? false : <Text>the name is empty</Text>}
         >
           <FontAwesome name="user" size={25} color="#AAAA" />
         </Input>
@@ -124,6 +125,7 @@ const ParentRegister = ({ navigation }) => {
           Icon={"email"}
           value={email}
           onChangeText={(text) => setEmail(text.toLowerCase())}
+          error={email ? false : <Text>the email is empty</Text>}
         >
           <MaterialIcons name={"email"} size={25} color="#AAAA" />
         </Input>
@@ -143,6 +145,7 @@ const ParentRegister = ({ navigation }) => {
           Icon={"email"}
           value={password}
           onChangeText={(text) => setPassword(text.toLowerCase())}
+          error={password ? false : <Text>the password is empty</Text>}
           password
         >
           <FontAwesome name="lock" size={25} color="#AAAA" />

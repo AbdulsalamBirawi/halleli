@@ -1,4 +1,4 @@
-import { View, Text, Image, TouchableOpacity } from "react-native";
+import { View, Text, Image, TouchableOpacity, ScrollView } from "react-native";
 import React, { useContext, useEffect } from "react";
 import { Button } from "../../Component/Button";
 import { Input } from "../../Component/TextInput";
@@ -15,11 +15,11 @@ const PerentLogout = ({ navigation }) => {
 
   const handelLogoout = () => {
     removeAuth();
-    navigation.navigate("Home");
+    navigation.navigate("ChildLogin");
   };
 
   return (
-    <View style={{ flex: 1, padding: 10, backgroundColor: "#fff" }}>
+    <ScrollView style={{ flex: 1, padding: 10, backgroundColor: "#fff" }}>
       <Image
         source={Ellipse}
         style={{
@@ -79,7 +79,7 @@ const PerentLogout = ({ navigation }) => {
             justifyContent: "center",
             alignItems: "center",
             gap: 10,
-            marginTop: 300,
+            marginTop: 30,
             marginLeft: 150,
           }}
         >
@@ -93,7 +93,7 @@ const PerentLogout = ({ navigation }) => {
         </TouchableOpacity>
         {/* <Button Title={"تأكيد"} /> */}
       </View>
-    </View>
+    </ScrollView>
   );
 };
 

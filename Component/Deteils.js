@@ -11,8 +11,20 @@ import {
 import icon from "../assets/Group.png";
 import mele from "../assets/female.png";
 import { Button } from "./Button";
-const Deteils = ({ visible, setvisible, deteils }) => {
+import axios from "axios";
+import { DeviceEventEmitter } from "react-native";
+const Deteils = ({ visible, setvisible, deteils, completeTaskId }) => {
+  const returnCompleteTask = async () => {
+    const api = "http://192.168.1.2:3000/api";
+    const res = await axios.put(`${api}/task/${completeTaskId}`, {
+      status: false,
+    });
+    DeviceEventEmitter.emit("tasks->reload", { relod: true });
+    console.log(res);
+    setvisible(false);
+  };
   console.log(visible);
+  console.log({ deteils });
   const { width, height } = useWindowDimensions();
   return (
     visible && (
@@ -66,7 +78,9 @@ const Deteils = ({ visible, setvisible, deteils }) => {
               justifyContent: "flex-end",
             }}
           >
-            <Text style={{ fontSize: 19 }}>{deteils.time.substring(0, 10)}</Text>
+            <Text style={{ fontSize: 19 }}>
+              {deteils?.time?.substring(0, 10)}
+            </Text>
             <Text
               style={{ fontWeight: "bold", color: "#3B3A7A", fontSize: 19 }}
             >
@@ -98,6 +112,14 @@ const Deteils = ({ visible, setvisible, deteils }) => {
           >
             اغلاق
           </Button>
+          {completeTaskId ? (
+            <Button
+              onPress={() => returnCompleteTask()}
+              Title={"اعادة الارسال"}
+            />
+          ) : (
+            <View></View>
+          )}
         </View>
       </View>
     )

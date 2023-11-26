@@ -21,11 +21,12 @@ const ProfileChild = ({ route, navigation }) => {
   const Context = useContext(ContextGlobal);
   const open = Context.open;
   const setOpen = Context.setOpen;
+  const refreshChild = Context.refreshChild;
   const [child, setChild] = useState(undefined);
   const [reload, setReload] = useState(false);
   const getChildById = async () => {
     const res = await axios.get(
-      `http://192.168.1.5:3000/api/child/child/${IdChaild}`
+      `http://192.168.1.2:3000/api/child/child/${IdChaild}`
     );
     console.log({ res: res.data });
     const Child = res.data;
@@ -91,11 +92,11 @@ const ProfileChild = ({ route, navigation }) => {
             alignItems: "center",
           }}
         >
-          {/* {item.gender == "male" ? (
+          {item.gender == "male" ? (
             <Image source={male} style={{ height: 60, width: 60 }} />
           ) : (
             <Image source={female} style={{ height: 60, width: 60 }} />
-          )} */}
+          )}
           <Text style={{ textAlign: "left" }}>{item.name}</Text>
         </View>
       </View>

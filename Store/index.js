@@ -3,7 +3,7 @@ import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as SecureStore from "expo-secure-store";
 
-const API_URL = "http://192.168.1.5:3000/api";
+const API_URL = "http://192.168.1.2:3000/api";
 export const ContextGlobal = React.createContext();
 
 const ContextData = (props) => {
@@ -185,6 +185,9 @@ const ContextData = (props) => {
         child,
         setChild,
         refreshChild,
+        setIsFirstTime,
+        setChaild,
+        getChild,
       }}
     >
       {props.children}

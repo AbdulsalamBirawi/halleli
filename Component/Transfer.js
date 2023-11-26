@@ -7,6 +7,7 @@ import {
   StyleSheet,
   Image,
   TouchableOpacity,
+  DeviceEventEmitter,
 } from "react-native";
 
 import halall2 from "../assets/halall2.png";
@@ -16,6 +17,7 @@ import { ContextGlobal } from "../Store/index";
 
 import { Input } from "./TextInput";
 import axios from "axios";
+import { useNavigation } from "@react-navigation/native";
 const Transfer = ({
   visible = false,
   Title,
@@ -28,9 +30,11 @@ const Transfer = ({
   const [mony, setMony] = useState("");
   const open = Context.open;
   const setOpen = Context.setOpen;
+  const getChild = Context.getChild;
+  const navigation = useNavigation();
   const payToChild = async () => {
     const res = await axios.post(
-      `http://192.168.1.5:3000/api/transaction/fromFather/${childId}`,
+      `http://192.168.1.2:3000/api/transaction/fromFather/${childId}`,
       {
         amount: mony,
       }
@@ -38,6 +42,9 @@ const Transfer = ({
     setVisible(false);
     setReload((p) => !p);
     setMony(undefined);
+    navigation.navigate("AddChild");
+
+    DeviceEventEmitter.emit("creat->child", { reload: true });
   };
 
   return (

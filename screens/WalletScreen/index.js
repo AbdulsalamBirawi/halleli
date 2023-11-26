@@ -17,7 +17,11 @@ import { styles } from "./style"; // Importing styles from an external file
 // WalletScreen component that displays various elements
 const WalletScreen = ({ route, navigation }) => {
   const { item, childData } = route.params;
-  const child = JSON.parse(childData);
+  let child = null;
+  try {
+    child = JSON.parse(childData);
+  } catch (error) {}
+
   // Data for displaying wallet transactions
   // const data = [];
 

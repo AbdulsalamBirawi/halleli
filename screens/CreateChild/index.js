@@ -10,7 +10,7 @@ import { Button } from "../../Component/Button";
 import { Input } from "../../Component/TextInput";
 import Ellipse from "../../assets/Ellipse.png";
 import Loader from "../../Component/Loader";
-export const API_URL = "http://192.168.1.5:3000/api";
+export const API_URL = "http://192.168.1.2:3000/api";
 import axios from "axios";
 import { ContextGlobal } from "../../Store";
 import { CheckBox } from "react-native-elements";
@@ -23,6 +23,8 @@ const CreateChild = () => {
   const [loder, setLoder] = useState(false);
   const [selectedValue, setSelectedValue] = useState(null);
   const token = Context.token;
+  const setIsFirstTime = Context.setIsFirstTime;
+
   const handleCheckboxChange = (value) => {
     setSelectedValue(value === selectedValue ? null : value);
     setGender(value);
@@ -48,6 +50,8 @@ const CreateChild = () => {
         },
         config
       );
+      setIsFirstTime(false);
+
       DeviceEventEmitter.emit("creat->child", { reload: true });
       console.log(response.data);
 

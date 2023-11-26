@@ -7,7 +7,7 @@ import axios from "axios";
 import { ContextGlobal } from "../Store";
 import { Ionicons } from "@expo/vector-icons";
 import { Modal } from "react-native";
-const API_URL = "http://192.168.1.5:3000/api";
+const API_URL = "http://192.168.1.2:3000/api";
 
 const Portfolio = ({ navigation }) => {
   const Context = useContext(ContextGlobal);
@@ -41,8 +41,10 @@ const Portfolio = ({ navigation }) => {
   const finalChild = chaild.filter((item) => item.parentId == user._id);
   const [isModalVisible, setModalVisible] = useState(false);
   const [selectedTaskIndex, setSelectedTaskIndex] = useState(null);
-  const [taskId, settaskId] = useState("");
+  const [isChecked, setisChecked] = useState(false);
+
   console.log(selectedTaskIndex);
+  const [TaskId, setTaskId] = useState(null);
   const [tasks, setTasks] = useState([
     {
       type: "بدني",
@@ -90,6 +92,7 @@ const Portfolio = ({ navigation }) => {
     //   i === index ? { ...item, ischecked: !item.ischecked } : item
     // );
     completeTask(TaskId);
+    setTaskId(null);
 
     // You can use the updatedTasks array for any further processing or set it to state
 
@@ -107,7 +110,10 @@ const Portfolio = ({ navigation }) => {
     setModalVisible(!isModalVisible);
   };
 
-  // console.log(tasks);
+  // useEffect(() => {
+  //   console.log(taskId);
+  // }, [taskId]);
+  // // console.log(tasks);
   return (
     <ScrollView
       style={{
@@ -145,6 +151,16 @@ const Portfolio = ({ navigation }) => {
       </View>
 
       <View style={{ flex: 3, padding: 10 }}>
+        <View style={{ marginVertical: 10 }}>
+          {TaskId != null ? (
+            <Button
+              Title={"انهاء المهمة "}
+              onPress={() => handleCheckboxToggle(TaskId)}
+            />
+          ) : (
+            <View></View>
+          )}
+        </View>
         <View style={{ width: "100%", gap: 10 }}>
           {tasks.map((item, index) => (
             <View
@@ -168,9 +184,13 @@ const Portfolio = ({ navigation }) => {
               }}
             >
               <CheckBox
-                checked={item.status}
-                onPress={() => handleCheckboxToggle(item._id)}
+                checked={item._id == TaskId}
+                onPress={() => {
+                  setTaskId(item._id);
+                }}
               />
+              {/* setTaskId(item._id) */}
+              {/* handleCheckboxToggle(item._id) */}
               {/* <TouchableOpacity
                 style={{
                   backgroundColor: "white",
@@ -257,23 +277,76 @@ const Portfolio = ({ navigation }) => {
                   color: "#3B3A7A",
                   fontSize: 20,
                   marginVertical: 10,
+                  fontWeight: "700",
+                  textAlign: "center",
+                  marginBottom: 20,
                 }}
               >
                 التفاصيل
               </Text>
               <View>
-                <Text style={{ fontSize: 20, color: "#3B3A7A" }}>
-                  اسم المهمة: {tasks[selectedTaskIndex]?.name}
-                </Text>
-                <Text style={{ fontSize: 20, color: "#3B3A7A" }}>
-                  تفاصيل المهمة : {tasks[selectedTaskIndex]?.desc}
-                </Text>
-                <Text style={{ fontSize: 20, color: "#3B3A7A" }}>
-                  الوقت النهائي : {Date(tasks[selectedTaskIndex]?.time)}
-                </Text>
-                <Text style={{ fontSize: 20, color: "#3B3A7A" }}>
-                  المبلغ المستحق : {tasks[selectedTaskIndex]?.valueTask}
-                </Text>
+                <View
+                  style={{
+                    borderBottomColor: "#3B3A7A",
+                    borderBottomWidth: 2,
+                    padding: 10,
+                  }}
+                >
+                  <Text
+                    style={{
+                      fontSize: 20,
+                      color: "#3B3A7A",
+                      fontWeight: "500",
+                    }}
+                  >
+                    اسم المهمة:{" "}
+                    <Text style={{ color: "black" }}>
+                      {tasks[selectedTaskIndex]?.name}
+                    </Text>
+                  </Text>
+                </View>
+                <View
+                  style={{
+                    borderBottomColor: "#3B3A7A",
+                    borderBottomWidth: 2,
+                    padding: 10,
+                  }}
+                >
+                  <Text style={{ fontSize: 20, color: "#3B3A7A" }}>
+                    تفاصيل المهمة :{" "}
+                    <Text style={{ color: "black" }}>
+                      {tasks[selectedTaskIndex]?.desc}
+                    </Text>
+                  </Text>
+                </View>
+                <View
+                  style={{
+                    borderBottomColor: "#3B3A7A",
+                    borderBottomWidth: 2,
+                    padding: 10,
+                  }}
+                >
+                  <Text style={{ fontSize: 20, color: "#3B3A7A" }}>
+                    الوقت النهائي :{" "}
+                    <Text style={{ color: "black" }}>
+                      {Date(tasks[selectedTaskIndex]?.time)}
+                    </Text>
+                  </Text>
+                </View>
+                <View
+                  style={{
+                    borderBottomColor: "#3B3A7A",
+                    borderBottomWidth: 2,
+                    padding: 10,
+                  }}
+                >
+                  <Text style={{ fontSize: 20, color: "#3B3A7A" }}>
+                    المبلغ المستحق :{" "}
+                    <Text style={{ color: "black" }}>
+                      {tasks[selectedTaskIndex]?.valueTask}
+                    </Text>
+                  </Text>
+                </View>
               </View>
               <Button Title={"اغلاق"} onPress={() => toggleModal(null)} />
             </View>

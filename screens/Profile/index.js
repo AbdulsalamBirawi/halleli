@@ -16,7 +16,7 @@ import { ContextGlobal } from "../../Store";
 import logo from "../../assets/Group9.png";
 import SuccessTost from "../../Component/SuccessTost";
 
-const API_URL = "http://192.168.1.5:3000/api";
+const API_URL = "http://192.168.1.2:3000/api";
 
 const Profile = ({ navigation }) => {
   const Context = useContext(ContextGlobal);
@@ -26,6 +26,7 @@ const Profile = ({ navigation }) => {
   const handleLogin = Context.handleLogin;
   const loder = Context.loder;
   const token = Context.token;
+  const [first, setfirst] = useState("");
   const setParent = Context.setParent;
   console.log(token, "auth");
   // useEffect(() => {
@@ -39,7 +40,7 @@ const Profile = ({ navigation }) => {
     handleLogin({ email, password });
   };
   const updateUserInfo = async () => {
-    const res = await axios.post(`http://192.168.1.5:3000/api/users/newpass`, {
+    const res = await axios.post(`http://192.168.1.2:3000/api/users/newpass`, {
       email: email,
       password: password,
     });
@@ -107,7 +108,7 @@ const Profile = ({ navigation }) => {
           }}
         >
           {" "}
-          كلمة المرور الجديد
+          كلمة المرور الحالية
         </Text>
         <Input
           placeholder={"كلمة المرور الجديد"}
@@ -118,7 +119,6 @@ const Profile = ({ navigation }) => {
         >
           <FontAwesome name="lock" size={25} color="#AAAA" />
         </Input>
-
         <Text
           style={{
             textAlign: "right",
@@ -130,6 +130,15 @@ const Profile = ({ navigation }) => {
           {" "}
           كلمة المرور الجديد
         </Text>
+        <Input
+          placeholder={"كلمة المرور الحالية"}
+          Icon={"email"}
+          value={first}
+          onChangeText={() => console.log("")}
+          password
+        >
+          <FontAwesome name="lock" size={25} color="#AAAA" />
+        </Input>
 
         <Button Title={"حفظ"} onPress={() => updateUserInfo()} />
       </View>

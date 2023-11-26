@@ -53,8 +53,9 @@ export default function AddTask({ setReload }) {
     date: new Date(),
   });
   const context = useContext(ContextGlobal);
-  const isChild = false;
+  const isChild = !context.isParent;
   const childrens = context.chaild;
+  console.log(childrens);
   const [showDatePicker, setShowDatePicker] = useState(false);
   const toggleModal = () => {
     setModalVisible(!isModalVisible);
@@ -83,7 +84,7 @@ export default function AddTask({ setReload }) {
         valueTask: newTask.mony,
         childId: context.loggedInChild._id,
       };
-      await axios.post("http://192.168.1.5:3000/api/requesttask", data);
+      await axios.post("http://192.168.1.2:3000/api/requesttask", data);
       DeviceEventEmitter.emit("tasks->reload", { reload: true });
       navigation.goBack();
       setsubmited(true);
@@ -97,7 +98,7 @@ export default function AddTask({ setReload }) {
       valueTask: newTask.mony,
       childId: selectedChild,
     };
-    await axios.post("http://192.168.1.5:3000/api/task", data, {
+    await axios.post("http://192.168.1.2:3000/api/task", data, {
       headers: {
         Authorization: "Bearer " + context.token,
       },
@@ -234,7 +235,7 @@ export default function AddTask({ setReload }) {
           {childrens.map((option) => (
             <CheckBox
               key={option._id}
-              title={option.name}
+              title={option?.name}
               checked={option._id === selectedChild}
               onPress={() => {
                 setSelectedChild(

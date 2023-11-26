@@ -15,6 +15,7 @@ import { ScrollView } from "react-native";
 import { CheckBox } from "react-native-elements";
 import { Input } from "../../Component/TextInput";
 import { Button } from "../../Component/Button";
+import male from "../../assets/male.png";
 import axios from "axios";
 import { useEffect } from "react";
 import { useContext } from "react";
@@ -22,7 +23,7 @@ import { ContextGlobal } from "../../Store";
 import DatePicker from "@react-native-community/datetimepicker";
 
 export default RootTask = ({ navigation }) => {
-  const api = "http://192.168.1.5:3000/api";
+  const api = "http://192.168.1.2:3000/api";
   const options = [
     { label: "بدنية", value: 1 },
     { label: "عقلية", value: 2 },
@@ -44,23 +45,26 @@ export default RootTask = ({ navigation }) => {
   const [editTypeTask, setEditTypeTask] = useState(null);
   const [tasks, setTasks] = useState([]);
   const [reload, setReload] = useState(false);
+  const [completeTask, setcompleteTask] = useState({});
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [latestsTasks, setLatestTasks] = useState([]);
   const [submited, setsubmited] = useState({
     edit: false,
     delet: false,
   });
+  const [visibleComplete, setvisibleComplete] = useState(false);
   const [requestTask, setrequestTask] = useState({
     accept: false,
     denied: false,
   });
   const [requestTasksData, setrequestTasksData] = useState([]);
 
+  const [completeTaskId, setcompleteTaskId] = useState(null);
+
   const getRequestTasks = async () => {
     const res = await axios.get(`${api}/requesttask`);
     const requsetTasks = res.data;
-    console.log({ requsetTasks });
-    // console.log(requsetTasks);
+
     setrequestTasksData(requsetTasks);
   };
 
@@ -84,7 +88,7 @@ export default RootTask = ({ navigation }) => {
       data
         .map((e) => ({
           ...e,
-          typeTask: options.find((x) => x.value === e.typeTask).label,
+          typeTask: options.find((x) => x.value === e.typeTask)?.label,
           child: e.childId?.name,
         }))
         .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
@@ -94,7 +98,7 @@ export default RootTask = ({ navigation }) => {
   useEffect(() => {
     DeviceEventEmitter.addListener("tasks->reload", (d) => {
       // transfer->internal
-      console.log({ d });
+
       setReload((r) => !r);
     });
     getRequestTasks();
@@ -110,7 +114,6 @@ export default RootTask = ({ navigation }) => {
   };
 
   const handelDeletTask = async () => {
-    console.log({ deletTask });
     const id = deletTask;
     await axios.delete(`${api}/task/${id}`, {
       headers: { Authorization: "Bearer " + context.token },
@@ -138,18 +141,35 @@ export default RootTask = ({ navigation }) => {
 
     setsubmited({ ...submited, edit: true });
   };
-  const [viewTask, setViewTask] = useState({});
+  const [viewTask, setViewTask] = useState(null);
   const handleDateChange = (e, date) => {
     setShowDatePicker(false);
-    console.log({ date });
+
     if (date !== undefined) {
       setediteTask({ ...editeTask, date: date });
     }
   };
-
+  const returnCompleteTask = async () => {
+    const res = await axios.put(`${api}/task/${completeTaskId}`, {
+      status: false,
+    });
+    console.log(res);
+  };
+  console.log(tasks);
+  console.log(viewTask);
   return (
     <View>
-      <Deteils visible={visible} setvisible={setVisible} deteils={viewTask} />
+      <Deteils
+        visible={visible && !!viewTask}
+        setvisible={setVisible}
+        deteils={viewTask}
+      />
+      <Deteils
+        visible={visibleComplete}
+        setvisible={setvisibleComplete}
+        deteils={completeTask}
+        completeTaskId={completeTaskId}
+      />
       <View style={{ borderBottomWidth: 1, flexDirection: "row" }}>
         <TouchableOpacity
           onPress={() => {
@@ -231,10 +251,18 @@ export default RootTask = ({ navigation }) => {
                   <View
                     style={{ justifyContent: "center", alignItems: "center" }}
                   >
-                    <Image
-                      source={female}
-                      style={{ height: 50, width: 50, resizeMode: "contain" }}
-                    />
+                    {item.childId.gender == "male" ? (
+                      <Image
+                        source={male}
+                        style={{ height: 50, width: 50, resizeMode: "contain" }}
+                      />
+                    ) : (
+                      <Image
+                        source={female}
+                        style={{ height: 50, width: 50, resizeMode: "contain" }}
+                      />
+                    )}
+
                     <Text style={{ fontSize: 23 }}>{item.childId?.name}</Text>
                   </View>
                   <View style={{}}>
@@ -374,13 +402,38 @@ export default RootTask = ({ navigation }) => {
                 resizeMode: "contain",
               }}
             /> */}
+            <TouchableOpacity
+              onPress={() => {
+                navigation.navigate("AddTask");
+              }}
+              style={{
+                flexDirection: "row",
+                justifyContent: "flex-end",
+                alignItems: "center",
+                gap: 10,
+              }}
+            >
+              <Text style={{ fontSize: 20, color: "#3B3A7A" }}>
+                اضافة المهام
+              </Text>
+              <Ionicons
+                name="add-circle-outline"
+                size={35}
+                color={"#2C2B66D6"}
+              />
+            </TouchableOpacity>
             {latestsTasks.length > 0 && (
               <View style={{ flex: 1.5, gap: 10 }}>
                 <Text style={{ textAlign: "right", fontSize: 20 }}>
                   احدث المهام المنجزة
                 </Text>
                 {latestsTasks.map((item, index) => (
-                  <View
+                  <TouchableOpacity
+                    onPress={() => {
+                      setcompleteTask(item);
+                      setvisibleComplete(true);
+                      setcompleteTaskId(item._id);
+                    }}
                     style={{
                       height: 100,
                       width: "100%",
@@ -396,10 +449,25 @@ export default RootTask = ({ navigation }) => {
                     <View
                       style={{ justifyContent: "center", alignItems: "center" }}
                     >
-                      <Image
-                        source={female}
-                        style={{ height: 70, width: 70, resizeMode: "contain" }}
-                      />
+                      {item.childId.gender == "male" ? (
+                        <Image
+                          source={male}
+                          style={{
+                            height: 50,
+                            width: 50,
+                            resizeMode: "contain",
+                          }}
+                        />
+                      ) : (
+                        <Image
+                          source={female}
+                          style={{
+                            height: 50,
+                            width: 50,
+                            resizeMode: "contain",
+                          }}
+                        />
+                      )}
                     </View>
                     <View style={{}}>
                       <Text style={{ fontSize: 23, textAlign: "right" }}>
@@ -413,10 +481,16 @@ export default RootTask = ({ navigation }) => {
                       </Text>
                     </View>
                     <View style={{ gap: 2 }}></View>
-                  </View>
+                  </TouchableOpacity>
                 ))}
               </View>
             )}
+            <View
+              style={{
+                flex: 1,
+                marginRight: 30,
+              }}
+            ></View>
             <View style={{ flex: 2, gap: 10 }}>
               <Text style={{ textAlign: "right", fontSize: 20 }}>
                 المهام المستندة
@@ -427,6 +501,7 @@ export default RootTask = ({ navigation }) => {
                     onPress={() => {
                       setVisible(true);
                       setViewTask(item);
+                      console.log({ item });
                     }}
                     style={{
                       height: 100,
@@ -443,10 +518,25 @@ export default RootTask = ({ navigation }) => {
                     <View
                       style={{ justifyContent: "center", alignItems: "center" }}
                     >
-                      <Image
-                        source={female}
-                        style={{ height: 70, width: 70, resizeMode: "contain" }}
-                      />
+                      {item.childId.gender == "male" ? (
+                        <Image
+                          source={male}
+                          style={{
+                            height: 50,
+                            width: 50,
+                            resizeMode: "contain",
+                          }}
+                        />
+                      ) : (
+                        <Image
+                          source={female}
+                          style={{
+                            height: 50,
+                            width: 50,
+                            resizeMode: "contain",
+                          }}
+                        />
+                      )}
                     </View>
                     <View style={{}}>
                       <Text style={{ fontSize: 23, textAlign: "right" }}>
@@ -497,35 +587,6 @@ export default RootTask = ({ navigation }) => {
                   </TouchableOpacity>
                 ))}
               </ScrollView>
-
-              <View
-                style={{
-                  flex: 1,
-                  marginTop: 20,
-                  marginRight: 30,
-                }}
-              >
-                <TouchableOpacity
-                  onPress={() => {
-                    navigation.navigate("AddTask");
-                  }}
-                  style={{
-                    flexDirection: "row",
-                    justifyContent: "flex-end",
-                    alignItems: "center",
-                    gap: 10,
-                  }}
-                >
-                  <Text style={{ fontSize: 20, color: "#3B3A7A" }}>
-                    اضافة المهام
-                  </Text>
-                  <Ionicons
-                    name="add-circle-outline"
-                    size={35}
-                    color={"#2C2B66D6"}
-                  />
-                </TouchableOpacity>
-              </View>
             </View>
             <View
               style={{
@@ -660,10 +721,10 @@ export default RootTask = ({ navigation }) => {
                         {options.map((option) => (
                           <CheckBox
                             key={option.value}
-                            title={option.label}
+                            title={option?.label}
                             checked={
                               option.value === editTypeTask ||
-                              option.label === editeTask?.typeTask
+                              option?.label === editeTask?.typeTask
                             }
                             onPress={() => handleCheckboxChange(option.value)}
                           />
@@ -683,10 +744,8 @@ export default RootTask = ({ navigation }) => {
                       <Input
                         onChangeText={(e) => {
                           setediteTask((x) => {
-                            console.log({ asdadsad: x });
                             return { ...x, taskName: e };
                           });
-                          console.log({ editeTask });
                         }}
                         defaultValue={editeTask?.name}
                         placeholder={"اسم المهمة"}
@@ -706,7 +765,6 @@ export default RootTask = ({ navigation }) => {
                       <Input
                         onChangeText={(e) =>
                           setediteTask((x) => {
-                            console.log({ asdasdas: x });
                             return { ...x, desc: e };
                           })
                         }

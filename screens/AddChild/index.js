@@ -16,7 +16,7 @@ import { Ionicons } from "@expo/vector-icons";
 import male from "../../assets/male.png";
 import female from "../../assets/female.png";
 
-const API_URL = "http://192.168.1.5:3000/api";
+const API_URL = "http://192.168.1.2:3000/api";
 
 const AddChild = ({ navigation }) => {
   const Context = useContext(ContextGlobal);
@@ -26,6 +26,7 @@ const AddChild = ({ navigation }) => {
   const [isBrother, setisBrother] = useState(false);
   const token = Context.token;
   const user = Context.user;
+  const setGlobalChild = Context.setChaild;
 
   useEffect(() => {
     async function fetchData() {
@@ -36,6 +37,8 @@ const AddChild = ({ navigation }) => {
             (item) => item.parentId == user._id
           );
           setChaild(finalChild);
+
+          setGlobalChild(finalChild);
           console.log(finalChild, "final child");
         } else {
           console.error("Invalid data format");

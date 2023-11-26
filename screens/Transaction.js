@@ -17,14 +17,14 @@ import { Picker } from "@react-native-picker/picker";
 import female from "../assets/female.png";
 import { Input } from "../Component/TextInput";
 import { ScrollView } from "react-native";
-const API_URL = "http://192.168.1.5:3000/api";
+const API_URL = "http://192.168.1.2:3000/api";
 
 const Transaction = ({ navigation }) => {
   const Context = useContext(ContextGlobal);
   const [chaild, setChaild] = useState([]);
   const [loading, setLoading] = useState(true);
   const [BroId, setBroId] = useState("");
-  const [isModalVisible, setModalVisible] = useState(false);
+  const [isModalVisibleTransfer, setModalVisibleTransfer] = useState(false);
   const [monyToBrother, setmonyToBrother] = useState(0);
   const [isTrans, setisTrans] = useState(false);
   const [isInternaltransSucsess, setisInternaltransSucsess] = useState(false);
@@ -40,8 +40,8 @@ const Transaction = ({ navigation }) => {
 
   const token = Context.token;
   const user = Context.loggedInChild;
-  const toggleModal = (BroId) => {
-    setModalVisible(!isModalVisible);
+  const toggleModalTransfer = (BroId) => {
+    setModalVisibleTransfer(!isModalVisibleTransfer);
     setBroId(BroId);
     setisTrans(false);
   };
@@ -49,14 +49,22 @@ const Transaction = ({ navigation }) => {
     setinternalTransferModel(!internalTransferModel);
     setisInternaltransSucsess(false);
   };
-  const handelTrans = () => {
-    transntionToBrother(BroId);
-    setisTrans(true);
-  };
   const handelinternal = () => {
-    setisInternaltransSucsess(true);
     transferInternal();
   };
+  const transferInternal = async () => {
+    const res = await axios.post(`${API_URL}/transaction/${user._id}`, {
+      from: selectedAccountType,
+      to: selectedTransferAccount,
+      amount: toCurrentAccountValue,
+    });
+    DeviceEventEmitter.emit("transfer->internal", { reload: true });
+    setisInternaltransSucsess(true);
+  };
+  const handelTrans = () => {
+    transntionToBrother(BroId);
+  };
+
   const transntionToBrother = async (broId) => {
     const res = await axios.post(`${API_URL}/transaction`, {
       sender: user._id,
@@ -67,18 +75,9 @@ const Transaction = ({ navigation }) => {
     Context.refreshChild();
 
     console.log(res);
+    setisTrans(true);
   };
-  const transferInternal = async () => {
-    const res = await axios.post(`${API_URL}/transaction/${user._id}`, {
-      from: selectedAccountType,
-      to: selectedTransferAccount,
-      amount: toCurrentAccountValue,
-    });
-    DeviceEventEmitter.emit("transfer->internal", { reload: true });
-    console.log(res);
-    console.log(selectedAccountType);
-    console.log(selectedTransferAccount);
-  };
+
   useEffect(() => {
     async function fetchData() {
       try {
@@ -170,7 +169,7 @@ const Transaction = ({ navigation }) => {
         {chaild.map((item, index) => (
           <TouchableOpacity
             onPress={() => {
-              toggleModal(item._id);
+              toggleModalTransfer(item._id);
             }}
             key={index} // Add a key for each item in the map
             style={{
@@ -235,8 +234,8 @@ const Transaction = ({ navigation }) => {
         <Modal
           animationType="slide"
           transparent={true}
-          visible={isModalVisible}
-          onRequestClose={() => toggleModal()}
+          visible={isModalVisibleTransfer}
+          onRequestClose={() => toggleModalTransfer()}
         >
           <View
             style={{
@@ -266,7 +265,7 @@ const Transaction = ({ navigation }) => {
                   تم التحويل بنجاح
                 </Text>
                 <Button
-                  onPress={() => setModalVisible(false)}
+                  onPress={() => setModalVisibleTransfer(false)}
                   Title={"استمرار"}
                 />
               </View>
@@ -319,7 +318,7 @@ const Transaction = ({ navigation }) => {
                     <Text style={{ color: "white", fontSize: 15 }}>ارسال</Text>
                   </TouchableOpacity>
                   <TouchableOpacity
-                    onPress={() => toggleModal(null)}
+                    onPress={() => toggleModalTransfer(null)}
                     style={{
                       backgroundColor: "red",
                       paddingHorizontal: 40,
