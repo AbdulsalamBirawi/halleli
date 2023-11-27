@@ -51,171 +51,164 @@ import { Button } from "./Component/Button";
 import { Picker } from "@react-native-picker/picker";
 import { Input } from "./Component/TextInput";
 
-const ModalScreen = ({ navigation }) => {
-  return (
-    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-      <Text>This is a modal!</Text>
-      <Button title="Close Modal" onPress={() => navigation.goBack()} />
-    </View>
-  );
-
-  // const [isInternaltransSucsess, setisInternaltransSucsess] = useState(false);
-  // const [toCurrentAccountValue, settoCurrentAccountValue] = useState(null);
-  // const [selectedAccountType, setSelectedAccountType] =
-  //   useState("savingAccount");
-  // const [selectedTransferAccount, setSelectedTransferAccount] =
-  //   useState("currentAccount");
-  // const [internalTransferModel, setinternalTransferModel] = useState(false);
-  // const internalToggleModel = () => {
-  //   setinternalTransferModel(!internalTransferModel);
-  //   setisInternaltransSucsess(false);
-  // };
-  // const handelinternal = () => {
-  //   transferInternal();
-  // };
-  // const transferInternal = async () => {
-  //   const res = await axios.post(`${API_URL}/transaction/${user._id}`, {
-  //     from: selectedAccountType,
-  //     to: selectedTransferAccount,
-  //     amount: toCurrentAccountValue,
-  //   });
-  //   DeviceEventEmitter.emit("transfer->internal", { reload: true });
-  //   setisInternaltransSucsess(true);
-  // };
-  // return (
-  //   <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-  //     <View
-  //       style={{
-  //         flex: 1,
-  //         justifyContent: "center",
-  //         alignItems: "center",
-  //       }}
-  //     >
-  //       <Modal
-  //         animationType="slide"
-  //         transparent={true}
-  //         visible={internalTransferModel}
-  //         onRequestClose={() => internalToggleModel()}
-  //       >
-  //         <View
-  //           style={{
-  //             flex: 1,
-  //             justifyContent: "center",
-  //             alignItems: "center",
-  //             // backgroundColor: "white",
-  //           }}
-  //         >
-  //           {isInternaltransSucsess && (
-  //             <View
-  //               style={{
-  //                 backgroundColor: "white",
-  //                 padding: 20,
-  //                 borderRadius: 10,
-  //                 elevation: 5,
-  //               }}
-  //             >
-  //               <Text
-  //                 style={{
-  //                   textAlign: "center",
-  //                   fontWeight: "600",
-  //                   fontSize: 20,
-  //                   marginVertical: 20,
-  //                 }}
-  //               >
-  //                 تم التحويل بنجاح
-  //               </Text>
-  //               <Button
-  //                 onPress={() => internalToggleModel()}
-  //                 Title={"استمرار"}
-  //               />
-  //             </View>
-  //           )}
-  //           {isInternaltransSucsess == false && (
-  //             <View
-  //               style={{
-  //                 backgroundColor: "white",
-  //                 padding: 20,
-  //                 borderRadius: 10,
-  //                 elevation: 5,
-  //               }}
-  //             >
-  //               <Text
-  //                 style={{
-  //                   color: "#3B3A7A",
-  //                   fontSize: 20,
-  //                   marginVertical: 10,
-  //                   fontWeight: "600",
-  //                 }}
-  //               >
-  //                 التحويل بين الحسابات
-  //               </Text>
-  //               <View>
-  //                 <Text>اختر نوع الحساب:</Text>
-  //                 <Picker
-  //                   selectedValue={selectedAccountType}
-  //                   onValueChange={(itemValue) =>
-  //                     setSelectedAccountType(itemValue)
-  //                   }
-  //                 >
-  //                   <Picker.Item label="حساب الادخار" value="savingAccount" />
-  //                   <Picker.Item label="حساب الجاري" value="currentAccount" />
-  //                 </Picker>
-  //                 <Text>اختر حساب النقل:</Text>
-  //                 <Picker
-  //                   selectedValue={selectedTransferAccount}
-  //                   onValueChange={(itemValue) =>
-  //                     setSelectedTransferAccount(itemValue)
-  //                   }
-  //                 >
-  //                   <Picker.Item label="حساب الادخار" value="savingAccount" />
-  //                   <Picker.Item label="حساب الجاري" value="currentAccount" />
-  //                 </Picker>
-  //               </View>
-  //               <View>
-  //                 <Text>المبلغ</Text>
-  //                 <Input onChangeText={(e) => settoCurrentAccountValue(e)} />
-  //               </View>
-  //               <View
-  //                 style={{
-  //                   flexDirection: "row",
-  //                   width: "100%",
-  //                   gap: 20,
-  //                   marginVertical: 20,
-  //                   marginLeft: 35,
-  //                   alignItems: "center",
-  //                 }}
-  //               >
-  //                 <TouchableOpacity
-  //                   onPress={() => handelinternal()}
-  //                   style={{
-  //                     backgroundColor: "#3B3A7A",
-  //                     paddingHorizontal: 40,
-  //                     paddingVertical: 10,
-  //                     borderRadius: 10,
-  //                   }}
-  //                 >
-  //                   <Text style={{ color: "white", fontSize: 15 }}>ارسال</Text>
-  //                 </TouchableOpacity>
-  //                 <TouchableOpacity
-  //                   onPress={() => internalToggleModel(null)}
-  //                   style={{
-  //                     backgroundColor: "red",
-  //                     paddingHorizontal: 40,
-  //                     paddingVertical: 10,
-  //                     borderRadius: 10,
-  //                   }}
-  //                 >
-  //                   <Text style={{ color: "white", fontSize: 15 }}>اغلاق</Text>
-  //                 </TouchableOpacity>
-  //               </View>
-  //             </View>
-  //           )}
-  //         </View>
-  //       </Modal>
-  //     </View>
-  //   </View>
-  // );
-};
+// const ModalScreen = ({ navigation }) => {
+//   const [isInternaltransSucsess, setisInternaltransSucsess] = useState(false);
+//   const [toCurrentAccountValue, settoCurrentAccountValue] = useState(null);
+//   const [selectedAccountType, setSelectedAccountType] =
+//     useState("savingAccount");
+//   const [selectedTransferAccount, setSelectedTransferAccount] =
+//     useState("currentAccount");
+//   const [internalTransferModel, setinternalTransferModel] = useState(false);
+//   const internalToggleModel = () => {
+//     setinternalTransferModel(!internalTransferModel);
+//     setisInternaltransSucsess(false);
+//   };
+//   const handelinternal = () => {
+//     transferInternal();
+//   };
+//   const transferInternal = async () => {
+//     const res = await axios.post(`${API_URL}/transaction/${user._id}`, {
+//       from: selectedAccountType,
+//       to: selectedTransferAccount,
+//       amount: toCurrentAccountValue,
+//     });
+//     DeviceEventEmitter.emit("transfer->internal", { reload: true });
+//     setisInternaltransSucsess(true);
+//   };
+//   return (
+//     <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+//       <View
+//         style={{
+//           flex: 1,
+//           justifyContent: "center",
+//           alignItems: "center",
+//         }}
+//       >
+//         <Modal
+//           animationType="slide"
+//           transparent={true}
+//           visible={internalTransferModel}
+//           onRequestClose={() => internalToggleModel()}
+//         >
+//           <View
+//             style={{
+//               flex: 1,
+//               justifyContent: "center",
+//               alignItems: "center",
+//               // backgroundColor: "white",
+//             }}
+//           >
+//             {isInternaltransSucsess && (
+//               <View
+//                 style={{
+//                   backgroundColor: "white",
+//                   padding: 20,
+//                   borderRadius: 10,
+//                   elevation: 5,
+//                 }}
+//               >
+//                 <Text
+//                   style={{
+//                     textAlign: "center",
+//                     fontWeight: "600",
+//                     fontSize: 20,
+//                     marginVertical: 20,
+//                   }}
+//                 >
+//                   تم التحويل بنجاح
+//                 </Text>
+//                 <Button
+//                   onPress={() => internalToggleModel()}
+//                   Title={"استمرار"}
+//                 />
+//               </View>
+//             )}
+//             {isInternaltransSucsess == false && (
+//               <View
+//                 style={{
+//                   backgroundColor: "white",
+//                   padding: 20,
+//                   borderRadius: 10,
+//                   elevation: 5,
+//                 }}
+//               >
+//                 <Text
+//                   style={{
+//                     color: "#3B3A7A",
+//                     fontSize: 20,
+//                     marginVertical: 10,
+//                     fontWeight: "600",
+//                   }}
+//                 >
+//                   التحويل بين الحسابات
+//                 </Text>
+//                 <View>
+//                   <Text>اختر نوع الحساب:</Text>
+//                   <Picker
+//                     selectedValue={selectedAccountType}
+//                     onValueChange={(itemValue) =>
+//                       setSelectedAccountType(itemValue)
+//                     }
+//                   >
+//                     <Picker.Item label="حساب الادخار" value="savingAccount" />
+//                     <Picker.Item label="حساب الجاري" value="currentAccount" />
+//                   </Picker>
+//                   <Text>اختر حساب النقل:</Text>
+//                   <Picker
+//                     selectedValue={selectedTransferAccount}
+//                     onValueChange={(itemValue) =>
+//                       setSelectedTransferAccount(itemValue)
+//                     }
+//                   >
+//                     <Picker.Item label="حساب الادخار" value="savingAccount" />
+//                     <Picker.Item label="حساب الجاري" value="currentAccount" />
+//                   </Picker>
+//                 </View>
+//                 <View>
+//                   <Text>المبلغ</Text>
+//                   <Input onChangeText={(e) => settoCurrentAccountValue(e)} />
+//                 </View>
+//                 <View
+//                   style={{
+//                     flexDirection: "row",
+//                     width: "100%",
+//                     gap: 20,
+//                     marginVertical: 20,
+//                     marginLeft: 35,
+//                     alignItems: "center",
+//                   }}
+//                 >
+//                   <TouchableOpacity
+//                     onPress={() => handelinternal()}
+//                     style={{
+//                       backgroundColor: "#3B3A7A",
+//                       paddingHorizontal: 40,
+//                       paddingVertical: 10,
+//                       borderRadius: 10,
+//                     }}
+//                   >
+//                     <Text style={{ color: "white", fontSize: 15 }}>ارسال</Text>
+//                   </TouchableOpacity>
+//                   <TouchableOpacity
+//                     onPress={() => internalToggleModel(null)}
+//                     style={{
+//                       backgroundColor: "red",
+//                       paddingHorizontal: 40,
+//                       paddingVertical: 10,
+//                       borderRadius: 10,
+//                     }}
+//                   >
+//                     <Text style={{ color: "white", fontSize: 15 }}>اغلاق</Text>
+//                   </TouchableOpacity>
+//                 </View>
+//               </View>
+//             )}
+//           </View>
+//         </Modal>
+//       </View>
+//     </View>
+//   );
+// };
 // Thanks for watching
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -293,8 +286,8 @@ function RooteTab() {
       )}
       {!Parent && (
         <Tab.Screen
-          name="ModalTab"
-          component={ModalScreen}
+          name="Transaction"
+          component={Transaction}
           options={{
             title: " التحويلات",
 
@@ -760,22 +753,7 @@ export default function App() {
   const [isModalVisible, setModalVisible] = useState(false);
   return (
     <ContextData>
-      <NavigationContainer>
-        <Modal
-          visible={isModalVisible}
-          animationType="slide"
-          onRequestClose={() => setModalVisible(false)}
-        >
-          <View style={{ flex: 1 }}>
-            <Text>This is a modal!</Text>
-            <Button
-              title="Close Modal"
-              onPress={() => setModalVisible(false)}
-            />
-          </View>
-        </Modal>
-        {RooteStack()}
-      </NavigationContainer>
+      <NavigationContainer>{RooteStack()}</NavigationContainer>
     </ContextData>
   );
 }

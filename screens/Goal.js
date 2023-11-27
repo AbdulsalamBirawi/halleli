@@ -13,7 +13,7 @@ import { Button } from "../Component/Button";
 import axios from "axios";
 import { ContextGlobal } from "../Store";
 import { Ionicons } from "@expo/vector-icons";
-const API_URL = "http://192.168.1.2:3000/api";
+const API_URL = "http://192.168.1.11:3000/api";
 import { Input } from "../Component/TextInput";
 const Goal = ({ navigation }) => {
   const Context = useContext(ContextGlobal);

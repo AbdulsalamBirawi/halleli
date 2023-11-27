@@ -70,7 +70,7 @@ const HomeScreen = ({ navigation }) => {
           />
         </View>
         <Text style={{ textAlign: "right", fontSize: 30, padding: 10 }}>
-          اهلا بك ... {user.name}
+          اهلا بك ... {user?.name}
         </Text>
       </View>
       {/* Horizontal lines */}
@@ -91,7 +91,11 @@ const HomeScreen = ({ navigation }) => {
         style={styles.counterCard}
       >
         {/* Render the Card component with specific props */}
-        <Card url={icons2} total={user.currentAccount} cardHolder={user.name} />
+        <Card
+          url={icons2}
+          total={user?.currentAccount}
+          cardHolder={user?.name}
+        />
       </TouchableOpacity>
 
       {/* Text for the savings account */}
@@ -107,7 +111,7 @@ const HomeScreen = ({ navigation }) => {
         style={styles.counterCard}
       >
         {/* Render the Card component with specific props */}
-        <Card url={icons} total={user.savingAccount} cardHolder={user.name} />
+        <Card url={icons} total={user?.savingAccount} cardHolder={user?.name} />
       </TouchableOpacity>
       <View
         style={{
