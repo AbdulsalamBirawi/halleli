@@ -97,7 +97,7 @@ const Goal = ({ navigation }) => {
     setModalVisible(false);
     setGoal(false);
   };
-
+  console.log(goals);
   return (
     <ScrollView
       style={{

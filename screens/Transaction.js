@@ -127,7 +127,7 @@ const Transaction = ({ navigation }) => {
           resizeMode: "contain",
         }}
       />
-      <View
+      {/* <View
         style={{
           flexDirection: "row",
           alignItems: "center",
@@ -136,12 +136,10 @@ const Transaction = ({ navigation }) => {
         }}
       >
         <View style={{ flexDirection: "row", gap: 5, padding: 10 }}></View>
-        <Text style={{ textAlign: "right", fontSize: 30, padding: 10 }}>
-          اهلا بك ... {user.name}!
-        </Text>
-      </View>
+        <Text style={{ textAlign: "right", fontSize: 30, padding: 10 }}></Text>
+      </View> */}
       {/* Horizontal lines */}
-      <View style={{ flexDirection: "row" }}>
+      {/* <View style={{ flexDirection: "row" }}>
         <View
           style={{
             height: 1,
@@ -159,7 +157,7 @@ const Transaction = ({ navigation }) => {
             marginTop: 20,
           }}
         />
-      </View>
+      </View> */}
 
       {/* <ScrollView style={{ width: "100%", gap: 5 }}>
         {chaild.map((item, index) => (
@@ -223,7 +221,7 @@ const Transaction = ({ navigation }) => {
           <Picker.Item label="حساب الجاري" value="currentAccount" />
         </Picker>
 
-        <Text>اختر حساب النقل:</Text>
+        <Text>اختر حساب المراد التحويل اليه:</Text>
 
         <Picker
           selectedValue={selectedTransferAccount}
