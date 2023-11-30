@@ -23,7 +23,7 @@ import { ContextGlobal } from "../../Store";
 import DatePicker from "@react-native-community/datetimepicker";
 
 export default RootTask = ({ navigation }) => {
-  const api = "http://192.168.1.11:3000/api";
+  const api = "http://192.168.1.66:3000/api";
   const options = [
     { label: "بدنية", value: 1 },
     { label: "عقلية", value: 2 },
@@ -103,8 +103,12 @@ export default RootTask = ({ navigation }) => {
     });
     getRequestTasks();
     getTasks();
+    const internal = setInterval(() => {
+      setReload(r => !r);
+    }, 10 * 1000);
     return () => {
       DeviceEventEmitter.removeAllListeners();
+      clearInterval(internal);
     };
   }, [reload]);
 

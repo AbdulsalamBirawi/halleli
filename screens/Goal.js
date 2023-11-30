@@ -13,7 +13,7 @@ import { Button } from "../Component/Button";
 import axios from "axios";
 import { ContextGlobal } from "../Store";
 import { Ionicons } from "@expo/vector-icons";
-const API_URL = "http://192.168.1.11:3000/api";
+const API_URL = "http://192.168.1.66:3000/api";
 import { Input } from "../Component/TextInput";
 const Goal = ({ navigation }) => {
   const Context = useContext(ContextGlobal);
@@ -36,7 +36,7 @@ const Goal = ({ navigation }) => {
   useEffect(() => {
     async function fetchData() {
       try {
-        const response = await axios.get(`${API_URL}/goal`);
+        const response = await axios.get(`${API_URL}/goal?id=${user._id}`);
         if (response.data && Array.isArray(response.data)) {
           const options = [
             { label: "منخفضة", value: 1 },
@@ -61,9 +61,9 @@ const Goal = ({ navigation }) => {
     DeviceEventEmitter.addListener("goal->reload", () => {
       setReload((e) => !e);
     });
-
     fetchData();
     return () => {
+
       DeviceEventEmitter.removeAllListeners();
     };
   }, [reload]);

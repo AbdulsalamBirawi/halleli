@@ -16,7 +16,7 @@ import { Ionicons } from "@expo/vector-icons";
 import male from "../../assets/male.png";
 import female from "../../assets/female.png";
 
-const API_URL = "http://192.168.1.11:3000/api";
+const API_URL = "http://192.168.1.66:3000/api";
 
 const AddChild = ({ navigation }) => {
   const Context = useContext(ContextGlobal);
@@ -49,12 +49,15 @@ const AddChild = ({ navigation }) => {
         setLoading(false);
       }
     }
-    fetchData();
+    const interval = setInterval(() => {
+        fetchData();
+    }, 10000);
     DeviceEventEmitter.addListener("creat->child", (e) => {
       fetchData();
     });
     return () => {
       DeviceEventEmitter.removeAllListeners();
+      clearInterval(interval);
     };
   }, []);
   console.log(chaild, "childs");

@@ -7,7 +7,7 @@ import axios from "axios";
 import { ContextGlobal } from "../Store";
 import { Ionicons } from "@expo/vector-icons";
 import { Modal } from "react-native";
-const API_URL = "http://192.168.1.11:3000/api";
+const API_URL = "http://192.168.1.66:3000/api";
 
 const Portfolio = ({ navigation }) => {
   const Context = useContext(ContextGlobal);
@@ -36,6 +36,13 @@ const Portfolio = ({ navigation }) => {
     }
 
     fetchData();
+    const interval = setInterval( () => {
+      setReload(r => !r);
+    }, 10 * 1000)
+
+    return () => {
+      clearInterval(interval);
+    }
   }, [reload]);
 
   const finalChild = chaild.filter((item) => item.parentId == user._id);
