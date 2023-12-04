@@ -12,7 +12,9 @@ const ChildQr = ({ route, navigation }) => {
     token: token,
     IdChaild: IdChaild,
   };
-
+  // const toCreateChild = () => {
+  //   navigation.navigate("CreateChild");
+  // };
   const newChilder = JSON.stringify(childs);
 
   return (
@@ -53,7 +55,12 @@ const ChildQr = ({ route, navigation }) => {
             viewBox={`0 0 256 256`}
           />
         </View>
-        <Button Title={"إنشاء باركود لطفل اخر"} />
+        <Button
+          onPress={() => {
+            navigation.navigate("CreateChild");
+          }}
+          Title={"إنشاء باركود لطفل اخر"}
+        />
       </View>
     </View>
   );

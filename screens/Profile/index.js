@@ -1,4 +1,11 @@
-import { View, Text, Image, TouchableOpacity, ScrollView } from "react-native";
+import {
+  View,
+  Text,
+  Image,
+  TouchableOpacity,
+  ScrollView,
+  Modal,
+} from "react-native";
 import React, { useState, useContext, useEffect } from "react";
 import axios from "axios";
 import {
@@ -16,35 +23,48 @@ import { ContextGlobal } from "../../Store";
 import logo from "../../assets/Group9.png";
 import SuccessTost from "../../Component/SuccessTost";
 
-const API_URL = "http://192.168.1.66:3000/api";
+const API_URL = "http://192.168.43.79:3000/api";
 
 const Profile = ({ navigation }) => {
   const Context = useContext(ContextGlobal);
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [modalVisible, setModalVisible] = useState(false);
+  const [oldpass, setoldpass] = useState(null);
   const handleLogin = Context.handleLogin;
   const loder = Context.loder;
   const token = Context.token;
   const [first, setfirst] = useState("");
   const setParent = Context.setParent;
   console.log(token, "auth");
+  const toggleModal = () => {
+    setModalVisible(!modalVisible);
+  };
   // useEffect(() => {
   //   if (token !== null) {
   //     setParent(true);
   //     navigation.navigate("RooteTab");
   //   }
   // }, [token]);
+  const handelClose = () => {
+    setModalVisible(false);
+    navigation.navigate("ParentLogin");
+  };
 
   const handleLogins = async () => {
     handleLogin({ email, password });
   };
   const updateUserInfo = async () => {
-    const res = await axios.post(`http://192.168.1.66:3000/api/users/newpass`, {
-      email: email,
-      password: password,
-    });
+    const res = await axios.post(
+      `http://192.168.43.79:3000/api/users/newpass`,
+      {
+        email: email,
+        password: password,
+      }
+    );
     console.log(res);
+    setModalVisible(true);
   };
 
   return (
@@ -96,6 +116,7 @@ const Profile = ({ navigation }) => {
           // Icon={"email"}
           value={email}
           onChangeText={(text) => setEmail(text.toLowerCase())}
+          error={email ? false : <Text>the email is empty</Text>}
         >
           <MaterialIcons name={"email"} size={25} color="#AAAA" />
         </Input>
@@ -111,14 +132,16 @@ const Profile = ({ navigation }) => {
           كلمة المرور الحالية
         </Text>
         <Input
-          placeholder={"كلمة المرور الجديد"}
+          placeholder={"كلمة المرور الحالية"}
           Icon={"email"}
-          value={password}
-          onChangeText={(text) => setPassword(text.toLowerCase())}
+          value={oldpass}
+          onChangeText={(e) => setoldpass(e)}
           password
+          error={oldpass ? false : <Text>the old password is empty</Text>}
         >
           <FontAwesome name="lock" size={25} color="#AAAA" />
         </Input>
+
         <Text
           style={{
             textAlign: "right",
@@ -131,17 +154,57 @@ const Profile = ({ navigation }) => {
           كلمة المرور الجديد
         </Text>
         <Input
-          placeholder={"كلمة المرور الحالية"}
+          placeholder={"كلمة المرور الجديد"}
           Icon={"email"}
-          value={first}
-          onChangeText={() => console.log("")}
+          value={password}
+          onChangeText={(text) => setPassword(text.toLowerCase())}
           password
+          error={password ? false : <Text>the password is empty</Text>}
         >
           <FontAwesome name="lock" size={25} color="#AAAA" />
         </Input>
 
         <Button Title={"حفظ"} onPress={() => updateUserInfo()} />
       </View>
+
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => toggleModal(null)}
+      >
+        <View
+          style={{
+            flex: 1,
+            justifyContent: "center",
+            alignItems: "center",
+            backgroundColor: "rgba(0, 0, 0, 0.5)",
+          }}
+        >
+          <View
+            style={{
+              backgroundColor: "white",
+              padding: 20,
+              borderRadius: 10,
+              elevation: 200,
+            }}
+          >
+            <View
+              style={{
+                backgroundColor: "white",
+                alignItems: "center",
+              }}
+            >
+              <Text
+                style={{ color: "#3B3A7A", marginVertical: 60, fontSize: 40 }}
+              >
+                تم التعديل بنجاح
+              </Text>
+              <Button Title={"رجوع"} onPress={() => handelClose()} />
+            </View>
+          </View>
+        </View>
+      </Modal>
     </ScrollView>
   );
 };

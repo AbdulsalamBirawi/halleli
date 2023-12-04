@@ -16,7 +16,7 @@ import { Ionicons } from "@expo/vector-icons";
 import male from "../../assets/male.png";
 import female from "../../assets/female.png";
 
-const API_URL = "http://192.168.1.66:3000/api";
+const API_URL = "http://192.168.43.79:3000/api";
 
 const AddChild = ({ navigation }) => {
   const Context = useContext(ContextGlobal);
@@ -50,7 +50,7 @@ const AddChild = ({ navigation }) => {
       }
     }
     const interval = setInterval(() => {
-        fetchData();
+      fetchData();
     }, 10000);
     DeviceEventEmitter.addListener("creat->child", (e) => {
       fetchData();
@@ -163,7 +163,7 @@ const AddChild = ({ navigation }) => {
             gap: 10,
           }}
         >
-          <Text style={{ fontSize: 20, color: "#3B3A7A" }}>اضافة المزيد</Text>
+          <Text style={{ fontSize: 20, color: "#3B3A7A" }}>اضافة طفل جديد</Text>
           <Ionicons name="add-circle-outline" size={35} color={"#2C2B66D6"} />
         </TouchableOpacity>
       </View>

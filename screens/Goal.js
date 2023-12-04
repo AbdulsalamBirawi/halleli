@@ -13,7 +13,7 @@ import { Button } from "../Component/Button";
 import axios from "axios";
 import { ContextGlobal } from "../Store";
 import { Ionicons } from "@expo/vector-icons";
-const API_URL = "http://192.168.1.66:3000/api";
+const API_URL = "http://192.168.43.79:3000/api";
 import { Input } from "../Component/TextInput";
 const Goal = ({ navigation }) => {
   const Context = useContext(ContextGlobal);
@@ -63,7 +63,6 @@ const Goal = ({ navigation }) => {
     });
     fetchData();
     return () => {
-
       DeviceEventEmitter.removeAllListeners();
     };
   }, [reload]);
@@ -164,18 +163,20 @@ const Goal = ({ navigation }) => {
           }}
         />
       </View>
-      <View
-        style={{
-          flex: 2,
-          justifyContent: "center",
-          alignItems: "center",
-        }}
+
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => toggleModal(null)}
       >
-        <Modal
-          animationType="slide"
-          transparent={true}
-          visible={modalVisible}
-          onRequestClose={() => toggleModal(null)}
+        <View
+          style={{
+            flex: 1,
+            justifyContent: "center",
+            alignItems: "center",
+            backgroundColor: "rgba(0, 0, 0, 0.5)",
+          }}
         >
           <View
             style={{
@@ -210,9 +211,14 @@ const Goal = ({ navigation }) => {
                       display: "block",
                       paddingVertical: 10,
                       alignItems: "center",
+                      borderWidth: 2,
+                      borderColor:
+                        accountType == "savingAccount"
+                          ? "rgba(0, 0, 0, 1)"
+                          : "white",
                     }}
                   >
-                    <Text style={{ color: "white" }}>حساب الادخار</Text>
+                    <Text style={{ color: "white" }}>حساب الادخاري</Text>
                   </TouchableOpacity>
                   <TouchableOpacity
                     onPress={() => setaccountType("currentAccount")}
@@ -223,6 +229,11 @@ const Goal = ({ navigation }) => {
                       display: "block",
                       paddingVertical: 10,
                       alignItems: "center",
+                      borderWidth: 2,
+                      borderColor:
+                        accountType == "currentAccount"
+                          ? "rgba(0, 0, 0, 1)"
+                          : "white",
                     }}
                   >
                     <Text style={{ color: "white" }}>حساب الجاري</Text>
@@ -241,6 +252,7 @@ const Goal = ({ navigation }) => {
                   اختر المبلغ المراد اضافته
                 </Text>
                 <Input
+                  keyboardType="numeric"
                   onChangeText={(e) => setammuntToAdd(e)}
                   placeholder={"المبلغ"}
                 ></Input>
@@ -291,7 +303,12 @@ const Goal = ({ navigation }) => {
             )}
 
             {goal && (
-              <View style={{ backgroundColor: "white", alignItems: "center" }}>
+              <View
+                style={{
+                  backgroundColor: "white",
+                  alignItems: "center",
+                }}
+              >
                 <Text
                   style={{ color: "#3B3A7A", marginVertical: 60, fontSize: 40 }}
                 >
@@ -301,8 +318,9 @@ const Goal = ({ navigation }) => {
               </View>
             )}
           </View>
-        </Modal>
-      </View>
+        </View>
+      </Modal>
+
       <View
         style={{
           flex: 2,

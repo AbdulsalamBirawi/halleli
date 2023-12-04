@@ -17,7 +17,7 @@ import { Picker } from "@react-native-picker/picker";
 import female from "../assets/female.png";
 import { Input } from "../Component/TextInput";
 import { ScrollView } from "react-native";
-const API_URL = "http://192.168.1.66:3000/api";
+const API_URL = "http://192.168.43.79:3000/api";
 
 const Transaction = ({ navigation }) => {
   const Context = useContext(ContextGlobal);
@@ -217,7 +217,7 @@ const Transaction = ({ navigation }) => {
           selectedValue={selectedAccountType}
           onValueChange={(itemValue) => setSelectedAccountType(itemValue)}
         >
-          <Picker.Item label="حساب الادخار" value="savingAccount" />
+          <Picker.Item label="حساب الادخاري" value="savingAccount" />
           <Picker.Item label="حساب الجاري" value="currentAccount" />
         </Picker>
 
@@ -227,7 +227,7 @@ const Transaction = ({ navigation }) => {
           selectedValue={selectedTransferAccount}
           onValueChange={(itemValue) => setSelectedTransferAccount(itemValue)}
         >
-          <Picker.Item label="حساب الادخار" value="savingAccount" />
+          <Picker.Item label="حساب الادخاري" value="savingAccount" />
           <Picker.Item label="حساب الجاري" value="currentAccount" />
         </Picker>
       </View>
@@ -258,7 +258,9 @@ const Transaction = ({ navigation }) => {
           <Text style={{ color: "white", fontSize: 15 }}>ارسال</Text>
         </TouchableOpacity>
         <TouchableOpacity
-          onPress={() => internalToggleModel(null)}
+          onPress={() => {
+            navigation.navigate("Home");
+          }}
           style={{
             backgroundColor: "red",
             paddingHorizontal: 40,

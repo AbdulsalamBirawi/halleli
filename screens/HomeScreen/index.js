@@ -99,7 +99,7 @@ const HomeScreen = ({ navigation }) => {
       </TouchableOpacity>
 
       {/* Text for the savings account */}
-      <Text style={styles.textCom}>الحساب الادخار</Text>
+      <Text style={styles.textCom}>الحساب الادخاري</Text>
 
       {/* TouchableOpacity for navigating to SavingsScreen */}
       <TouchableOpacity

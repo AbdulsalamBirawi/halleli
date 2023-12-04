@@ -19,7 +19,7 @@ import PropTransfer from "../Component/PropTransfer";
 import { ScrollView } from "react-native";
 import { Input } from "../Component/TextInput";
 
-const API_URL = "http://192.168.1.66:3000/api";
+const API_URL = "http://192.168.43.79:3000/api";
 const Prices = ({ navigation }) => {
   const toggleModal = () => {
     setModalVisible(!isModalVisible);
@@ -198,7 +198,7 @@ const Prices = ({ navigation }) => {
                 }}
                 onPress={() => toggleModalTransfer(item._id)}
               >
-                <Text style={{ color: "#3B3A7A" }}>ارسال حوالة</Text>
+                <Text style={{ color: "#3B3A7A" }}>تحويل مبلغ</Text>
               </TouchableOpacity>
             </View>
           </TouchableOpacity>

@@ -26,7 +26,7 @@ const ProfileChild = ({ route, navigation }) => {
   const [reload, setReload] = useState(false);
   const getChildById = async () => {
     const res = await axios.get(
-      `http://192.168.1.66:3000/api/child/child/${IdChaild}`
+      `http://192.168.43.79:3000/api/child/child/${IdChaild}`
     );
     console.log({ res: res.data });
     const Child = res.data;
@@ -162,7 +162,7 @@ const ProfileChild = ({ route, navigation }) => {
             }}
             style={{
               height: 50,
-              width: "50%",
+              width: "100%",
               backgroundColor: "#3B3A7A",
               justifyContent: "center",
               alignItems: "center",
@@ -171,25 +171,8 @@ const ProfileChild = ({ route, navigation }) => {
               gap: 5,
             }}
           >
-            <Text style={{ color: "#fff" }}>تحويل المصروف الشهري</Text>
+            <Text style={{ color: "#fff" }}>تحويل المصروف </Text>
             <Image source={transfer} />
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => {
-              setOpen(true);
-            }}
-            style={{
-              height: 50,
-              width: "50%",
-              backgroundColor: "#3B3A7A",
-              justifyContent: "center",
-              alignItems: "center",
-              borderRadius: 20,
-              flexDirection: "row",
-            }}
-          >
-            <Text style={{ color: "#fff" }}>تحويل مبلغ</Text>
-            <Image source={set} />
           </TouchableOpacity>
         </View>
       )}

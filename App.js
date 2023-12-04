@@ -251,7 +251,7 @@ function RooteTab() {
           Parent ? (Context.isFirstTime ? HomeParent : AddChild) : HomeScreen
         }
         // component={HomeScreen}
-        options={{
+        options={({ navigation }) => ({
           title: " الرئيسية",
           tabBarIcon: ({ focused }) => {
             return (
@@ -262,7 +262,15 @@ function RooteTab() {
               />
             );
           },
-        }}
+          headerLeft: () => (
+            <AntDesign
+              onPress={() => navigation.goBack()}
+              name="arrowleft"
+              size={30}
+              color="black"
+            />
+          ),
+        })}
       />
 
       {!Parent && (
@@ -317,7 +325,7 @@ function RooteTab() {
           name="Goalsss"
           component={Goal}
           options={{
-            title: "اهدافي",
+            title: "أهدافي",
 
             tabBarIcon: ({ focused }) => {
               return (
@@ -335,7 +343,7 @@ function RooteTab() {
         name="RootTask"
         component={Parent == true ? RootTask : Portfolio}
         options={{
-          title: " مهام",
+          title: " مهامي",
 
           tabBarIcon: ({ focused }) => {
             return (

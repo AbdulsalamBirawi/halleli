@@ -23,7 +23,7 @@ import { ContextGlobal } from "../../Store";
 import DatePicker from "@react-native-community/datetimepicker";
 
 export default RootTask = ({ navigation }) => {
-  const api = "http://192.168.1.66:3000/api";
+  const api = "http://192.168.43.79:3000/api";
   const options = [
     { label: "بدنية", value: 1 },
     { label: "عقلية", value: 2 },
@@ -104,7 +104,7 @@ export default RootTask = ({ navigation }) => {
     getRequestTasks();
     getTasks();
     const internal = setInterval(() => {
-      setReload(r => !r);
+      setReload((r) => !r);
     }, 10 * 1000);
     return () => {
       DeviceEventEmitter.removeAllListeners();
@@ -497,7 +497,7 @@ export default RootTask = ({ navigation }) => {
             ></View>
             <View style={{ flex: 2, gap: 10 }}>
               <Text style={{ textAlign: "right", fontSize: 20 }}>
-                المهام المستندة
+                المهام المسندة
               </Text>
               <ScrollView>
                 {tasks.map((item, index) => (
@@ -648,7 +648,7 @@ export default RootTask = ({ navigation }) => {
                         <Text
                           style={{ color: "white", marginTop: 2, fontSize: 15 }}
                         >
-                          اغلاق
+                          الغاء
                         </Text>
                       </TouchableOpacity>
                       <TouchableOpacity
@@ -853,7 +853,7 @@ export default RootTask = ({ navigation }) => {
                         <Text
                           style={{ color: "white", marginTop: 2, fontSize: 15 }}
                         >
-                          اغلاق
+                          الغاء
                         </Text>
                       </TouchableOpacity>
                       <TouchableOpacity

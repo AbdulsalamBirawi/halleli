@@ -28,27 +28,22 @@ const Card = ({ total, url, cardHolder }) => {
     <ImageBackground source={url} style={styles.card} borderRadius={30}>
       {/* Row for the card logo and the eye icon */}
       <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-        <Image source={require("../assets/visa_text.png")} />
-        <AntDesign name="eyeo" size={26} color="#fff" />
+        <Image
+          style={{ width: 100, height: 100 }}
+          source={require("../assets/Group9.png")}
+        />
       </View>
 
       {/* Card number and expiration date */}
       <View style={styles.cardNumber}>
         <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-          <Text style={styles.cardNumberText}>{`SAR ${total}`}</Text>
-          <Text
-            style={[styles.cardNumberText, { fontSize: 18 }]}
-          >{`03/2025`}</Text>
+          <Text style={styles.cardNumberText}>{` ${total}`}</Text>
         </View>
-        <Text style={styles.cardNumberText}>{`**** **** **** ****`}</Text>
+        <Text style={styles.cardNumberText}>{`.... .... .... ....`}</Text>
       </View>
 
       {/* Card holder information */}
       <View style={styles.cardFooter}>
-        <View>
-          <Text style={styles.cardHolderName}>Card holder</Text>
-          <Text style={styles.cardName}>MR. {cardHolder} </Text>
-        </View>
         <Image source={require("../assets/card_icon.png")} />
       </View>
     </ImageBackground>
@@ -80,5 +75,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
+    justifyContent: "flex-end",
   },
 });
