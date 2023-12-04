@@ -8,6 +8,7 @@ import {
   StyleSheet,
   ScrollView,
   DeviceEventEmitter,
+  ImageBackground,
 } from "react-native";
 import { Button } from "../Component/Button";
 import axios from "axios";
@@ -109,11 +110,13 @@ const Goal = ({ navigation }) => {
     >
       <View style={{ flex: 3, padding: 10, gap: 10 }}>
         {goals.map((item, index) => (
-          <View
+          <ImageBackground
+            source={require('../assets/goalbg.png')}
+            resizeMode="cover"
             key={item._id}
             style={{
               flexDirection: "row",
-              height: 100,
+              height: 110,
               width: "100%",
               backgroundColor: "#3B3A7A",
               borderRadius: 15,
@@ -122,7 +125,7 @@ const Goal = ({ navigation }) => {
               justifyContent: "space-between",
               alignItems: "center",
               paddingHorizontal: 10,
-              paddingVertical: 20,
+              paddingVertical: 10,
             }}
           >
             <TouchableOpacity onPress={() => setdeleteGoal(item._id)}>
@@ -136,17 +139,16 @@ const Goal = ({ navigation }) => {
                 flexDirection: "row",
                 justifyContent: "space-between",
                 alignItems: "center",
-                width: "80%",
+                width: "90%",
               }}
             >
               <Text style={{ color: "#fff", fontSize: 20 }}>
-                {item.valueGoal}
+                {item.valueGoal} SAR
               </Text>
               <View>
-                <Text style={{ color: "#fff", fontSize: 20 }}>{item.name}</Text>
-                <Text style={{ color: "#fff", fontSize: 20 }}>
-                  {/* {item.typeGoal} */}
-                  {item.typeGoal == 1
+                <Text style={{ color: "#fff", fontSize: 22 }}>عبدددد</Text>
+                <Text style={{ color: "#fff", fontSize: 14 }}>
+                  الاولوية:{item.typeGoal == 1
                     ? "عالية"
                     : item.typeGoal == 2
                     ? "متوسطة"
@@ -154,10 +156,10 @@ const Goal = ({ navigation }) => {
                 </Text>
               </View>
             </TouchableOpacity>
-          </View>
+          </ImageBackground>
         ))}
 
-        <Button
+        <Button          
           Title={" أضافة الهدف جديد "}
           onPress={() => {
             navigation.navigate("AddGoal");
