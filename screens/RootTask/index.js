@@ -62,7 +62,9 @@ export default RootTask = ({ navigation }) => {
   const [completeTaskId, setcompleteTaskId] = useState(null);
 
   const getRequestTasks = async () => {
-    const res = await axios.get(`${api}/requesttask`);
+    const res = await axios.get(`${api}/requesttask`, {
+      headers: { Authorization: "Bearer " + context.token },
+    });
     const requsetTasks = res.data;
 
     setrequestTasksData(requsetTasks);
@@ -497,7 +499,7 @@ export default RootTask = ({ navigation }) => {
             ></View>
             <View style={{ flex: 2, gap: 10 }}>
               <Text style={{ textAlign: "right", fontSize: 20 }}>
-                المهام المستندة
+                المهام المسندة
               </Text>
               <ScrollView>
                 {tasks.map((item, index) => (
@@ -648,7 +650,7 @@ export default RootTask = ({ navigation }) => {
                         <Text
                           style={{ color: "white", marginTop: 2, fontSize: 15 }}
                         >
-                          اغلاق
+                          الغاء
                         </Text>
                       </TouchableOpacity>
                       <TouchableOpacity
@@ -853,7 +855,7 @@ export default RootTask = ({ navigation }) => {
                         <Text
                           style={{ color: "white", marginTop: 2, fontSize: 15 }}
                         >
-                          اغلاق
+                          الغاء
                         </Text>
                       </TouchableOpacity>
                       <TouchableOpacity

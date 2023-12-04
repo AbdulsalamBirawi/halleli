@@ -49,6 +49,7 @@ const AddChild = ({ navigation }) => {
         setLoading(false);
       }
     }
+    fetchData();
     const interval = setInterval(() => {
         fetchData();
     }, 10000);
@@ -163,7 +164,7 @@ const AddChild = ({ navigation }) => {
             gap: 10,
           }}
         >
-          <Text style={{ fontSize: 20, color: "#3B3A7A" }}>اضافة المزيد</Text>
+          <Text style={{ fontSize: 20, color: "#3B3A7A" }}>اضافة طفل جديد</Text>
           <Ionicons name="add-circle-outline" size={35} color={"#2C2B66D6"} />
         </TouchableOpacity>
       </View>

@@ -127,7 +127,7 @@ const ProfileChild = ({ route, navigation }) => {
       </TouchableOpacity>
 
       {/* Text for the savings account */}
-      <Text style={styles.textCom}>الحساب الادخار</Text>
+      <Text style={styles.textCom}>الحساب الادخاري</Text>
 
       {/* TouchableOpacity for navigating to SavingsScreen */}
       <TouchableOpacity
@@ -150,7 +150,7 @@ const ProfileChild = ({ route, navigation }) => {
         <View
           style={{
             flexDirection: "row",
-            justifyContent: "space-between",
+            justifyContent: "center",
             padding: 20,
             marginTop: 10,
             gap: 10,
@@ -174,23 +174,7 @@ const ProfileChild = ({ route, navigation }) => {
             <Text style={{ color: "#fff" }}>تحويل المصروف الشهري</Text>
             <Image source={transfer} />
           </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => {
-              setOpen(true);
-            }}
-            style={{
-              height: 50,
-              width: "50%",
-              backgroundColor: "#3B3A7A",
-              justifyContent: "center",
-              alignItems: "center",
-              borderRadius: 20,
-              flexDirection: "row",
-            }}
-          >
-            <Text style={{ color: "#fff" }}>تحويل مبلغ</Text>
-            <Image source={set} />
-          </TouchableOpacity>
+          
         </View>
       )}
     </ScrollView>

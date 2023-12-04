@@ -25,7 +25,7 @@ const Goal = ({ navigation }) => {
   const [goal, setGoal] = useState(false);
   const [goals, setGoals] = useState([]);
   const [reload, setReload] = useState(false);
-  const [accountType, setaccountType] = useState("");
+  const [accountType, setaccountType] = useState("savingAccount");
   const [GoalId, setGoalId] = useState("");
   const [ammuntToAdd, setammuntToAdd] = useState(null);
   const user = Context.loggedInChild;
@@ -204,7 +204,7 @@ const Goal = ({ navigation }) => {
                   <TouchableOpacity
                     onPress={() => setaccountType("savingAccount")}
                     style={{
-                      backgroundColor: "#3B3A7A",
+                      backgroundColor: accountType !== "currentAccount" ? "#3B3A7A" : "grey",
                       paddingHorizontal: 30,
                       borderRadius: 10,
                       display: "block",
@@ -212,12 +212,12 @@ const Goal = ({ navigation }) => {
                       alignItems: "center",
                     }}
                   >
-                    <Text style={{ color: "white" }}>حساب الادخار</Text>
+                    <Text style={{ color: "white" }}>الحساب الادخاري</Text>
                   </TouchableOpacity>
                   <TouchableOpacity
                     onPress={() => setaccountType("currentAccount")}
                     style={{
-                      backgroundColor: "#5A5859",
+                      backgroundColor: accountType === "currentAccount" ? "#3B3A7A" : "grey",
                       paddingHorizontal: 30,
                       borderRadius: 10,
                       display: "block",
@@ -225,7 +225,7 @@ const Goal = ({ navigation }) => {
                       alignItems: "center",
                     }}
                   >
-                    <Text style={{ color: "white" }}>حساب الجاري</Text>
+                    <Text style={{ color: "white" }}>الحساب الجاري</Text>
                   </TouchableOpacity>
                 </View>
                 <Text
@@ -266,7 +266,7 @@ const Goal = ({ navigation }) => {
                     <Text
                       style={{ color: "white", marginTop: 2, fontSize: 15 }}
                     >
-                      اغلاق
+                      الغاء
                     </Text>
                   </TouchableOpacity>
                   <TouchableOpacity
@@ -351,7 +351,7 @@ const Goal = ({ navigation }) => {
                   }}
                 >
                   <Text style={{ color: "white", marginTop: 2, fontSize: 15 }}>
-                    اغلاق
+                    الغاء
                   </Text>
                 </TouchableOpacity>
                 <TouchableOpacity

@@ -99,7 +99,7 @@ const HomeScreen = ({ navigation }) => {
       </TouchableOpacity>
 
       {/* Text for the savings account */}
-      <Text style={styles.textCom}>الحساب الادخار</Text>
+      <Text style={styles.textCom}>الحساب الادخاري</Text>
 
       {/* TouchableOpacity for navigating to SavingsScreen */}
       <TouchableOpacity
@@ -193,7 +193,7 @@ const HomeScreen = ({ navigation }) => {
                       borderRadius: 10,
                     }}
                   >
-                    <Text style={{ color: "white", fontSize: 15 }}>اغلاق</Text>
+                    <Text style={{ color: "white", fontSize: 15 }}>الغاء</Text>
                   </TouchableOpacity>
                 </View>
               </View>

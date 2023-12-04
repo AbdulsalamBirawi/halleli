@@ -116,7 +116,6 @@ const Transaction = ({ navigation }) => {
         flex: 1,
         padding: 10,
         backgroundColor: "#fff",
-        direction: "ltr",
       }}
     >
       <Image
@@ -217,8 +216,8 @@ const Transaction = ({ navigation }) => {
           selectedValue={selectedAccountType}
           onValueChange={(itemValue) => setSelectedAccountType(itemValue)}
         >
-          <Picker.Item label="حساب الادخار" value="savingAccount" />
-          <Picker.Item label="حساب الجاري" value="currentAccount" />
+          <Picker.Item label="الحساب الادخاري" value="savingAccount" />
+          <Picker.Item label="الحساب الجاري" value="currentAccount" />
         </Picker>
 
         <Text>اختر حساب المراد التحويل اليه:</Text>
@@ -227,8 +226,8 @@ const Transaction = ({ navigation }) => {
           selectedValue={selectedTransferAccount}
           onValueChange={(itemValue) => setSelectedTransferAccount(itemValue)}
         >
-          <Picker.Item label="حساب الادخار" value="savingAccount" />
-          <Picker.Item label="حساب الجاري" value="currentAccount" />
+          <Picker.Item label="الحساب الادخاري" value="savingAccount" />
+          <Picker.Item label="الحساب الجاري" value="currentAccount" />
         </Picker>
       </View>
       <View>
@@ -266,7 +265,7 @@ const Transaction = ({ navigation }) => {
             borderRadius: 10,
           }}
         >
-          <Text style={{ color: "white", fontSize: 15 }}>اغلاق</Text>
+          <Text style={{ color: "white", fontSize: 15 }}>الغاء</Text>
         </TouchableOpacity>
       </View>
 
@@ -372,7 +371,7 @@ const Transaction = ({ navigation }) => {
                       borderRadius: 10,
                     }}
                   >
-                    <Text style={{ color: "white", fontSize: 15 }}>اغلاق</Text>
+                    <Text style={{ color: "white", fontSize: 15 }}>الغاء</Text>
                   </TouchableOpacity>
                 </View>
               </View>
@@ -466,8 +465,8 @@ const Transaction = ({ navigation }) => {
                       setSelectedAccountType(itemValue)
                     }
                   >
-                    <Picker.Item label="حساب الادخار" value="savingAccount" />
-                    <Picker.Item label="حساب الجاري" value="currentAccount" />
+                    <Picker.Item label="الحساب الادخاري" value="savingAccount" />
+                    <Picker.Item label="الحساب الجاري" value="currentAccount" />
                   </Picker>
 
                   <Text>اختر حساب النقل:</Text>
@@ -478,8 +477,8 @@ const Transaction = ({ navigation }) => {
                       setSelectedTransferAccount(itemValue)
                     }
                   >
-                    <Picker.Item label="حساب الادخار" value="savingAccount" />
-                    <Picker.Item label="حساب الجاري" value="currentAccount" />
+                    <Picker.Item label="الحساب الادخاري" value="savingAccount" />
+                    <Picker.Item label="الحساب الجاري" value="currentAccount" />
                   </Picker>
                 </View>
                 <View>
@@ -516,7 +515,7 @@ const Transaction = ({ navigation }) => {
                       borderRadius: 10,
                     }}
                   >
-                    <Text style={{ color: "white", fontSize: 15 }}>اغلاق</Text>
+                    <Text style={{ color: "white", fontSize: 15 }}>الغاء</Text>
                   </TouchableOpacity>
                 </View>
               </View>

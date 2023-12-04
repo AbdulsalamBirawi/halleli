@@ -150,8 +150,8 @@ import { Input } from "./Component/TextInput";
 //                       setSelectedAccountType(itemValue)
 //                     }
 //                   >
-//                     <Picker.Item label="حساب الادخار" value="savingAccount" />
-//                     <Picker.Item label="حساب الجاري" value="currentAccount" />
+//                     <Picker.Item label="الحساب الادخاري" value="savingAccount" />
+//                     <Picker.Item label="الحساب الجاري" value="currentAccount" />
 //                   </Picker>
 //                   <Text>اختر حساب النقل:</Text>
 //                   <Picker
@@ -160,8 +160,8 @@ import { Input } from "./Component/TextInput";
 //                       setSelectedTransferAccount(itemValue)
 //                     }
 //                   >
-//                     <Picker.Item label="حساب الادخار" value="savingAccount" />
-//                     <Picker.Item label="حساب الجاري" value="currentAccount" />
+//                     <Picker.Item label="الحساب الادخاري" value="savingAccount" />
+//                     <Picker.Item label="الحساب الجاري" value="currentAccount" />
 //                   </Picker>
 //                 </View>
 //                 <View>
@@ -198,7 +198,7 @@ import { Input } from "./Component/TextInput";
 //                       borderRadius: 10,
 //                     }}
 //                   >
-//                     <Text style={{ color: "white", fontSize: 15 }}>اغلاق</Text>
+//                     <Text style={{ color: "white", fontSize: 15 }}>الغاء</Text>
 //                   </TouchableOpacity>
 //                 </View>
 //               </View>
@@ -317,7 +317,7 @@ function RooteTab() {
           name="Goalsss"
           component={Goal}
           options={{
-            title: "اهدافي",
+            title: "أهدافي",
 
             tabBarIcon: ({ focused }) => {
               return (
@@ -335,7 +335,7 @@ function RooteTab() {
         name="RootTask"
         component={Parent == true ? RootTask : Portfolio}
         options={{
-          title: " مهام",
+          title: "مهامي",
 
           tabBarIcon: ({ focused }) => {
             return (
@@ -514,7 +514,7 @@ function RooteStack() {
         name="SavingsScreen"
         component={SavingsScreen}
         options={({ navigation, route }) => ({
-          title: "الحساب الادخار",
+          title: "الحساب الادخاري",
           headerShown: true,
           headerTitleAlign: "center",
           headerTitleStyle: {

@@ -20,15 +20,20 @@ const API_URL = "http://192.168.1.66:3000/api";
 
 const Profile = ({ navigation }) => {
   const Context = useContext(ContextGlobal);
+  const user = Context.user;
 
-  const [email, setEmail] = useState("");
+  const [email, setEmail] = useState(user?.email);
   const [password, setPassword] = useState("");
   const handleLogin = Context.handleLogin;
   const loder = Context.loder;
   const token = Context.token;
   const [first, setfirst] = useState("");
+
+  const [error, setError] = useState({
+    password: ''
+  })
+  
   const setParent = Context.setParent;
-  console.log(token, "auth");
   // useEffect(() => {
   //   if (token !== null) {
   //     setParent(true);
@@ -44,7 +49,7 @@ const Profile = ({ navigation }) => {
       email: email,
       password: password,
     });
-    console.log(res);
+    navigation.navigate("RooteTab");
   };
 
   return (
@@ -94,11 +99,13 @@ const Profile = ({ navigation }) => {
         <Input
           placeholder={"البريد الالكتروني"}
           // Icon={"email"}
-          value={email}
-          onChangeText={(text) => setEmail(text.toLowerCase())}
+          value={user.email}
+          editable={false}
+          //onChangeText={(text) => setEmail(text.toLowerCase())}
         >
           <MaterialIcons name={"email"} size={25} color="#AAAA" />
         </Input>
+        
         <Text
           style={{
             textAlign: "right",
@@ -111,14 +118,16 @@ const Profile = ({ navigation }) => {
           كلمة المرور الحالية
         </Text>
         <Input
-          placeholder={"كلمة المرور الجديد"}
+          placeholder={"كلمة المرور الحالية"}
           Icon={"email"}
-          value={password}
-          onChangeText={(text) => setPassword(text.toLowerCase())}
+          value={first}
+          
+          onChangeText={(t) => setfirst(t)}
           password
         >
           <FontAwesome name="lock" size={25} color="#AAAA" />
         </Input>
+          
         <Text
           style={{
             textAlign: "right",
@@ -128,18 +137,32 @@ const Profile = ({ navigation }) => {
           }}
         >
           {" "}
-          كلمة المرور الجديد
+          كلمة المرور الجديدة
         </Text>
         <Input
-          placeholder={"كلمة المرور الحالية"}
+          placeholder={"كلمة المرور الجديدة"}
           Icon={"email"}
-          value={first}
-          onChangeText={() => console.log("")}
+          value={password}
+          error={error.password}
+          onChangeText={(text) => {
+            if (text.length < 8)  {
+              setError(v => ({
+                ...v, 
+                password: 'كلمة السر يجب ان تكون 8 حروف على الاقل'
+              }));
+            }
+            else {
+              setError(v => ({
+                ...v,
+                password: null
+              }))
+            }
+            setPassword(text);
+          }}
           password
         >
           <FontAwesome name="lock" size={25} color="#AAAA" />
         </Input>
-
         <Button Title={"حفظ"} onPress={() => updateUserInfo()} />
       </View>
     </ScrollView>

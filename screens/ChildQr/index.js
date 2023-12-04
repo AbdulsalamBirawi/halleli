@@ -53,7 +53,9 @@ const ChildQr = ({ route, navigation }) => {
             viewBox={`0 0 256 256`}
           />
         </View>
-        <Button Title={"إنشاء باركود لطفل اخر"} />
+        <Button Title={"إنشاء باركود لطفل اخر"} onPress={() => {
+          navigation.navigate("CreateChild");
+        }} />
       </View>
     </View>
   );

@@ -198,18 +198,18 @@ const Prices = ({ navigation }) => {
                 }}
                 onPress={() => toggleModalTransfer(item._id)}
               >
-                <Text style={{ color: "#3B3A7A" }}>ارسال حوالة</Text>
+                <Text style={{ color: "#3B3A7A" }}>تحويل مبلغ</Text>
               </TouchableOpacity>
             </View>
           </TouchableOpacity>
         ))}
         {/* <Button
             onPress={() => settoCurrentAccount(false)}
-            Title={"التحويل الى حساب الادخار"}
+            Title={"التحويل الى الحساب الادخاري"}
           />
           <Button
             onPress={() => settoCurrentAccount(true)}
-            Title={"التحويل الى حساب الجاري"}
+            Title={"التحويل الى الحساب الجاري"}
           />
           {toCurrentAccount ? (
             <View>
@@ -218,7 +218,7 @@ const Prices = ({ navigation }) => {
             </View>
           ) : (
             <View>
-              <Text>التحويل الى الحساب الادخار </Text>
+              <Text>التحويل الى الحساب الادخاري </Text>
               <Input onChangeText={(e) => settoSavingAccountValue(e)} />
             </View>
           )} */}
@@ -326,7 +326,7 @@ const Prices = ({ navigation }) => {
                       borderRadius: 10,
                     }}
                   >
-                    <Text style={{ color: "white", fontSize: 15 }}>اغلاق</Text>
+                    <Text style={{ color: "white", fontSize: 15 }}>الغاء</Text>
                   </TouchableOpacity>
                 </View>
               </View>
@@ -408,7 +408,7 @@ const Prices = ({ navigation }) => {
                     borderRadius: 10,
                   }}
                 >
-                  <Text style={{ color: "white", fontSize: 15 }}>اغلاق</Text>
+                  <Text style={{ color: "white", fontSize: 15 }}>الغاء</Text>
                 </TouchableOpacity>
               </View>
             </View>
