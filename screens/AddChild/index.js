@@ -49,6 +49,7 @@ const AddChild = ({ navigation }) => {
         setLoading(false);
       }
     }
+    fetchData();
     const interval = setInterval(() => {
       fetchData();
     }, 10000);

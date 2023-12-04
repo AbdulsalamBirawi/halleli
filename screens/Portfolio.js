@@ -355,7 +355,7 @@ const Portfolio = ({ navigation }) => {
                   </Text>
                 </View>
               </View>
-              <Button Title={"اغلاق"} onPress={() => toggleModal(null)} />
+              <Button Title={"الغاء"} onPress={() => toggleModal(null)} />
             </View>
           </View>
         </Modal>

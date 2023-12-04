@@ -127,7 +127,7 @@ const ProfileChild = ({ route, navigation }) => {
       </TouchableOpacity>
 
       {/* Text for the savings account */}
-      <Text style={styles.textCom}>الحساب الادخار</Text>
+      <Text style={styles.textCom}>الحساب الادخاري</Text>
 
       {/* TouchableOpacity for navigating to SavingsScreen */}
       <TouchableOpacity
@@ -150,7 +150,7 @@ const ProfileChild = ({ route, navigation }) => {
         <View
           style={{
             flexDirection: "row",
-            justifyContent: "space-between",
+            justifyContent: "center",
             padding: 20,
             marginTop: 10,
             gap: 10,

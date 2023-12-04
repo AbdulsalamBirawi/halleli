@@ -56,10 +56,10 @@ const ChildQr = ({ route, navigation }) => {
           />
         </View>
         <Button
+          Title={"إنشاء باركود لطفل اخر"}
           onPress={() => {
             navigation.navigate("CreateChild");
           }}
-          Title={"إنشاء باركود لطفل اخر"}
         />
       </View>
     </View>

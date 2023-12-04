@@ -8,6 +8,7 @@ import {
   StyleSheet,
   ScrollView,
   DeviceEventEmitter,
+  ImageBackground,
 } from "react-native";
 import { Button } from "../Component/Button";
 import axios from "axios";
@@ -25,7 +26,7 @@ const Goal = ({ navigation }) => {
   const [goal, setGoal] = useState(false);
   const [goals, setGoals] = useState([]);
   const [reload, setReload] = useState(false);
-  const [accountType, setaccountType] = useState("");
+  const [accountType, setaccountType] = useState("savingAccount");
   const [GoalId, setGoalId] = useState("");
   const [ammuntToAdd, setammuntToAdd] = useState(null);
   const user = Context.loggedInChild;
@@ -108,11 +109,13 @@ const Goal = ({ navigation }) => {
     >
       <View style={{ flex: 3, padding: 10, gap: 10 }}>
         {goals.map((item, index) => (
-          <View
+          <ImageBackground
+            source={require("../assets/goalbg.png")}
+            resizeMode="cover"
             key={item._id}
             style={{
               flexDirection: "row",
-              height: 100,
+              height: 110,
               width: "100%",
               backgroundColor: "#3B3A7A",
               borderRadius: 15,
@@ -121,7 +124,7 @@ const Goal = ({ navigation }) => {
               justifyContent: "space-between",
               alignItems: "center",
               paddingHorizontal: 10,
-              paddingVertical: 20,
+              paddingVertical: 10,
             }}
           >
             <TouchableOpacity onPress={() => setdeleteGoal(item._id)}>
@@ -135,16 +138,16 @@ const Goal = ({ navigation }) => {
                 flexDirection: "row",
                 justifyContent: "space-between",
                 alignItems: "center",
-                width: "80%",
+                width: "90%",
               }}
             >
               <Text style={{ color: "#fff", fontSize: 20 }}>
-                {item.valueGoal}
+                {item.valueGoal} SAR
               </Text>
               <View>
-                <Text style={{ color: "#fff", fontSize: 20 }}>{item.name}</Text>
-                <Text style={{ color: "#fff", fontSize: 20 }}>
-                  {/* {item.typeGoal} */}
+                <Text style={{ color: "#fff", fontSize: 22 }}>عبدددد</Text>
+                <Text style={{ color: "#fff", fontSize: 14 }}>
+                  الاولوية:
                   {item.typeGoal == 1
                     ? "عالية"
                     : item.typeGoal == 2
@@ -153,7 +156,7 @@ const Goal = ({ navigation }) => {
                 </Text>
               </View>
             </TouchableOpacity>
-          </View>
+          </ImageBackground>
         ))}
 
         <Button
@@ -205,7 +208,8 @@ const Goal = ({ navigation }) => {
                   <TouchableOpacity
                     onPress={() => setaccountType("savingAccount")}
                     style={{
-                      backgroundColor: "#3B3A7A",
+                      backgroundColor:
+                        accountType !== "currentAccount" ? "#3B3A7A" : "grey",
                       paddingHorizontal: 30,
                       borderRadius: 10,
                       display: "block",
@@ -218,12 +222,13 @@ const Goal = ({ navigation }) => {
                           : "white",
                     }}
                   >
-                    <Text style={{ color: "white" }}>حساب الادخاري</Text>
+                    <Text style={{ color: "white" }}>الحساب الادخاري</Text>
                   </TouchableOpacity>
                   <TouchableOpacity
                     onPress={() => setaccountType("currentAccount")}
                     style={{
-                      backgroundColor: "#5A5859",
+                      backgroundColor:
+                        accountType === "currentAccount" ? "#3B3A7A" : "grey",
                       paddingHorizontal: 30,
                       borderRadius: 10,
                       display: "block",
@@ -236,7 +241,7 @@ const Goal = ({ navigation }) => {
                           : "white",
                     }}
                   >
-                    <Text style={{ color: "white" }}>حساب الجاري</Text>
+                    <Text style={{ color: "white" }}>الحساب الجاري</Text>
                   </TouchableOpacity>
                 </View>
                 <Text
@@ -278,7 +283,7 @@ const Goal = ({ navigation }) => {
                     <Text
                       style={{ color: "white", marginTop: 2, fontSize: 15 }}
                     >
-                      اغلاق
+                      الغاء
                     </Text>
                   </TouchableOpacity>
                   <TouchableOpacity
@@ -369,7 +374,7 @@ const Goal = ({ navigation }) => {
                   }}
                 >
                   <Text style={{ color: "white", marginTop: 2, fontSize: 15 }}>
-                    اغلاق
+                    الغاء
                   </Text>
                 </TouchableOpacity>
                 <TouchableOpacity

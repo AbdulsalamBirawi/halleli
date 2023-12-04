@@ -24,7 +24,7 @@ export function Input({
 }) {
   const [IsFocused, setIsFocused] = useState(false);
   const [lan, setLan] = useState(false);
-
+  console.log({error});
   const handleBlur = () => {
     setIsFocused(false);
 
@@ -80,7 +80,7 @@ export function Input({
         <Text
           style={{
             marginTop: 7,
-            color: "white",
+            color: "red",
             fontSize: 15,
             marginLeft: 10,
             fontWeight: 500,

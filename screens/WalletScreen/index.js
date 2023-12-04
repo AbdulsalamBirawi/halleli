@@ -156,7 +156,7 @@ const WalletScreen = ({ route, navigation }) => {
                     borderRadius: 10,
                   }}
                 >
-                  <Text style={{ color: "white", fontSize: 15 }}>اغلاق</Text>
+                  <Text style={{ color: "white", fontSize: 15 }}>الغاء</Text>
                 </TouchableOpacity>
               </View>
             </View>

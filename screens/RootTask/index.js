@@ -62,7 +62,9 @@ export default RootTask = ({ navigation }) => {
   const [completeTaskId, setcompleteTaskId] = useState(null);
 
   const getRequestTasks = async () => {
-    const res = await axios.get(`${api}/requesttask`);
+    const res = await axios.get(`${api}/requesttask`, {
+      headers: { Authorization: "Bearer " + context.token },
+    });
     const requsetTasks = res.data;
 
     setrequestTasksData(requsetTasks);

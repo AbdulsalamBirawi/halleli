@@ -9,6 +9,7 @@ import {
   Image,
 } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
+import { LinearGradient } from "expo-linear-gradient";
 
 // Get the width of the screen
 const width_screen = Dimensions.get("window").width;
@@ -25,28 +26,31 @@ const card_size = {
 // Card component that displays card information
 const Card = ({ total, url, cardHolder }) => {
   return (
-    <ImageBackground source={url} style={styles.card} borderRadius={30}>
+    <LinearGradient
+      colors={["#a69bb1", "#8079aa"]}
+      style={styles.card}
+      borderRadius={30}
+    >
       {/* Row for the card logo and the eye icon */}
       <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
         <Image
-          style={{ width: 100, height: 100 }}
           source={require("../assets/Group9.png")}
+          style={{
+            width: 100,
+            height: 100,
+          }}
         />
+        <AntDesign name="eyeo" size={26} color="#fff" />
       </View>
 
       {/* Card number and expiration date */}
       <View style={styles.cardNumber}>
         <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-          <Text style={styles.cardNumberText}>{` ${total}`}</Text>
+          <Text style={styles.cardNumberText}>{`${total}`}</Text>
         </View>
         <Text style={styles.cardNumberText}>{`.... .... .... ....`}</Text>
       </View>
-
-      {/* Card holder information */}
-      <View style={styles.cardFooter}>
-        <Image source={require("../assets/card_icon.png")} />
-      </View>
-    </ImageBackground>
+    </LinearGradient>
   );
 };
 
@@ -59,6 +63,7 @@ const styles = StyleSheet.create({
     height: (card_item * card_size.height) / card_size.width,
     padding: 24,
     direction: "ltr",
+    borderRadius: 30,
   },
   cardNumber: {
     flex: 1,

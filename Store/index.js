@@ -53,6 +53,7 @@ const ContextData = (props) => {
     try {
       await SecureStore.deleteItemAsync("auth");
       console.log("Item removed successfully");
+      setToken(null);
     } catch (error) {
       console.error("Error removing item:", error);
     }

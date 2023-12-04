@@ -46,7 +46,7 @@ const SavingsScreen = ({ route, navigation }) => {
         </View>
       </View>
       {/* Text for the savings account */}
-      <Text style={styles.textCom}>الحساب الادخار</Text>
+      <Text style={styles.textCom}>الحساب الادخاري</Text>
 
       {/* Display the savings card */}
       <View style={styles.counterCard}>
@@ -137,7 +137,7 @@ const SavingsScreen = ({ route, navigation }) => {
                     borderRadius: 10,
                   }}
                 >
-                  <Text style={{ color: "white", fontSize: 15 }}>اغلاق</Text>
+                  <Text style={{ color: "white", fontSize: 15 }}>الغاء</Text>
                 </TouchableOpacity>
               </View>
             </View>

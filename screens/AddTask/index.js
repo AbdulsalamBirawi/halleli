@@ -331,7 +331,7 @@ export default function AddTask({ setReload }) {
                       }}
                     >
                       <Text style={{ color: "white", fontSize: 15 }}>
-                        اغلاق
+                        الغاء
                       </Text>
                     </TouchableOpacity>
                   </View>
@@ -350,7 +350,7 @@ export default function AddTask({ setReload }) {
                   >
                     تم الاضافة بنجاح{" "}
                   </Text>
-                  <Button Title={"اغلاق"} onPress={() => toggleModal(null)} />
+                  <Button Title={"الغاء"} onPress={() => toggleModal(null)} />
                 </View>
               )}
             </View>

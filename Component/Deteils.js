@@ -108,9 +108,9 @@ const Deteils = ({ visible, setvisible, deteils, completeTaskId }) => {
             onPress={() => {
               setvisible(false);
             }}
-            Title={"اغلاق"}
+            Title={"الغاء"}
           >
-            اغلاق
+            الغاء
           </Button>
           {completeTaskId ? (
             <Button
