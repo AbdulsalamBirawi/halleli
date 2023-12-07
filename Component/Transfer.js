@@ -34,7 +34,7 @@ const Transfer = ({
   const navigation = useNavigation();
   const payToChild = async () => {
     const res = await axios.post(
-      `http://192.168.43.79:3000/api/transaction/fromFather/${childId}`,
+      `http://192.168.1.8:3000/api/transaction/fromFather/${childId}`,
       {
         amount: mony,
       }

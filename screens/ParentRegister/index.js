@@ -16,25 +16,78 @@ import user from "../../assets/user.png";
 import Loader from "../../Component/Loader";
 import SuccessTost from "../../Component/SuccessTost";
 
-const API_URL = "http://192.168.43.79:3000/api";
+const API_URL = "http://192.168.1.8:3000/api";
 
 const ParentRegister = ({ navigation }) => {
-  const PROP = [
-    {
-      key: "female",
-      text: "انثى",
-    },
-    {
-      key: "male",
-      text: "ذكر",
-    },
-  ];
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [gender, setGender] = useState("Male");
   const [loder, setLoder] = useState(false);
+  const [error, setError] = useState("");
+  const [emailError, setemailError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
 
+  const handleNameChange = (text) => {
+    setName(text);
+  };
+  const handleNameBlur = () => {
+    // Regular expression to match only English lowercase letters
+    const englishLowercaseRegex = /^[a-z]+$/;
+
+    // Check the validation when the input loses focus
+    if (name.length === 0) {
+      setError("The name should not be empty.");
+    } else if (name.length <= 3) {
+      setError("The name should be more than 3 characters.");
+    } else if (englishLowercaseRegex.test(name)) {
+      setError("");
+    } else {
+      setError(
+        "Please enter a valid name with only English lowercase letters."
+      );
+    }
+  };
+
+  const handleEmailChange = (text) => {
+    setEmail(text.toLowerCase());
+  };
+
+  const handleEmailBlur = () => {
+    // Regular expression for basic email validation
+    const emailRegex = /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/;
+
+    // Check the validation when the input loses focus
+    if (email.length === 0) {
+      setemailError("The email should not be empty.");
+    } else if (emailRegex.test(email)) {
+      setemailError("");
+    } else {
+      setemailError("Please enter a valid email address.");
+    }
+  };
+
+  const handlePasswordChange = (text) => {
+    setPassword(text.toLowerCase());
+  };
+
+  const handlePasswordBlur = () => {
+    // Validation for a password with more than 8 characters,
+    // including numbers, lowercase and uppercase letters, and special characters
+    const passwordRegex =
+      /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()_+])[0-9a-zA-Z!@#$%^&*()_+]{9,}$/;
+
+    // Check the validation when the input loses focus
+    if (password.length === 0) {
+      setPasswordError("The password should not be empty.");
+    } else if (password.length < 9 || !passwordRegex.test(password)) {
+      setPasswordError(
+        "Password must be more than 8 characters and include numbers, lowercase and uppercase letters, and special characters."
+      );
+    } else {
+      setPasswordError("");
+    }
+  };
   const handleLogin = async () => {
     try {
       console.log({ name, email, password, gender });
@@ -104,8 +157,9 @@ const ParentRegister = ({ navigation }) => {
           placeholder={" الاسم"}
           Icon={user}
           value={name}
-          onChangeText={(text) => setName(text)}
-          error={name ? false : <Text>the name is empty</Text>}
+          onChangeText={handleNameChange}
+          onBlur={handleNameBlur}
+          error={error}
         >
           <FontAwesome name="user" size={25} color="#AAAA" />
         </Input>
@@ -124,8 +178,9 @@ const ParentRegister = ({ navigation }) => {
           placeholder={"البريد الالكتروني"}
           Icon={"email"}
           value={email}
-          onChangeText={(text) => setEmail(text.toLowerCase())}
-          error={email ? false : <Text>the email is empty</Text>}
+          onChangeText={handleEmailChange}
+          error={emailError}
+          onBlur={handleEmailBlur}
         >
           <MaterialIcons name={"email"} size={25} color="#AAAA" />
         </Input>
@@ -144,7 +199,8 @@ const ParentRegister = ({ navigation }) => {
           placeholder={" كلمة المرور"}
           Icon={"email"}
           value={password}
-          onChangeText={(text) => setPassword(text.toLowerCase())}
+          onChangeText={handlePasswordChange}
+          onBlur={handlePasswordBlur}
           error={password ? false : <Text>the password is empty</Text>}
           password
         >

@@ -12,9 +12,7 @@ const ChildQr = ({ route, navigation }) => {
     token: token,
     IdChaild: IdChaild,
   };
-  // const toCreateChild = () => {
-  //   navigation.navigate("CreateChild");
-  // };
+
   const newChilder = JSON.stringify(childs);
 
   return (

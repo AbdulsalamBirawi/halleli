@@ -7,7 +7,7 @@ import axios from "axios";
 import { ContextGlobal } from "../Store";
 import { Ionicons } from "@expo/vector-icons";
 import { Modal } from "react-native";
-const API_URL = "http://192.168.43.79:3000/api";
+const API_URL = "http://192.168.1.8:3000/api";
 
 const Portfolio = ({ navigation }) => {
   const Context = useContext(ContextGlobal);

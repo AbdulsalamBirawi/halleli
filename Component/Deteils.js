@@ -15,7 +15,7 @@ import axios from "axios";
 import { DeviceEventEmitter } from "react-native";
 const Deteils = ({ visible, setvisible, deteils, completeTaskId }) => {
   const returnCompleteTask = async () => {
-    const api = "http://192.168.43.79:3000/api";
+    const api = "http://192.168.1.8:3000/api";
     const res = await axios.put(`${api}/task/${completeTaskId}`, {
       status: false,
     });

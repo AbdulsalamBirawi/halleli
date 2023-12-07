@@ -8,6 +8,7 @@ export function Input({
   value,
   placeholder,
   onChangeText,
+  onBlur,
   password,
   width,
   Icon,
@@ -24,7 +25,7 @@ export function Input({
 }) {
   const [IsFocused, setIsFocused] = useState(false);
   const [lan, setLan] = useState(false);
-  console.log({error});
+  console.log({ error });
   const handleBlur = () => {
     setIsFocused(false);
 
@@ -61,7 +62,7 @@ export function Input({
             onFocus();
             setIsFocused(true);
           }}
-          onBlur={handleBlur} // Call the handleBlur function
+          onBlur={onBlur} // Call the handleBlur function
           style={{
             height: 40,
             width: "83%",
