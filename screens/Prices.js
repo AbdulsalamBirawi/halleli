@@ -19,7 +19,7 @@ import PropTransfer from "../Component/PropTransfer";
 import { ScrollView } from "react-native";
 import { Input } from "../Component/TextInput";
 
-const API_URL = "http://192.168.1.8:3000/api";
+const API_URL = "http://192.168.43.79:3000/api";
 const Prices = ({ navigation }) => {
   const toggleModal = () => {
     setModalVisible(!isModalVisible);

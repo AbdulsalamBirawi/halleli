@@ -14,7 +14,7 @@ import { Button } from "../Component/Button";
 import axios from "axios";
 import { ContextGlobal } from "../Store";
 import { Ionicons } from "@expo/vector-icons";
-const API_URL = "http://192.168.1.8:3000/api";
+const API_URL = "http://192.168.43.79:3000/api";
 import { Input } from "../Component/TextInput";
 const Goal = ({ navigation }) => {
   const Context = useContext(ContextGlobal);
@@ -97,6 +97,23 @@ const Goal = ({ navigation }) => {
     setModalVisible(false);
     setGoal(false);
   };
+
+  const [sortOrder, setSortOrder] = useState("asc"); // Default sorting order is ascending
+
+  // Sorting function
+  const sortGoals = () => {
+    const sortedGoals = [...goals];
+    sortedGoals.sort((a, b) => {
+      if (sortOrder === "asc") {
+        return a.typeGoal - b.typeGoal;
+      } else {
+        return b.typeGoal - a.typeGoal;
+      }
+    });
+    setGoals(sortedGoals);
+    setSortOrder(sortOrder === "asc" ? "desc" : "asc");
+  };
+
   console.log(goals);
   return (
     <ScrollView
@@ -107,6 +124,23 @@ const Goal = ({ navigation }) => {
         direction: "ltr",
       }}
     >
+      <TouchableOpacity
+        style={{
+          padding: 10,
+          margin: 10,
+          borderWidth: 2,
+          borderColor: "#3B3A7A",
+          borderRadius: 20,
+          width: "50%",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+        onPress={sortGoals}
+      >
+        <Text style={{ color: "#3B3A7A" }}>
+          ترتيب {sortOrder == "asc" ? "تصاعدي" : "ننازلي"}
+        </Text>
+      </TouchableOpacity>
       <View style={{ flex: 3, padding: 10, gap: 10 }}>
         {goals.map((item, index) => (
           <ImageBackground
@@ -145,7 +179,7 @@ const Goal = ({ navigation }) => {
                 {item.valueGoal} SAR
               </Text>
               <View>
-                <Text style={{ color: "#fff", fontSize: 22 }}>عبدددد</Text>
+                <Text style={{ color: "#fff", fontSize: 22 }}>{item.name}</Text>
                 <Text style={{ color: "#fff", fontSize: 14 }}>
                   الاولوية:
                   {item.typeGoal == 1

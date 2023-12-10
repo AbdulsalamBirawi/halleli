@@ -11,11 +11,40 @@ import {
 import icon from "../assets/Group.png";
 import mele from "../assets/female.png";
 import { Button } from "./Button";
+
+import * as Notifications from "expo-notifications";
+
 import axios from "axios";
 import { DeviceEventEmitter } from "react-native";
 const Deteils = ({ visible, setvisible, deteils, completeTaskId }) => {
+  const showNotification = async (title, body) => {
+    Notifications.setNotificationHandler({
+      handleNotification: async () => ({
+        shouldShowAlert: true,
+        shouldPlaySound: true,
+        shouldSetBadge: false,
+      }),
+    });
+
+    // Second, call the method
+
+    Notifications.scheduleNotificationAsync({
+      content: {
+        title: "Look at that notification",
+        body: "I'm so proud of myself!",
+      },
+      trigger: null,
+    });
+  };
+
+  const deleteCompleteTask = async () => {
+    const res = await axios.get(
+      `http://192.168.43.79:3000/api/task/father-complete/${completeTaskId}`
+    );
+    console.log(res);
+  };
   const returnCompleteTask = async () => {
-    const api = "http://192.168.1.8:3000/api";
+    const api = "http://192.168.43.79:3000/api";
     const res = await axios.put(`${api}/task/${completeTaskId}`, {
       status: false,
     });
@@ -106,6 +135,7 @@ const Deteils = ({ visible, setvisible, deteils, completeTaskId }) => {
           </View>
           <Button
             onPress={() => {
+              // showNotification();
               setvisible(false);
             }}
             Title={"الغاء"}
@@ -113,10 +143,19 @@ const Deteils = ({ visible, setvisible, deteils, completeTaskId }) => {
             الغاء
           </Button>
           {completeTaskId ? (
-            <Button
-              onPress={() => returnCompleteTask()}
-              Title={"اعادة الارسال"}
-            />
+            <View>
+              <Button
+                onPress={() => returnCompleteTask()}
+                Title={"اعادة الارسال"}
+              />
+              <Button
+                onPress={() => {
+                  setvisible(false);
+                  deleteCompleteTask();
+                }}
+                Title={"تاكيد اكمال المهمة"}
+              />
+            </View>
           ) : (
             <View></View>
           )}
@@ -131,10 +170,10 @@ const style = StyleSheet.create({
     borderRadius: 10,
     backgroundColor: "#fff",
     // height: "50%",
-    width: "90%",
+
     alignItems: "center",
     padding: 10,
-    marginTop: 130,
+    marginTop: 30,
   },
   container: {
     position: "absolute",

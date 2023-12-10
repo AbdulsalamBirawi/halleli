@@ -3,12 +3,12 @@ import {
   useWindowDimensions,
   View,
   Text,
-  ActivityIndicator,
   StyleSheet,
   Image,
   TouchableOpacity,
   DeviceEventEmitter,
 } from "react-native";
+import { Picker } from "@react-native-picker/picker";
 
 import halall2 from "../assets/halall2.png";
 import set from "../assets/set.png";
@@ -28,15 +28,21 @@ const Transfer = ({
   const { width, height } = useWindowDimensions();
   const Context = useContext(ContextGlobal);
   const [mony, setMony] = useState("");
+  const [selectedValue, setSelectedValue] = useState(null);
   const open = Context.open;
   const setOpen = Context.setOpen;
   const getChild = Context.getChild;
   const navigation = useNavigation();
   const payToChild = async () => {
     const res = await axios.post(
-      `http://192.168.1.8:3000/api/transaction/fromFather/${childId}`,
+      `http://192.168.43.79:3000/api/transaction/fromFather/${childId}`,
+
       {
         amount: mony,
+        day: selectedValue,
+      },
+      {
+        headers: { Authorization: "Bearer " + Context.token },
       }
     );
     setVisible(false);
@@ -46,7 +52,7 @@ const Transfer = ({
 
     DeviceEventEmitter.emit("creat->child", { reload: true });
   };
-
+  const daysArray = Array.from({ length: 27 }, (_, index) => index + 1);
   return (
     visible && (
       <View style={[style.container, { height, width }]}>
@@ -95,6 +101,18 @@ const Transfer = ({
               onChangeText={(text) => setMony(text)}
             />
           </View>
+          <View>
+            <Picker
+              selectedValue={selectedValue}
+              onValueChange={(itemValue, itemIndex) =>
+                setSelectedValue(itemValue)
+              }
+            >
+              {daysArray.map((day) => (
+                <Picker.Item key={day} label={`Day ${day}`} value={day} />
+              ))}
+            </Picker>
+          </View>
 
           <TouchableOpacity
             onPress={() => payToChild()}
@@ -122,7 +140,7 @@ const style = StyleSheet.create({
   loader: {
     borderRadius: 10,
     backgroundColor: "#fff",
-    height: "40%",
+
     width: "90%",
     // justifyContent: "center",
     // alignItems: "center",

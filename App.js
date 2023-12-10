@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import {
   Text,
   Platform,
@@ -45,192 +45,112 @@ import Goal from "./screens/Goal";
 import AddTask from "./screens/AddTask";
 import RootTask from "./screens/RootTask";
 import Profile from "./screens/Profile";
-// import Store
 import ContextData from "./Store";
-import { Button } from "./Component/Button";
-import { Picker } from "@react-native-picker/picker";
-import { Input } from "./Component/TextInput";
+import * as TaskManager from "expo-task-manager";
+import * as Notifications from "expo-notifications";
+import { AppState } from "react-native";
+import axios from "axios";
 
-// const ModalScreen = ({ navigation }) => {
-//   const [isInternaltransSucsess, setisInternaltransSucsess] = useState(false);
-//   const [toCurrentAccountValue, settoCurrentAccountValue] = useState(null);
-//   const [selectedAccountType, setSelectedAccountType] =
-//     useState("savingAccount");
-//   const [selectedTransferAccount, setSelectedTransferAccount] =
-//     useState("currentAccount");
-//   const [internalTransferModel, setinternalTransferModel] = useState(false);
-//   const internalToggleModel = () => {
-//     setinternalTransferModel(!internalTransferModel);
-//     setisInternaltransSucsess(false);
-//   };
-//   const handelinternal = () => {
-//     transferInternal();
-//   };
-//   const transferInternal = async () => {
-//     const res = await axios.post(`${API_URL}/transaction/${user._id}`, {
-//       from: selectedAccountType,
-//       to: selectedTransferAccount,
-//       amount: toCurrentAccountValue,
-//     });
-//     DeviceEventEmitter.emit("transfer->internal", { reload: true });
-//     setisInternaltransSucsess(true);
-//   };
-//   return (
-//     <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-//       <View
-//         style={{
-//           flex: 1,
-//           justifyContent: "center",
-//           alignItems: "center",
-//         }}
-//       >
-//         <Modal
-//           animationType="slide"
-//           transparent={true}
-//           visible={internalTransferModel}
-//           onRequestClose={() => internalToggleModel()}
-//         >
-//           <View
-//             style={{
-//               flex: 1,
-//               justifyContent: "center",
-//               alignItems: "center",
-//               // backgroundColor: "white",
-//             }}
-//           >
-//             {isInternaltransSucsess && (
-//               <View
-//                 style={{
-//                   backgroundColor: "white",
-//                   padding: 20,
-//                   borderRadius: 10,
-//                   elevation: 5,
-//                 }}
-//               >
-//                 <Text
-//                   style={{
-//                     textAlign: "center",
-//                     fontWeight: "600",
-//                     fontSize: 20,
-//                     marginVertical: 20,
-//                   }}
-//                 >
-//                   تم التحويل بنجاح
-//                 </Text>
-//                 <Button
-//                   onPress={() => internalToggleModel()}
-//                   Title={"استمرار"}
-//                 />
-//               </View>
-//             )}
-//             {isInternaltransSucsess == false && (
-//               <View
-//                 style={{
-//                   backgroundColor: "white",
-//                   padding: 20,
-//                   borderRadius: 10,
-//                   elevation: 5,
-//                 }}
-//               >
-//                 <Text
-//                   style={{
-//                     color: "#3B3A7A",
-//                     fontSize: 20,
-//                     marginVertical: 10,
-//                     fontWeight: "600",
-//                   }}
-//                 >
-//                   التحويل بين الحسابات
-//                 </Text>
-//                 <View>
-//                   <Text>اختر نوع الحساب:</Text>
-//                   <Picker
-//                     selectedValue={selectedAccountType}
-//                     onValueChange={(itemValue) =>
-//                       setSelectedAccountType(itemValue)
-//                     }
-//                   >
-//                     <Picker.Item label="الحساب الادخاري" value="savingAccount" />
-//                     <Picker.Item label="الحساب الجاري" value="currentAccount" />
-//                   </Picker>
-//                   <Text>اختر حساب النقل:</Text>
-//                   <Picker
-//                     selectedValue={selectedTransferAccount}
-//                     onValueChange={(itemValue) =>
-//                       setSelectedTransferAccount(itemValue)
-//                     }
-//                   >
-//                     <Picker.Item label="الحساب الادخاري" value="savingAccount" />
-//                     <Picker.Item label="الحساب الجاري" value="currentAccount" />
-//                   </Picker>
-//                 </View>
-//                 <View>
-//                   <Text>المبلغ</Text>
-//                   <Input onChangeText={(e) => settoCurrentAccountValue(e)} />
-//                 </View>
-//                 <View
-//                   style={{
-//                     flexDirection: "row",
-//                     width: "100%",
-//                     gap: 20,
-//                     marginVertical: 20,
-//                     marginLeft: 35,
-//                     alignItems: "center",
-//                   }}
-//                 >
-//                   <TouchableOpacity
-//                     onPress={() => handelinternal()}
-//                     style={{
-//                       backgroundColor: "#3B3A7A",
-//                       paddingHorizontal: 40,
-//                       paddingVertical: 10,
-//                       borderRadius: 10,
-//                     }}
-//                   >
-//                     <Text style={{ color: "white", fontSize: 15 }}>ارسال</Text>
-//                   </TouchableOpacity>
-//                   <TouchableOpacity
-//                     onPress={() => internalToggleModel(null)}
-//                     style={{
-//                       backgroundColor: "red",
-//                       paddingHorizontal: 40,
-//                       paddingVertical: 10,
-//                       borderRadius: 10,
-//                     }}
-//                   >
-//                     <Text style={{ color: "white", fontSize: 15 }}>الغاء</Text>
-//                   </TouchableOpacity>
-//                 </View>
-//               </View>
-//             )}
-//           </View>
-//         </Modal>
-//       </View>
-//     </View>
-//   );
-// };
-// Thanks for watching
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 
 I18nManager.allowRTL(false);
 I18nManager.forceRTL(false);
 
-// const Parent = true;
 function RooteTab() {
-  // if (!I18nManager.isRTL) {
-  //   I18nManager.allowRTL(false);
-  //   I18nManager.forceRTL(false);
-  //   Restart();
-  // }
   const Context = useContext(ContextGlobal);
   const user = Context.user;
   const isLoading = Context.isLoading;
-  // const Parent = Context.Parent;
   const Parent = Context.isParent;
-  if (isLoading) {
-    return <View></View>;
-  }
+  const child = Context.loggedInChild;
+
+  const fetchNotifications = async () => {
+    if (!user && !child) {
+      return;
+    }
+    try {
+      // Fetch notifications from a URL
+      const id = user?._id || child._id;
+      const response = await axios.get(
+        `http://192.168.43.79:3000/api/notifications?id=${id}`
+      );
+
+      const notifications = response.data;
+      console.log({ notifications });
+
+      // Schedule and display notifications
+      for (const notification of notifications) {
+        await Notifications.scheduleNotificationAsync({
+          content: {
+            title: notification.title,
+            body: notification.body,
+          },
+          trigger: null, // Trigger immediately in the background
+        });
+        // await deleteNotification(notification._id);
+      }
+
+      console.log("Background fetch task completed successfully");
+    } catch (error) {
+      console.error("Error in background fetch task:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchNotifications();
+    const interval = setInterval(() => {
+      fetchNotifications();
+    }, 10000000000);
+    return () => {
+      clearInterval(interval);
+    };
+  }, []);
+
+  Notifications.setNotificationHandler({
+    handleNotification: async () => ({
+      shouldShowAlert: true,
+      shouldPlaySound: true,
+      shouldSetBadge: false,
+    }),
+  });
+  const deleteNotification = async (id) => {
+    const res = await axios.delete(
+      `http://192.168.43.79:3000/api/notifications/${id}`
+    );
+  };
+  // Second, call the method
+
+  // try {
+  //   // Fetch notifications from a URL
+  //   const response = await fetch(
+  //     `http://192.168.43.79:3000/api/notifications?id=${user}`
+  //   );
+
+  //   if (!response.ok) {
+  //     throw new Error(`HTTP error! Status: ${response.status}`);
+  //   }
+
+  //   const notifications = await response.json();
+  //   console.log(notifications);
+  //   console.log(response);
+
+  //   // Schedule and display notifications
+  //   for (const notification of notifications) {
+  //     await Notifications.scheduleNotificationAsync({
+  //       content: {
+  //         title: notification.title,
+  //         body: notification.body,
+  //       },
+  //       trigger: null, // Trigger immediately in the background
+  //     });
+  //   }
+
+  //   console.log("Background fetch task completed successfully");
+  //   return BackgroundFetch.Result.NewData;
+  // } catch (error) {
+  //   console.error("Error in background fetch task:", error);
+  //   return BackgroundFetch.Result.Failed;
+  // }
 
   return (
     <Tab.Navigator
@@ -758,7 +678,6 @@ function RooteStack() {
   );
 }
 export default function App() {
-  const [isModalVisible, setModalVisible] = useState(false);
   return (
     <ContextData>
       <NavigationContainer>{RooteStack()}</NavigationContainer>

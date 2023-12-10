@@ -23,7 +23,7 @@ import { ContextGlobal } from "../../Store";
 import DatePicker from "@react-native-community/datetimepicker";
 
 export default RootTask = ({ navigation }) => {
-  const api = "http://192.168.1.8:3000/api";
+  const api = "http://192.168.43.79:3000/api";
   const options = [
     { label: "بدنية", value: 1 },
     { label: "عقلية", value: 2 },
@@ -390,14 +390,6 @@ export default RootTask = ({ navigation }) => {
               gap: 10,
             }}
           >
-            {/* <Image
-              source={Ellipse}
-              style={{
-                position: "absolute",
-                marginTop: "100%",
-                resizeMode: "contain",
-              }}
-            /> */}
             <TouchableOpacity
               onPress={() => {
                 navigation.navigate("AddTask");

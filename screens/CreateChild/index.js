@@ -5,7 +5,7 @@ import { Button } from "../../Component/Button";
 import { Input } from "../../Component/TextInput";
 import Ellipse from "../../assets/Ellipse.png";
 import Loader from "../../Component/Loader";
-export const API_URL = "http://192.168.1.8:3000/api";
+export const API_URL = "http://192.168.43.79:3000/api";
 import axios from "axios";
 import { ContextGlobal } from "../../Store";
 import { CheckBox } from "react-native-elements";
@@ -14,7 +14,7 @@ import DatePicker from "@react-native-community/datetimepicker";
 const CreateChild = () => {
   const Context = useContext(ContextGlobal);
   const [name, setName] = useState("");
-  const [dateBirth, setDateBirth] = useState(null);
+  const [dateBirth, setDateBirth] = useState("");
   const [gender, setGender] = useState("");
   const [loder, setLoder] = useState(false);
   const [selectedValue, setSelectedValue] = useState(null);
@@ -48,10 +48,13 @@ const CreateChild = () => {
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [dateError, setDateError] = useState("");
 
-  const handleDateChange = (date) => {
+  const handleDateChange = (event, selectedDate) => {
     setShowDatePicker(false);
-    if (date !== undefined) {
-      setDateBirth(date);
+
+    if (selectedDate !== undefined) {
+      const formattedDate = selectedDate.toISOString().split("T")[0];
+      setDateBirth(formattedDate);
+      setSelectedDate(selectedDate);
     }
   };
 
@@ -171,17 +174,16 @@ const CreateChild = () => {
           تاريخ الميلاد
         </Text>
         <Input
-          defaultValue={
-            new Date(dateBirth || Date.now())?.toISOString()?.split("T")?.[0]
-          }
+          value={selectedDate ? selectedDate.toISOString().split("T")[0] : ""}
           placeholder="اختر تاريخ"
           style={{ borderBottomWidth: 1, marginBottom: 10 }}
           onFocus={() => setShowDatePicker(true)}
         />
         {showDatePicker && (
           <DatePicker
-            minimumDate={new Date()}
-            value={new Date(dateBirth || Date.now())} // Ensure selectedDate is not undefined
+            minimumDate={new Date(2010, 0, 1)} // January 1, 2010
+            maximumDate={new Date(2016, 11, 31)} // December 31, 2016
+            value={new Date(selectedDate || Date.now())}
             mode="date"
             display="default"
             onChange={handleDateChange}

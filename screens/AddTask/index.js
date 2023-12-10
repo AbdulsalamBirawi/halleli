@@ -18,6 +18,7 @@ import { Button } from "../../Component/Button";
 import { ContextGlobal } from "../../Store";
 import { useNavigation } from "@react-navigation/native";
 import { DeviceEventEmitter } from "react-native";
+import male from "../../assets/male.png";
 
 import axios from "axios";
 export default function AddTask({ setReload }) {
@@ -69,7 +70,7 @@ export default function AddTask({ setReload }) {
         valueTask: newTask.mony,
         childId: context.loggedInChild._id,
       };
-      await axios.post("http://192.168.1.8:3000/api/requesttask", data);
+      await axios.post("http://192.168.43.79:3000/api/requesttask", data);
       DeviceEventEmitter.emit("tasks->reload", { reload: true });
       navigation.goBack();
       setsubmited(true);
@@ -83,7 +84,7 @@ export default function AddTask({ setReload }) {
       valueTask: newTask.mony,
       childId: selectedChild,
     };
-    await axios.post("http://192.168.1.8:3000/api/task", data, {
+    await axios.post("http://192.168.43.79:3000/api/task", data, {
       headers: {
         Authorization: "Bearer " + context.token,
       },
@@ -93,6 +94,45 @@ export default function AddTask({ setReload }) {
     setsubmited(true);
   };
   console.log(childrens);
+
+  const [taskNameError, setTaskNameError] = useState("");
+
+  const handleTaskNameChange = (input) => {
+    setNewTask({ ...newTask, taskName: input });
+  };
+
+  const handleTaskNameBlur = () => {
+    // Regular expression for Arabic characters
+    const arabicRegex = /^[\u0600-\u06FF\s]+$/;
+
+    if (newTask.taskName.length < 3 || newTask.taskName.length > 30) {
+      setTaskNameError("Task name should be between 3 and 30 characters.");
+    } else if (!arabicRegex.test(newTask.taskName)) {
+      setTaskNameError("Task name should contain only Arabic characters.");
+    } else {
+      setTaskNameError("");
+    }
+  };
+
+  const [descError, setDescError] = useState("");
+
+  const handleDescChange = (input) => {
+    setNewTask({ ...newTask, desc: input });
+  };
+
+  const handleDescBlur = () => {
+    // Regular expression for Arabic characters
+    const arabicRegex = /^[\u0600-\u06FF\s]+$/;
+
+    if (newTask.desc.length < 3 || newTask.desc.length > 150) {
+      setDescError("Description should be between 3 and 150 characters.");
+    } else if (!arabicRegex.test(newTask.desc)) {
+      setDescError("Description should contain only Arabic characters.");
+    } else {
+      setDescError("");
+    }
+  };
+
   return (
     <ScrollView
       style={{
@@ -119,24 +159,6 @@ export default function AddTask({ setReload }) {
           marginTop: 20,
         }}
       >
-        {/* <View
-          style={{
-            justifyContent: "center",
-            flexDirection: "row",
-            alignItems: "center",
-            paddingVertical: 10,
-          }}
-        >
-          {options.map((option) => (
-            <CheckBox
-              key={option.label}
-              title={option.label}
-              checked={option.value === selectedValue}
-              onPress={() => handleCheckboxChange(option.value)}
-            />
-          ))}
-        </View> */}
-
         <View
           style={{
             justifyContent: "center",
@@ -160,10 +182,11 @@ export default function AddTask({ setReload }) {
           اسم المهمة{" "}
         </Text>
         <Input
-          onChangeText={(e) => setNewTask({ ...newTask, taskName: e })}
+          onChangeText={(e) => handleTaskNameChange(e)}
+          onBlur={handleTaskNameBlur}
           placeholder={"اسم المهمة"}
           backColor={"#fff"}
-          error={newTask.taskName ? false : <Text>the name is empty</Text>}
+          error={taskNameError}
         />
       </View>
       <View style={{ marginTop: 20, marginTop: 20 }}>
@@ -171,10 +194,11 @@ export default function AddTask({ setReload }) {
           وصف المهمة
         </Text>
         <Input
-          onChangeText={(e) => setNewTask({ ...newTask, desc: e })}
+          onChangeText={(e) => handleDescChange(e)}
+          onBlur={handleDescBlur}
           placeholder={"وصف"}
           backColor={"#fff"}
-          error={newTask.desc ? false : <Text>the description is empty</Text>}
+          error={descError}
         />
       </View>
 
@@ -188,7 +212,6 @@ export default function AddTask({ setReload }) {
           onChangeText={(e) => setNewTask({ ...newTask, mony: e })}
           placeholder={"المبلغ المستحق"}
           backColor={"#fff"}
-          error={newTask.mony ? false : <Text>the value is empty</Text>}
         />
       </View>
       <View style={{ marginTop: 10 }}>
@@ -217,18 +240,27 @@ export default function AddTask({ setReload }) {
           <Text style={{ textAlign: "right", color: "#3B3A7A", fontSize: 22 }}>
             اختر الطفل
           </Text>
-          {childrens.map((option) => (
-            <CheckBox
-              key={option._id}
-              title={option?.name}
-              checked={option._id === selectedChild}
-              onPress={() => {
-                setSelectedChild(
-                  option._id === selectedChild ? null : option._id
-                );
-              }}
-            />
-          ))}
+          <View style={{}}>
+            {childrens.map((option) => (
+              <View style={{}}>
+                {option.gender == "male" ? (
+                  <Image source={male} style={{ height: 70, width: 70 }} />
+                ) : (
+                  <Image source={female} style={{ height: 70, width: 70 }} />
+                )}
+                <CheckBox
+                  key={option._id}
+                  title={option?.name}
+                  checked={option._id === selectedChild}
+                  onPress={() => {
+                    setSelectedChild(
+                      option._id === selectedChild ? null : option._id
+                    );
+                  }}
+                />
+              </View>
+            ))}
+          </View>
         </View>
       )}
       <TouchableOpacity
