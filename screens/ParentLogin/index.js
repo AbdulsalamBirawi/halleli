@@ -1,4 +1,4 @@
-import { View, Text, Image, TouchableOpacity } from "react-native";
+import { View, Text, Image, TouchableOpacity, ScrollView } from "react-native";
 import React, { useState, useContext, useEffect } from "react";
 import axios from "axios";
 import {
@@ -16,7 +16,7 @@ import { ContextGlobal } from "../../Store";
 import logo from "../../assets/Group9.png";
 import SuccessTost from "../../Component/SuccessTost";
 
-const API_URL = "http://192.168.1.66:3000/api";
+const API_URL = "http://192.168.1.8:3000/api";
 
 const ParentLogin = ({ navigation }) => {
   const Context = useContext(ContextGlobal);
@@ -28,6 +28,11 @@ const ParentLogin = ({ navigation }) => {
   const loder = Context.loder;
   const token = Context.token;
   const setParent = Context.setParent;
+  const [error, setError] = useState({
+    email: "",
+    password: "",
+  });
+
   useEffect(() => {
     async function fetchData() {
       try {
@@ -59,7 +64,7 @@ const ParentLogin = ({ navigation }) => {
   };
 
   return (
-    <View
+    <ScrollView
       style={{
         flex: 1,
         padding: 10,
@@ -102,10 +107,9 @@ const ParentLogin = ({ navigation }) => {
         </Text>
         <Input
           placeholder={"البريد الالكتروني"}
-          // Icon={"email"}
-
           value={email}
           onChangeText={(text) => setEmail(text.toLowerCase())}
+          error={email ? false : <Text>the email field is empty</Text>}
         >
           <MaterialIcons name={"email"} size={25} color="#AAAA" />
         </Input>
@@ -125,6 +129,7 @@ const ParentLogin = ({ navigation }) => {
           Icon={"email"}
           value={password}
           onChangeText={(text) => setPassword(text.toLowerCase())}
+          error={password ? false : <Text>the password field is empty</Text>}
           password
         >
           <FontAwesome name="lock" size={25} color="#AAAA" />
@@ -156,7 +161,7 @@ const ParentLogin = ({ navigation }) => {
           </Text>
         </TouchableOpacity>
       </View>
-    </View>
+    </ScrollView>
   );
 };
 

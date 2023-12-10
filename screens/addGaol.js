@@ -1,21 +1,12 @@
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  TextInput,
-  DeviceEventEmitter,
-} from "react-native";
+import { View, Text, TouchableOpacity, DeviceEventEmitter } from "react-native";
 import { CheckBox } from "react-native-elements";
 import React, { useContext, useState } from "react";
 import { Input } from "../Component/TextInput";
-import { Button } from "../Component/Button";
-import RadioButton from "../Component/RadioButton";
-import CheckboxGroup from "react-native-checkbox-group";
 import { ContextGlobal } from "../Store";
 import axios from "axios";
 import { useNavigation } from "@react-navigation/native";
 import { ScrollView } from "react-native";
-const API_URL = "http://192.168.1.66:3000/api";
+const API_URL = "http://192.168.1.8:3000/api";
 
 export default function AddGoal() {
   const [newGoal, setnewGoal] = useState({
@@ -59,40 +50,6 @@ export default function AddGoal() {
         padding: 20,
       }}
     >
-      {/* <Text
-        style={{
-          textAlign: "right",
-          color: "#fff",
-          fontSize: 22,
-          marginTop: 50,
-        }}
-      >
-        تصنيف المهمة
-      </Text> */}
-      {/* <View
-        style={{
-          flexDirection: "row",
-          justifyContent: "space-between",
-          paddingHorizontal: 30,
-          marginTop: 20,
-        }}
-      >
-        {["بدنية", "عقلية", "تطوعية"].map((item, index) => (
-          <View
-            style={{
-              height: 40,
-              width: 100,
-              borderColor: "#fff",
-              borderWidth: 2,
-              borderRadius: 10,
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            <Text style={{ color: "#fff" }}>{item}</Text>
-          </View>
-        ))}
-      </View> */}
       <View style={{ marginTop: 100 }}>
         <Text style={{ textAlign: "right", color: "#fff", fontSize: 22 }}>
           اسم هدفك{" "}

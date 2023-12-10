@@ -23,21 +23,13 @@ import { ContextGlobal } from "../../Store";
 import DatePicker from "@react-native-community/datetimepicker";
 
 export default RootTask = ({ navigation }) => {
-  const api = "http://192.168.1.66:3000/api";
+  const api = "http://192.168.1.8:3000/api";
   const options = [
     { label: "بدنية", value: 1 },
     { label: "عقلية", value: 2 },
     { label: "تطوعية", value: 3 },
   ];
   const context = useContext(ContextGlobal);
-  const user = context.user;
-
-  const [editTask, setEditTask] = useState({
-    taskType: null,
-    taskName: "",
-    mony: "",
-    date: "",
-  });
   const [open, setOpen] = useState("kareem");
   const [visible, setVisible] = useState(false);
   const [deletTask, setdeletTask] = useState(null);
@@ -99,8 +91,6 @@ export default RootTask = ({ navigation }) => {
 
   useEffect(() => {
     DeviceEventEmitter.addListener("tasks->reload", (d) => {
-      // transfer->internal
-
       setReload((r) => !r);
     });
     getRequestTasks();

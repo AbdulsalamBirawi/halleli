@@ -5,7 +5,7 @@ import { ContextGlobal } from "../../Store";
 import SuccessTost from "../../Component/SuccessTost";
 import axios from "axios";
 
-const API_URL = "http://192.168.1.66:3000/api";
+const API_URL = "http://192.168.1.8:3000/api";
 
 export default function ScannerScreen({ navigation }) {
   const [hasPermission, setHasPermission] = useState(null);

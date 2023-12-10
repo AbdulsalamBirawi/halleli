@@ -23,7 +23,7 @@ import { ContextGlobal } from "../../Store";
 import logo from "../../assets/Group9.png";
 import SuccessTost from "../../Component/SuccessTost";
 
-const API_URL = "http://192.168.1.66:3000/api";
+const API_URL = "http://192.168.1.8:3000/api";
 
 const Profile = ({ navigation }) => {
   const Context = useContext(ContextGlobal);
@@ -43,12 +43,7 @@ const Profile = ({ navigation }) => {
   });
 
   const setParent = Context.setParent;
-  // useEffect(() => {
-  //   if (token !== null) {
-  //     setParent(true);
-  //     navigation.navigate("RooteTab");
-  //   }
-  // }, [token]);
+
   const handelClose = () => {
     setModalVisible(false);
     navigation.navigate("ParentLogin");
@@ -58,7 +53,7 @@ const Profile = ({ navigation }) => {
     handleLogin({ email, password });
   };
   const updateUserInfo = async () => {
-    const res = await axios.post(`http://192.168.1.66:3000/api/users/newpass`, {
+    const res = await axios.post(`http://192.168.1.8:3000/api/users/newpass`, {
       email: email,
       password: password,
     });
@@ -96,15 +91,7 @@ const Profile = ({ navigation }) => {
           marginTop: 550,
         }}
       />
-      {/* <View style={{ flex: 1, marginTop: 100, marginRight: 30 }}>
-        <Text style={{ textAlign: "right", fontSize: 35, color: "#3B3A7A" }}>
-          أهلا بك..
-        </Text>
-        <Text style={{ textAlign: "right", fontSize: 35, color: "#3B3A7A" }}>
-          {" "}
-          تسجيل دخول
-        </Text>
-      </View> */}
+
       <View style={{ flex: 3, padding: 10, marginTop: 100 }}>
         <Text style={{ textAlign: "right", fontSize: 25, color: "#3B3A7A" }}>
           البريد الالكتروني
@@ -154,7 +141,7 @@ const Profile = ({ navigation }) => {
         </Text>
         <Input
           placeholder={"كلمة المرور الجديدة"}
-          Icon={"email"}
+          Icon={"password"}
           value={password}
           error={error.password}
           onChangeText={(text) => {
