@@ -26,7 +26,7 @@ const ProfileChild = ({ route, navigation }) => {
   const [reload, setReload] = useState(false);
   const getChildById = async () => {
     const res = await axios.get(
-      `http://192.168.43.79:3000/api/child/child/${IdChaild}`
+      `http://192.168.1.66:3000/api/child/child/${IdChaild}`
     );
     console.log({ res: res.data });
     const Child = res.data;
