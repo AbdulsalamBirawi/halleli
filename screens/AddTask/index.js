@@ -84,6 +84,7 @@ export default function AddTask({ setReload }) {
       valueTask: newTask.mony,
       childId: selectedChild,
     };
+
     await axios.post("http://192.168.43.79:3000/api/task", data, {
       headers: {
         Authorization: "Bearer " + context.token,

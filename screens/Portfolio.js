@@ -53,47 +53,11 @@ const Portfolio = ({ navigation }) => {
   console.log(selectedTaskIndex);
   const [TaskId, setTaskId] = useState(null);
   const [tasks, setTasks] = useState([
-    {
-      type: "بدني",
-      name: "ممارسة الرياضة",
-      time: "12/12/2026",
-      money: "24",
-      ischecked: false,
-      description: "بلا بلا بلا بلا ",
-    },
-    {
-      type: "عقلي ",
-      name: "ممارسة الرياضة aaaa",
-      time: "12/12/2026",
-      money: "24",
-      ischecked: false,
-      description: "بلا بلا بلا بلا ",
-    },
-    {
-      type: "بدني",
-      name: "ممارسة الرياضة",
-      time: "12/12/2026",
-      money: "24",
-      ischecked: false,
-      description: "بلا بلا بلا بلا ",
-    },
-    {
-      type: "عقلي",
-      name: "ممارسة الرياضة",
-      time: "12/12/2026",
-      money: "24",
-      ischecked: false,
-      description: "بلا بلا بلا بلا ",
-    },
-    {
-      type: "بدني",
-      name: "ممارسة الرياضة",
-      time: "12/12/2026",
-      money: "24",
-      ischecked: false,
-      description: "بلا بلا بلا بلا ",
-    },
   ]);
+  const [completedTasks, setCompletedTasks] = useState([
+  ]);
+  
+  
   const handleCheckboxToggle = (TaskId) => {
     // const updatedTasks = tasks.map((item, i) =>
     //   i === index ? { ...item, ischecked: !item.ischecked } : item
@@ -169,7 +133,85 @@ const Portfolio = ({ navigation }) => {
           )}
         </View>
         <View style={{ width: "100%", gap: 10 }}>
-          {tasks.map((item, index) => (
+          {tasks.filter(e => new Date(e.time) <= Date.now() ).map((item, index) => (
+            <View
+              key={index} // Add a key for each item in the map
+              style={{
+                height: 80,
+                width: "100%",
+                backgroundColor:'#646363',
+                alignItems: "center",
+                borderRadius: 20,
+                flexDirection: "row",
+
+                paddingHorizontal: 30,
+
+                justifyContent: "space-between",
+              }}
+            >
+              
+              {/* setTaskId(item._id) */}
+              {/* handleCheckboxToggle(item._id) */}
+              {/* <TouchableOpacity
+                style={{
+                  backgroundColor: "white",
+                  paddingHorizontal: 5,
+                  padding: 7,
+                  borderRadius: 10,
+                }}
+                onPress={() => handleCheckboxToggle(item._id)}
+              >
+                <Text style={{ color: "#3B3A7A", fontSize: 20 }}>اكتملت</Text>
+              </TouchableOpacity> */}
+              <TouchableOpacity
+                style={{
+                  width: "80%",
+                  flexDirection: "row",
+                  height: 80,
+
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                }}
+                onPress={() => toggleModal(index)}
+              >
+                <View>
+                  <Text style={{ color: "#fff" }}>{item.valueTask} SAR</Text>
+                </View>
+                <View style={{}}>
+                  <Text
+                    style={{ fontSize: 20, color: "#fff", textAlign: "right" }}
+                  >
+                    {item.type} {console.log(item.type)}
+                  </Text>
+                  
+                  <Text
+                    style={{ fontSize: 20, color: "#fff", textAlign: "right" }}
+                  >
+                    {item.name}
+                  </Text>
+                  <Text
+                    style={{ fontSize: 20, color: "#fff", textAlign: "right" }}
+                  >
+                    {item.name}
+                  </Text>
+
+                  <Text
+                    style={{
+                      fontSize: 15,
+                      color: "#fff",
+                      textAlign: "right",
+                      color: "red",
+                    }}
+                  >
+                    {item.date}
+                  </Text>
+                </View>
+              </TouchableOpacity>
+            </View>
+          ))}
+        </View>
+        <View style={{ width: "100%", gap: 10 }}>
+          {tasks.filter(e => new Date(e.time) > Date.now() ).map((item, index) => (
             <View
               key={index} // Add a key for each item in the map
               style={{
@@ -336,7 +378,11 @@ const Portfolio = ({ navigation }) => {
                   <Text style={{ fontSize: 20, color: "#3B3A7A" }}>
                     الوقت النهائي :{" "}
                     <Text style={{ color: "black" }}>
-                      {Date(tasks[selectedTaskIndex]?.time)}
+                      {new Date(tasks[selectedTaskIndex]?.time).toLocaleString('ar-SA', {
+                        year: "numeric",
+                        month: "2-digit",
+                        day: "2-digit",
+                      })}
                     </Text>
                   </Text>
                 </View>

@@ -100,7 +100,7 @@ function RooteTab() {
     fetchNotifications();
     const interval = setInterval(() => {
       fetchNotifications();
-    }, 10000000000);
+    }, 10000);
     return () => {
       clearInterval(interval);
     };
