@@ -17,7 +17,7 @@ import { Picker } from "@react-native-picker/picker";
 import female from "../assets/female.png";
 import { Input } from "../Component/TextInput";
 import { ScrollView } from "react-native";
-const API_URL = "http://192.168.43.79:3000/api";
+const API_URL = "http://192.168.1.16:3000/api";
 
 const Transaction = ({ navigation }) => {
   const Context = useContext(ContextGlobal);
@@ -99,13 +99,14 @@ const Transaction = ({ navigation }) => {
           fontSize: 20,
           marginVertical: 10,
           fontWeight: "600",
+          textAlign: "right",
         }}
       >
         التحويل بين الحسابات
       </Text>
 
       <View>
-        <Text>اختر نوع الحساب:</Text>
+        <Text style={{ textAlign: "right" }}>اختر نوع الحساب:</Text>
 
         <Picker
           selectedValue={selectedAccountType}
@@ -115,7 +116,9 @@ const Transaction = ({ navigation }) => {
           <Picker.Item label="الحساب الجاري" value="currentAccount" />
         </Picker>
 
-        <Text>اختر حساب المراد التحويل اليه:</Text>
+        <Text style={{ textAlign: "right" }}>
+          اختر حساب المراد التحويل اليه:
+        </Text>
 
         <Picker
           selectedValue={selectedTransferAccount}
@@ -126,7 +129,7 @@ const Transaction = ({ navigation }) => {
         </Picker>
       </View>
       <View>
-        <Text>المبلغ</Text>
+        <Text style={{ textAlign: "right" }}>المبلغ</Text>
         <Input onChangeText={(e) => settoCurrentAccountValue(e)} />
       </View>
       <View

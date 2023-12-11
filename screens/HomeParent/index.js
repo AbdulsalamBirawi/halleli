@@ -5,7 +5,7 @@ import Ellipse from "../../assets/Ellipse.png";
 import axios from "axios";
 import { ContextGlobal } from "../../Store";
 import family from "../../assets/family2.jpg";
-const API_URL = "http://192.168.43.79:3000/api";
+const API_URL = "http://192.168.1.16:3000/api";
 
 const HomeParent = ({ navigation }) => {
   const Context = useContext(ContextGlobal);

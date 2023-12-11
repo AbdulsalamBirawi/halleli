@@ -7,7 +7,7 @@ import axios from "axios";
 import { ContextGlobal } from "../Store";
 import { Ionicons } from "@expo/vector-icons";
 import { Modal } from "react-native";
-const API_URL = "http://192.168.43.79:3000/api";
+const API_URL = "http://192.168.1.16:3000/api";
 
 const Portfolio = ({ navigation }) => {
   const Context = useContext(ContextGlobal);
@@ -52,12 +52,9 @@ const Portfolio = ({ navigation }) => {
 
   console.log(selectedTaskIndex);
   const [TaskId, setTaskId] = useState(null);
-  const [tasks, setTasks] = useState([
-  ]);
-  const [completedTasks, setCompletedTasks] = useState([
-  ]);
-  
-  
+  const [tasks, setTasks] = useState([]);
+  const [completedTasks, setCompletedTasks] = useState([]);
+
   const handleCheckboxToggle = (TaskId) => {
     // const updatedTasks = tasks.map((item, i) =>
     //   i === index ? { ...item, ischecked: !item.ischecked } : item
@@ -133,26 +130,27 @@ const Portfolio = ({ navigation }) => {
           )}
         </View>
         <View style={{ width: "100%", gap: 10 }}>
-          {tasks.filter(e => new Date(e.time) <= Date.now() ).map((item, index) => (
-            <View
-              key={index} // Add a key for each item in the map
-              style={{
-                height: 80,
-                width: "100%",
-                backgroundColor:'#646363',
-                alignItems: "center",
-                borderRadius: 20,
-                flexDirection: "row",
+          {tasks
+            .filter((e) => new Date(e.time) <= Date.now())
+            .map((item, index) => (
+              <View
+                key={index} // Add a key for each item in the map
+                style={{
+                  height: 80,
+                  width: "100%",
+                  backgroundColor: "#646363",
+                  alignItems: "center",
+                  borderRadius: 20,
+                  flexDirection: "row",
 
-                paddingHorizontal: 30,
+                  paddingHorizontal: 30,
 
-                justifyContent: "space-between",
-              }}
-            >
-              
-              {/* setTaskId(item._id) */}
-              {/* handleCheckboxToggle(item._id) */}
-              {/* <TouchableOpacity
+                  justifyContent: "space-between",
+                }}
+              >
+                {/* setTaskId(item._id) */}
+                {/* handleCheckboxToggle(item._id) */}
+                {/* <TouchableOpacity
                 style={{
                   backgroundColor: "white",
                   paddingHorizontal: 5,
@@ -163,84 +161,98 @@ const Portfolio = ({ navigation }) => {
               >
                 <Text style={{ color: "#3B3A7A", fontSize: 20 }}>اكتملت</Text>
               </TouchableOpacity> */}
-              <TouchableOpacity
-                style={{
-                  width: "80%",
-                  flexDirection: "row",
-                  height: 80,
+                <TouchableOpacity
+                  style={{
+                    width: "80%",
+                    flexDirection: "row",
+                    height: 80,
 
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                }}
-                onPress={() => toggleModal(index)}
-              >
-                <View>
-                  <Text style={{ color: "#fff" }}>{item.valueTask} SAR</Text>
-                </View>
-                <View style={{}}>
-                  <Text
-                    style={{ fontSize: 20, color: "#fff", textAlign: "right" }}
-                  >
-                    {item.type} {console.log(item.type)}
-                  </Text>
-                  
-                  <Text
-                    style={{ fontSize: 20, color: "#fff", textAlign: "right" }}
-                  >
-                    {item.name}
-                  </Text>
-                  <Text
-                    style={{ fontSize: 20, color: "#fff", textAlign: "right" }}
-                  >
-                    {item.name}
-                  </Text>
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                  }}
+                  onPress={() => toggleModal(index)}
+                >
+                  <View>
+                    <Text style={{ color: "#fff" }}>{item.valueTask} SAR</Text>
+                  </View>
+                  <View style={{}}>
+                    <Text
+                      style={{
+                        fontSize: 20,
+                        color: "#fff",
+                        textAlign: "right",
+                      }}
+                    >
+                      {item.type} {console.log(item.type)}
+                    </Text>
 
-                  <Text
-                    style={{
-                      fontSize: 15,
-                      color: "#fff",
-                      textAlign: "right",
-                      color: "red",
-                    }}
-                  >
-                    {item.date}
-                  </Text>
-                </View>
-              </TouchableOpacity>
-            </View>
-          ))}
+                    <Text
+                      style={{
+                        fontSize: 20,
+                        color: "#fff",
+                        textAlign: "right",
+                      }}
+                    >
+                      {item.name}
+                    </Text>
+                    <Text
+                      style={{
+                        fontSize: 20,
+                        color: "#fff",
+                        textAlign: "right",
+                      }}
+                    >
+                      {item.name}
+                    </Text>
+
+                    <Text
+                      style={{
+                        fontSize: 15,
+                        color: "#fff",
+                        textAlign: "right",
+                        color: "red",
+                      }}
+                    >
+                      {item.date}
+                    </Text>
+                  </View>
+                </TouchableOpacity>
+              </View>
+            ))}
         </View>
         <View style={{ width: "100%", gap: 10 }}>
-          {tasks.filter(e => new Date(e.time) > Date.now() ).map((item, index) => (
-            <View
-              key={index} // Add a key for each item in the map
-              style={{
-                height: 80,
-                width: "100%",
-                backgroundColor:
-                  item.type == "بدني"
-                    ? "rgba(96, 96, 96, 0.7)"
-                    : "عقلي"
-                    ? "#3B3A7A"
-                    : "rgba(84, 141, 84, 0.8)",
-                alignItems: "center",
-                borderRadius: 20,
-                flexDirection: "row",
+          {tasks
+            .filter((e) => new Date(e.time) > Date.now())
+            .map((item, index) => (
+              <View
+                key={index} // Add a key for each item in the map
+                style={{
+                  height: 80,
+                  width: "100%",
+                  backgroundColor:
+                    item.type == "بدني"
+                      ? "rgba(96, 96, 96, 0.7)"
+                      : "عقلي"
+                      ? "#3B3A7A"
+                      : "rgba(84, 141, 84, 0.8)",
+                  alignItems: "center",
+                  borderRadius: 20,
+                  flexDirection: "row",
 
-                paddingHorizontal: 30,
+                  paddingHorizontal: 30,
 
-                justifyContent: "space-between",
-              }}
-            >
-              <CheckBox
-                checked={item._id == TaskId}
-                onPress={() => {
-                  setTaskId(item._id);
+                  justifyContent: "space-between",
                 }}
-              />
-              {/* setTaskId(item._id) */}
-              {/* handleCheckboxToggle(item._id) */}
-              {/* <TouchableOpacity
+              >
+                <CheckBox
+                  checked={item._id == TaskId}
+                  onPress={() => {
+                    setTaskId(item._id);
+                  }}
+                />
+                {/* setTaskId(item._id) */}
+                {/* handleCheckboxToggle(item._id) */}
+                {/* <TouchableOpacity
                 style={{
                   backgroundColor: "white",
                   paddingHorizontal: 5,
@@ -251,45 +263,53 @@ const Portfolio = ({ navigation }) => {
               >
                 <Text style={{ color: "#3B3A7A", fontSize: 20 }}>اكتملت</Text>
               </TouchableOpacity> */}
-              <TouchableOpacity
-                style={{
-                  width: "80%",
-                  flexDirection: "row",
-                  height: 80,
+                <TouchableOpacity
+                  style={{
+                    width: "80%",
+                    flexDirection: "row",
+                    height: 80,
 
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                }}
-                onPress={() => toggleModal(index)}
-              >
-                <View>
-                  <Text style={{ color: "#fff" }}>{item.valueTask} SAR</Text>
-                </View>
-                <View style={{}}>
-                  <Text
-                    style={{ fontSize: 20, color: "#fff", textAlign: "right" }}
-                  >
-                    {item.type} {console.log(item.type)}
-                  </Text>
-                  <Text
-                    style={{ fontSize: 20, color: "#fff", textAlign: "right" }}
-                  >
-                    {item.name}
-                  </Text>
-                  <Text
-                    style={{
-                      fontSize: 15,
-                      color: "#fff",
-                      textAlign: "right",
-                      color: "red",
-                    }}
-                  >
-                    {item.date}
-                  </Text>
-                </View>
-              </TouchableOpacity>
-            </View>
-          ))}
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                  }}
+                  onPress={() => toggleModal(index)}
+                >
+                  <View>
+                    <Text style={{ color: "#fff" }}>{item.valueTask} SAR</Text>
+                  </View>
+                  <View style={{}}>
+                    <Text
+                      style={{
+                        fontSize: 20,
+                        color: "#fff",
+                        textAlign: "right",
+                      }}
+                    >
+                      {item.type} {console.log(item.type)}
+                    </Text>
+                    <Text
+                      style={{
+                        fontSize: 20,
+                        color: "#fff",
+                        textAlign: "right",
+                      }}
+                    >
+                      {item.name}
+                    </Text>
+                    <Text
+                      style={{
+                        fontSize: 15,
+                        color: "#fff",
+                        textAlign: "right",
+                        color: "red",
+                      }}
+                    >
+                      {item.date}
+                    </Text>
+                  </View>
+                </TouchableOpacity>
+              </View>
+            ))}
         </View>
       </View>
 
@@ -378,11 +398,14 @@ const Portfolio = ({ navigation }) => {
                   <Text style={{ fontSize: 20, color: "#3B3A7A" }}>
                     الوقت النهائي :{" "}
                     <Text style={{ color: "black" }}>
-                      {new Date(tasks[selectedTaskIndex]?.time).toLocaleString('ar-SA', {
-                        year: "numeric",
-                        month: "2-digit",
-                        day: "2-digit",
-                      })}
+                      {new Date(tasks[selectedTaskIndex]?.time).toLocaleString(
+                        "ar-SA",
+                        {
+                          year: "numeric",
+                          month: "2-digit",
+                          day: "2-digit",
+                        }
+                      )}
                     </Text>
                   </Text>
                 </View>
