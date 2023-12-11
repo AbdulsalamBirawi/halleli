@@ -88,7 +88,9 @@ function RooteTab() {
           },
           trigger: null, // Trigger immediately in the background
         });
-        await deleteNotification(notification._id);
+        setTimeout( async () => {
+          await deleteNotification(notification._id);
+        } , 100)
       }
 
       console.log("Background fetch task completed successfully");
@@ -103,31 +105,32 @@ function RooteTab() {
       settings.granted || settings.ios?.status === Notifications.IosAuthorizationStatus.PROVISIONAL
     );
   }
+  const [r, setR] = useState(false);
+
+
   useEffect(() => {
     allowsNotificationsAsync().then(async e => {
       if (!e)
        await Notifications.requestPermissionsAsync();
-
-
-
-      Notifications.setNotificationHandler({
-        handleNotification: async () => ({
-          shouldShowAlert: true,
-          shouldPlaySound: true,
-          shouldSetBadge: false,
-        }),
-      });
       fetchNotifications();
       
-      const interval = setInterval(() => {
-        fetchNotifications();
-      }, 10000);
-      return () => {
-        clearInterval(interval);
-      };
     })
+
+    Notifications.setNotificationHandler({
+      handleNotification: async () => ({
+        shouldShowAlert: true,
+        shouldPlaySound: true,
+        shouldSetBadge: false,
+      }),
+    });
+    const interval = setInterval(() => {
+      setR(r => !r);
+    }, 10 * 1000);
+    return () => {
+      clearInterval(interval);
+    };
      
-  }, []);
+  }, [r]);
 
 
   const deleteNotification = async (id) => {
