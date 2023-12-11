@@ -63,16 +63,16 @@ function RooteTab() {
   const isLoading = Context.isLoading;
   const Parent = Context.isParent;
   const child = Context.loggedInChild;
-
+  const [per, setPer] = useState(false);
   const fetchNotifications = async () => {
     if (!user && !child) {
       return;
     }
     try {
       // Fetch notifications from a URL
-      const id = user?._id || child._id;
+      const id = user?._id || child?._id;
       const response = await axios.get(
-        `http://192.168.43.79:3000/api/notifications?id=${id}`
+        `http://192.168.1.66:3000/api/notifications?id=${id}`
       );
 
       const notifications = response.data;
@@ -80,6 +80,7 @@ function RooteTab() {
 
       // Schedule and display notifications
       for (const notification of notifications) {
+        console.log({notification});
         await Notifications.scheduleNotificationAsync({
           content: {
             title: notification.title,
@@ -87,7 +88,7 @@ function RooteTab() {
           },
           trigger: null, // Trigger immediately in the background
         });
-        // await deleteNotification(notification._id);
+        await deleteNotification(notification._id);
       }
 
       console.log("Background fetch task completed successfully");
@@ -96,26 +97,42 @@ function RooteTab() {
     }
   };
 
+  async function allowsNotificationsAsync() {
+    const settings = await Notifications.getPermissionsAsync();
+    return (
+      settings.granted || settings.ios?.status === Notifications.IosAuthorizationStatus.PROVISIONAL
+    );
+  }
   useEffect(() => {
-    fetchNotifications();
-    const interval = setInterval(() => {
+    allowsNotificationsAsync().then(async e => {
+      if (!e)
+       await Notifications.requestPermissionsAsync();
+
+
+
+      Notifications.setNotificationHandler({
+        handleNotification: async () => ({
+          shouldShowAlert: true,
+          shouldPlaySound: true,
+          shouldSetBadge: false,
+        }),
+      });
       fetchNotifications();
-    }, 10000);
-    return () => {
-      clearInterval(interval);
-    };
+      
+      const interval = setInterval(() => {
+        fetchNotifications();
+      }, 10000);
+      return () => {
+        clearInterval(interval);
+      };
+    })
+     
   }, []);
 
-  Notifications.setNotificationHandler({
-    handleNotification: async () => ({
-      shouldShowAlert: true,
-      shouldPlaySound: true,
-      shouldSetBadge: false,
-    }),
-  });
+
   const deleteNotification = async (id) => {
-    const res = await axios.delete(
-      `http://192.168.43.79:3000/api/notifications/${id}`
+     await axios.delete(
+      `http://192.168.1.66:3000/api/notifications/${id}`
     );
   };
   // Second, call the method
@@ -123,7 +140,7 @@ function RooteTab() {
   // try {
   //   // Fetch notifications from a URL
   //   const response = await fetch(
-  //     `http://192.168.43.79:3000/api/notifications?id=${user}`
+  //     `http://192.168.1.66:3000/api/notifications?id=${user}`
   //   );
 
   //   if (!response.ok) {
