@@ -10,7 +10,7 @@ import { Button } from "../../Component/Button";
 import { Input } from "../../Component/TextInput";
 import Ellipse from "../../assets/Ellipse.png";
 import { ContextGlobal } from "../../Store";
-const API_URL = "http://192.168.1.66:3000/api";
+const API_URL = "http://192.168.1.16:3000/api";
 import Loader from "../../Component/Loader";
 import SuccessTost from "../../Component/SuccessTost";
 

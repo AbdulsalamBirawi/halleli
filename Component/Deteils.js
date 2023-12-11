@@ -39,12 +39,12 @@ const Deteils = ({ visible, setvisible, deteils, completeTaskId }) => {
 
   const deleteCompleteTask = async () => {
     const res = await axios.get(
-      `http://192.168.1.66:3000/api/task/father-complete/${completeTaskId}`
+      `http://192.168.1.16:3000/api/task/father-complete/${completeTaskId}`
     );
     console.log(res);
   };
   const returnCompleteTask = async () => {
-    const api = "http://192.168.1.66:3000/api";
+    const api = "http://192.168.1.16:3000/api";
     const res = await axios.put(`${api}/task/${completeTaskId}`, {
       status: false,
     });

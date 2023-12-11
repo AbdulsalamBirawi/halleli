@@ -72,7 +72,7 @@ function RooteTab() {
       // Fetch notifications from a URL
       const id = user?._id || child?._id;
       const response = await axios.get(
-        `http://192.168.1.66:3000/api/notifications?id=${id}`
+        `http://192.168.1.16:3000/api/notifications?id=${id}`
       );
 
       const notifications = response.data;
@@ -80,7 +80,7 @@ function RooteTab() {
 
       // Schedule and display notifications
       for (const notification of notifications) {
-        console.log({notification});
+        console.log({ notification });
         await Notifications.scheduleNotificationAsync({
           content: {
             title: notification.title,
@@ -102,7 +102,8 @@ function RooteTab() {
   async function allowsNotificationsAsync() {
     const settings = await Notifications.getPermissionsAsync();
     return (
-      settings.granted || settings.ios?.status === Notifications.IosAuthorizationStatus.PROVISIONAL
+      settings.granted ||
+      settings.ios?.status === Notifications.IosAuthorizationStatus.PROVISIONAL
     );
   }
   const [r, setR] = useState(false);
@@ -132,10 +133,9 @@ function RooteTab() {
      
   }, [r]);
 
-
   const deleteNotification = async (id) => {
-     await axios.delete(
-      `http://192.168.1.66:3000/api/notifications/${id}`
+    const res = await axios.delete(
+      `http://192.168.1.16:3000/api/notifications/${id}`
     );
   };
   // Second, call the method
@@ -143,7 +143,7 @@ function RooteTab() {
   // try {
   //   // Fetch notifications from a URL
   //   const response = await fetch(
-  //     `http://192.168.1.66:3000/api/notifications?id=${user}`
+  //     `http://192.168.1.16:3000/api/notifications?id=${user}`
   //   );
 
   //   if (!response.ok) {
