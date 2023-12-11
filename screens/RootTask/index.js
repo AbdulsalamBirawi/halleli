@@ -58,7 +58,7 @@ export default RootTask = ({ navigation }) => {
       headers: { Authorization: "Bearer " + context.token },
     });
     const requsetTasks = res.data;
-
+    console.log({ requsetTasks });
     setrequestTasksData(requsetTasks);
   };
 
