@@ -16,7 +16,7 @@ import user from "../../assets/user.png";
 import Loader from "../../Component/Loader";
 import SuccessTost from "../../Component/SuccessTost";
 
-const API_URL = "http://192.168.1.16:3000/api";
+const API_URL = "http://192.168.43.79:3000/api";
 
 const ParentRegister = ({ navigation }) => {
   const [name, setName] = useState("");
@@ -33,7 +33,7 @@ const ParentRegister = ({ navigation }) => {
   };
   const handleNameBlur = () => {
     // Regular expression to match only English lowercase letters
-    const englishLowercaseRegex = /^[a-z]+$/;
+    const englishLowercaseRegex = /^[\u0600-\u06FFa-zA-Z\s]+$/;
 
     // Check the validation when the input loses focus
     if (name.length === 0) {
@@ -44,7 +44,7 @@ const ParentRegister = ({ navigation }) => {
       setError("");
     } else {
       setError(
-        "Please enter a valid name with only English lowercase letters."
+        "Please enter a valid name with only English and arabic letters."
       );
     }
   };
@@ -68,7 +68,7 @@ const ParentRegister = ({ navigation }) => {
   };
 
   const handlePasswordChange = (text) => {
-    setPassword(text.toLowerCase());
+    setPassword(text);
   };
 
   const handlePasswordBlur = () => {
@@ -89,6 +89,9 @@ const ParentRegister = ({ navigation }) => {
     }
   };
   const handleLogin = async () => {
+    if (error != "" || passwordError != "" || emailError != "") {
+      return;
+    }
     try {
       console.log({ name, email, password, gender });
       const response = await axios.post(`${API_URL}/users`, {

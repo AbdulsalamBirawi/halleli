@@ -6,7 +6,7 @@ import { Input } from "../../Component/TextInput";
 import Ellipse from "../../assets/Ellipse.png";
 import Loader from "../../Component/Loader";
 
-export const API_URL = "http://192.168.1.16:3000/api";
+export const API_URL = "http://192.168.43.79:3000/api";
 
 import axios from "axios";
 import { ContextGlobal } from "../../Store";
@@ -30,7 +30,7 @@ const CreateChild = () => {
 
   const handleNameBlur = () => {
     // Regular expression for Arabic characters and special characters
-    const arabicSpecialCharsRegex = /^[\u0600-\u06FF\s*!@#$%^&*()_+،؛؟]+$/;
+    const arabicSpecialCharsRegex = /^[\u0600-\u06FFa-zA-Z\s]+$/;
 
     // Check the validation when the input loses focus
     if (name.length === 0) {
@@ -39,7 +39,7 @@ const CreateChild = () => {
       setNameError("The name should be more than 3 characters.");
     } else if (!arabicSpecialCharsRegex.test(name)) {
       setNameError(
-        "Please enter a valid name with only Arabic characters and special characters."
+        "Please enter a valid name with only Arabic and English characters."
       );
     } else {
       setNameError("");
@@ -93,6 +93,9 @@ const CreateChild = () => {
     { label: "انثى", value: "female" },
   ];
   const handleLogin = async () => {
+    if (nameError != "") {
+      return;
+    }
     let config = {
       headers: {
         Authorization: "Bearer " + token,
@@ -134,7 +137,7 @@ const CreateChild = () => {
         direction: "ltr",
       }}
     >
-      <Loader visible={loder} />
+      <Loader Title={"تم اضافة الطفل بنجاح"} visible={loder} />
 
       <Image
         source={Ellipse}

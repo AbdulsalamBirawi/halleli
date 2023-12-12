@@ -16,7 +16,7 @@ import { ContextGlobal } from "../../Store";
 import logo from "../../assets/Group9.png";
 import SuccessTost from "../../Component/SuccessTost";
 
-const API_URL = "http://192.168.1.16:3000/api";
+const API_URL = "http://192.168.43.79:3000/api";
 
 const ParentLogin = ({ navigation }) => {
   const Context = useContext(ContextGlobal);
@@ -32,6 +32,8 @@ const ParentLogin = ({ navigation }) => {
     email: "",
     password: "",
   });
+  const [emailError, setemailError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
 
   useEffect(() => {
     async function fetchData() {
@@ -59,7 +61,50 @@ const ParentLogin = ({ navigation }) => {
     }
   }, [token]);
 
+  const handleEmailChange = (text) => {
+    setEmail(text.toLowerCase());
+  };
+
+  const handleEmailBlur = () => {
+    // Regular expression for basic email validation
+    const emailRegex = /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/;
+
+    // Check the validation when the input loses focus
+    if (email.length === 0) {
+      setemailError("The email should not be empty.");
+    } else if (emailRegex.test(email)) {
+      setemailError("");
+    } else {
+      setemailError("Please enter a valid email address.");
+    }
+  };
+
+  const handlePasswordChange = (text) => {
+    setPassword(text);
+  };
+
+  const handlePasswordBlur = () => {
+    // Validation for a password with more than 8 characters,
+    // including numbers, lowercase and uppercase letters, and special characters
+    const passwordRegex =
+      /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()_+])[0-9a-zA-Z!@#$%^&*()_+]{9,}$/;
+
+    // Check the validation when the input loses focus
+    if (password.length === 0) {
+      setPasswordError("The password should not be empty.");
+    } else if (password.length < 9 || !passwordRegex.test(password)) {
+      setPasswordError(
+        "Password must be more than 8 characters and include numbers, lowercase and uppercase letters, and special characters."
+      );
+    } else {
+      setPasswordError("");
+    }
+  };
+
   const handleLogins = async () => {
+    if (emailError != "" || passwordError != "") {
+      return;
+    }
     handleLogin({ email, password });
   };
 
@@ -108,8 +153,9 @@ const ParentLogin = ({ navigation }) => {
         <Input
           placeholder={"البريد الالكتروني"}
           value={email}
-          onChangeText={(text) => setEmail(text.toLowerCase())}
-          error={email ? false : <Text>the email field is empty</Text>}
+          onChangeText={handleEmailChange}
+          error={emailError}
+          onBlur={handleEmailBlur}
         >
           <MaterialIcons name={"email"} size={25} color="#AAAA" />
         </Input>
@@ -128,8 +174,9 @@ const ParentLogin = ({ navigation }) => {
           placeholder={" كلمة المرور"}
           Icon={"email"}
           value={password}
-          onChangeText={(text) => setPassword(text.toLowerCase())}
-          error={password ? false : <Text>the password field is empty</Text>}
+          onChangeText={handlePasswordChange}
+          onBlur={handlePasswordBlur}
+          error={passwordError}
           password
         >
           <FontAwesome name="lock" size={25} color="#AAAA" />

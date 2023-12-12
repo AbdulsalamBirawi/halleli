@@ -18,6 +18,7 @@ import { ContextGlobal } from "../Store/index";
 import { Input } from "./TextInput";
 import axios from "axios";
 import { useNavigation } from "@react-navigation/native";
+import image1 from "../assets/Group.png";
 const Transfer = ({
   visible = false,
   Title,
@@ -29,13 +30,14 @@ const Transfer = ({
   const Context = useContext(ContextGlobal);
   const [mony, setMony] = useState("");
   const [selectedValue, setSelectedValue] = useState(null);
+  const [conferm, setconferm] = useState(false);
   const open = Context.open;
   const setOpen = Context.setOpen;
   const getChild = Context.getChild;
   const navigation = useNavigation();
   const payToChild = async () => {
     const res = await axios.post(
-      `http://192.168.1.16:3000/api/transaction/fromFather/${childId}`,
+      `http://192.168.43.79:3000/api/transaction/fromFather/${childId}`,
 
       {
         amount: mony,
@@ -45,95 +47,137 @@ const Transfer = ({
         headers: { Authorization: "Bearer " + Context.token },
       }
     );
-    setVisible(false);
+
     setReload((p) => !p);
     setMony(undefined);
-    navigation.navigate("AddChild");
+    setconferm(true);
 
     DeviceEventEmitter.emit("creat->child", { reload: true });
   };
   const daysArray = Array.from({ length: 27 }, (_, index) => index + 1);
-  return (
-    visible && (
-      <View style={[style.container, { height, width }]}>
-        <View style={style.loader}>
-          <View
-            style={{
-              width: "100%",
-              height: 90,
-              flexDirection: "row",
-              justifyContent: "space-between",
-            }}
-          >
-            <View style={{ height: 5, width: 200 }}></View>
+  if (conferm == true) {
+    return (
+      visible && (
+        <View style={[style.container, { height, width }]}>
+          <View style={style.loader}>
             <Image
-              source={halall2}
-              style={{
-                height: 200,
-                width: 200,
-                resizeMode: "contain",
-                position: "absolute",
-                bottom: 0,
-                marginLeft: 90,
-              }}
+              source={image1}
+              style={{ height: 200, width: 200, marginLeft: 70 }}
             />
+            <Text style={{ textAlign: "center", fontSize: 20, margin: 10 }}>
+              تم اجراء العملية بنجاح
+            </Text>
+
             <TouchableOpacity
               onPress={() => {
-                setOpen(false);
+                setconferm(false);
+                setVisible(false);
+              }}
+              style={{
+                backgroundColor: "#3B3A7A",
+                width: "100%",
+                height: 50,
+                justifyContent: "center",
+                alignItems: "center",
+                borderRadius: 20,
+                marginTop: 40,
+                flexDirection: "row",
               }}
             >
-              <Ionicons name="close" size={24} color="black" />
+              <Text style={{ color: "#fff", fontWeight: "bold" }}>استمرار</Text>
+              <Image source={set} />
             </TouchableOpacity>
           </View>
-          <View style={{ gap: 10 }}>
-            <Text
+        </View>
+      )
+    );
+  } else {
+    return (
+      visible && (
+        <View style={[style.container, { height, width }]}>
+          <View style={style.loader}>
+            <View
               style={{
-                textAlign: "right",
-                fontSize: 27,
-                color: "#3B3A7A",
+                width: "100%",
+                height: 90,
+                flexDirection: "row",
+                justifyContent: "space-between",
               }}
             >
-              مبلغ التحويل
-            </Text>
-            <Input
-              placeholder={" المبلغ التحويل"}
-              value={mony}
-              onChangeText={(text) => setMony(text)}
-            />
-          </View>
-          <View>
-            <Picker
-              selectedValue={selectedValue}
-              onValueChange={(itemValue, itemIndex) =>
-                setSelectedValue(itemValue)
-              }
-            >
-              {daysArray.map((day) => (
-                <Picker.Item key={day} label={`Day ${day}`} value={day} />
-              ))}
-            </Picker>
-          </View>
+              <View style={{ height: 5, width: 200 }}></View>
+              <Image
+                source={halall2}
+                style={{
+                  height: 200,
+                  width: 200,
+                  resizeMode: "contain",
+                  position: "absolute",
+                  bottom: 0,
+                  marginLeft: 90,
+                }}
+              />
+              <TouchableOpacity
+                onPress={() => {
+                  setOpen(false);
+                }}
+              >
+                <Ionicons name="close" size={24} color="black" />
+              </TouchableOpacity>
+            </View>
+            <View style={{ gap: 10 }}>
+              <Text
+                style={{
+                  textAlign: "right",
+                  fontSize: 27,
+                  color: "#3B3A7A",
+                }}
+              >
+                مبلغ التحويل
+              </Text>
+              <Input
+                placeholder={" المبلغ التحويل"}
+                value={mony}
+                onChangeText={(text) => setMony(text)}
+              />
+            </View>
+            <View>
+              <Picker
+                selectedValue={selectedValue}
+                onValueChange={(itemValue, itemIndex) =>
+                  setSelectedValue(itemValue)
+                }
+              >
+                {daysArray.map((day) => (
+                  <Picker.Item
+                    key={day}
+                    label={`اليوم ${day} من الشهر`}
+                    value={day}
+                  />
+                ))}
+              </Picker>
+            </View>
 
-          <TouchableOpacity
-            onPress={() => payToChild()}
-            style={{
-              backgroundColor: "#3B3A7A",
-              width: "100%",
-              height: 50,
-              justifyContent: "center",
-              alignItems: "center",
-              borderRadius: 20,
-              marginTop: 40,
-              flexDirection: "row",
-            }}
-          >
-            <Text style={{ color: "#fff", fontWeight: "bold" }}>إرسال</Text>
-            <Image source={set} />
-          </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => payToChild()}
+              style={{
+                backgroundColor: "#3B3A7A",
+                width: "100%",
+                height: 50,
+                justifyContent: "center",
+                alignItems: "center",
+                borderRadius: 20,
+                marginTop: 40,
+                flexDirection: "row",
+              }}
+            >
+              <Text style={{ color: "#fff", fontWeight: "bold" }}>إرسال</Text>
+              <Image source={set} />
+            </TouchableOpacity>
+          </View>
         </View>
-      </View>
-    )
-  );
+      )
+    );
+  }
 };
 
 const style = StyleSheet.create({

@@ -60,7 +60,55 @@ export default function AddTask({ setReload }) {
       setNewTask({ ...newTask, date: date });
     }
   };
+
+  console.log(childrens);
+
+  const [taskNameError, setTaskNameError] = useState("");
+
+  const handleTaskNameChange = (input) => {
+    setNewTask({ ...newTask, taskName: input });
+  };
+
+  const handleTaskNameBlur = () => {
+    // Regular expression for Arabic characters
+    const arabicRegex = /^[\u0600-\u06FFa-zA-Z\s]+$/;
+
+    if (newTask.taskName.length < 3 || newTask.taskName.length > 30) {
+      setTaskNameError("Task name should be between 3 and 30 characters.");
+    } else if (!arabicRegex.test(newTask.taskName)) {
+      setTaskNameError(
+        "Task name should contain only Arabic and English characters."
+      );
+    } else {
+      setTaskNameError("");
+    }
+  };
+
+  const [descError, setDescError] = useState("");
+
+  const handleDescChange = (input) => {
+    setNewTask({ ...newTask, desc: input });
+  };
+
+  const handleDescBlur = () => {
+    // Regular expression for Arabic characters
+    const arabicRegex = /^[\u0600-\u06FFa-zA-Z\s]+$/;
+    if (newTask.desc.length < 3 || newTask.desc.length > 150) {
+      setDescError("Description should be between 3 and 150 characters.");
+    } else if (!arabicRegex.test(newTask.desc)) {
+      setDescError(
+        "Description should contain only Arabic and English characters."
+      );
+    } else {
+      setDescError("");
+    }
+  };
+
   const handelSubmit = async () => {
+    if (taskNameError != "" || descError != "") {
+      return;
+    }
+
     if (isChild) {
       const data = {
         desc: newTask.desc,
@@ -70,7 +118,7 @@ export default function AddTask({ setReload }) {
         valueTask: newTask.mony,
         childId: context.loggedInChild._id,
       };
-      await axios.post("http://192.168.1.16:3000/api/requesttask", data);
+      await axios.post("http://192.168.43.79:3000/api/requesttask", data);
       DeviceEventEmitter.emit("tasks->reload", { reload: true });
       navigation.goBack();
       setsubmited(true);
@@ -85,7 +133,7 @@ export default function AddTask({ setReload }) {
       childId: selectedChild,
     };
 
-    await axios.post("http://192.168.1.16:3000/api/task", data, {
+    await axios.post("http://192.168.43.79:3000/api/task", data, {
       headers: {
         Authorization: "Bearer " + context.token,
       },
@@ -93,45 +141,6 @@ export default function AddTask({ setReload }) {
     navigation.goBack();
     DeviceEventEmitter.emit("tasks->reload", { reload: true });
     setsubmited(true);
-  };
-  console.log(childrens);
-
-  const [taskNameError, setTaskNameError] = useState("");
-
-  const handleTaskNameChange = (input) => {
-    setNewTask({ ...newTask, taskName: input });
-  };
-
-  const handleTaskNameBlur = () => {
-    // Regular expression for Arabic characters
-    const arabicRegex = /^[\u0600-\u06FF\s]+$/;
-
-    if (newTask.taskName.length < 3 || newTask.taskName.length > 30) {
-      setTaskNameError("Task name should be between 3 and 30 characters.");
-    } else if (!arabicRegex.test(newTask.taskName)) {
-      setTaskNameError("Task name should contain only Arabic characters.");
-    } else {
-      setTaskNameError("");
-    }
-  };
-
-  const [descError, setDescError] = useState("");
-
-  const handleDescChange = (input) => {
-    setNewTask({ ...newTask, desc: input });
-  };
-
-  const handleDescBlur = () => {
-    // Regular expression for Arabic characters
-    const arabicRegex = /^[\u0600-\u06FF\s]+$/;
-
-    if (newTask.desc.length < 3 || newTask.desc.length > 150) {
-      setDescError("Description should be between 3 and 150 characters.");
-    } else if (!arabicRegex.test(newTask.desc)) {
-      setDescError("Description should contain only Arabic characters.");
-    } else {
-      setDescError("");
-    }
   };
 
   return (
@@ -242,8 +251,8 @@ export default function AddTask({ setReload }) {
             اختر الطفل
           </Text>
           <View style={{}}>
-            {childrens.map((option) => (
-              <View style={{}}>
+            {childrens.map((option, idx) => (
+              <View style={{}} key={idx}>
                 {option.gender == "male" ? (
                   <Image source={male} style={{ height: 70, width: 70 }} />
                 ) : (
@@ -327,19 +336,6 @@ export default function AddTask({ setReload }) {
                     }}
                   >
                     <TouchableOpacity
-                      onPress={() => handelSubmit()}
-                      style={{
-                        backgroundColor: "green",
-                        paddingHorizontal: 40,
-                        paddingVertical: 10,
-                        borderRadius: 10,
-                      }}
-                    >
-                      <Text style={{ color: "white", fontSize: 15 }}>
-                        تأكيد
-                      </Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
                       onPress={() => toggleModal(null)}
                       style={{
                         backgroundColor: "red",
@@ -350,6 +346,19 @@ export default function AddTask({ setReload }) {
                     >
                       <Text style={{ color: "white", fontSize: 15 }}>
                         الغاء
+                      </Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      onPress={() => handelSubmit()}
+                      style={{
+                        backgroundColor: "green",
+                        paddingHorizontal: 40,
+                        paddingVertical: 10,
+                        borderRadius: 10,
+                      }}
+                    >
+                      <Text style={{ color: "white", fontSize: 15 }}>
+                        تأكيد
                       </Text>
                     </TouchableOpacity>
                   </View>

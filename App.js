@@ -72,7 +72,7 @@ function RooteTab() {
       // Fetch notifications from a URL
       const id = user?._id || child?._id;
       const response = await axios.get(
-        `http://192.168.1.16:3000/api/notifications?id=${id}`
+        `http://192.168.43.79:3000/api/notifications?id=${id}`
       );
 
       const notifications = response.data;
@@ -128,7 +128,7 @@ function RooteTab() {
 
   const deleteNotification = async (id) => {
     const res = await axios.delete(
-      `http://192.168.1.16:3000/api/notifications/${id}`
+      `http://192.168.43.79:3000/api/notifications/${id}`
     );
   };
   // Second, call the method
@@ -136,7 +136,7 @@ function RooteTab() {
   // try {
   //   // Fetch notifications from a URL
   //   const response = await fetch(
-  //     `http://192.168.1.16:3000/api/notifications?id=${user}`
+  //     `http://192.168.43.79:3000/api/notifications?id=${user}`
   //   );
 
   //   if (!response.ok) {

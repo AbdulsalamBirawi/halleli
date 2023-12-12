@@ -17,7 +17,7 @@ import { Picker } from "@react-native-picker/picker";
 import female from "../assets/female.png";
 import { Input } from "../Component/TextInput";
 import { ScrollView } from "react-native";
-const API_URL = "http://192.168.1.16:3000/api";
+const API_URL = "http://192.168.43.79:3000/api";
 
 const Transaction = ({ navigation }) => {
   const Context = useContext(ContextGlobal);

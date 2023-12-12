@@ -7,7 +7,7 @@ import axios from "axios";
 import { ContextGlobal } from "../Store";
 import { Ionicons } from "@expo/vector-icons";
 import { Modal } from "react-native";
-const API_URL = "http://192.168.1.16:3000/api";
+const API_URL = "http://192.168.43.79:3000/api";
 
 const Portfolio = ({ navigation }) => {
   const Context = useContext(ContextGlobal);
@@ -220,7 +220,7 @@ const Portfolio = ({ navigation }) => {
               </View>
             ))}
         </View>
-        <View style={{ width: "100%", gap: 10 }}>
+        <View style={{ width: "100%", gap: 10, marginTop: 10 }}>
           {tasks
             .filter((e) => new Date(e.time) > Date.now())
             .map((item, index) => (
@@ -246,7 +246,7 @@ const Portfolio = ({ navigation }) => {
               >
                 <CheckBox
                   checked={item._id == TaskId}
-                  onPress={() => {
+                  onPress={(e) => {
                     setTaskId(item._id);
                   }}
                 />
@@ -366,6 +366,7 @@ const Portfolio = ({ navigation }) => {
                       fontSize: 20,
                       color: "#3B3A7A",
                       fontWeight: "500",
+                      textAlign: "right",
                     }}
                   >
                     اسم المهمة:{" "}
@@ -381,7 +382,13 @@ const Portfolio = ({ navigation }) => {
                     padding: 10,
                   }}
                 >
-                  <Text style={{ fontSize: 20, color: "#3B3A7A" }}>
+                  <Text
+                    style={{
+                      fontSize: 20,
+                      color: "#3B3A7A",
+                      textAlign: "right",
+                    }}
+                  >
                     تفاصيل المهمة :{" "}
                     <Text style={{ color: "black" }}>
                       {tasks[selectedTaskIndex]?.desc}
@@ -395,7 +402,13 @@ const Portfolio = ({ navigation }) => {
                     padding: 10,
                   }}
                 >
-                  <Text style={{ fontSize: 20, color: "#3B3A7A" }}>
+                  <Text
+                    style={{
+                      fontSize: 20,
+                      color: "#3B3A7A",
+                      textAlign: "right",
+                    }}
+                  >
                     الوقت النهائي :{" "}
                     <Text style={{ color: "black" }}>
                       {new Date(tasks[selectedTaskIndex]?.time).toLocaleString(
@@ -416,7 +429,13 @@ const Portfolio = ({ navigation }) => {
                     padding: 10,
                   }}
                 >
-                  <Text style={{ fontSize: 20, color: "#3B3A7A" }}>
+                  <Text
+                    style={{
+                      fontSize: 20,
+                      color: "#3B3A7A",
+                      textAlign: "right",
+                    }}
+                  >
                     المبلغ المستحق :{" "}
                     <Text style={{ color: "black" }}>
                       {tasks[selectedTaskIndex]?.valueTask}

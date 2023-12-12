@@ -13,13 +13,34 @@ import SuccessTost from "../../Component/SuccessTost";
 const ResetPass = ({ navigation }) => {
   const [email, setEmail] = React.useState("");
   const [loder, setLoder] = React.useState(false);
+  const [emailError, setemailError] = React.useState("");
 
   const changepass = () => {
+    if (emailError != "") {
+      return;
+    }
     setLoder(true);
     setTimeout(() => {
       setLoder(false);
       navigation.navigate("Createpassword", { email: email });
     }, 2000);
+  };
+  const handleEmailChange = (text) => {
+    setEmail(text.toLowerCase());
+  };
+
+  const handleEmailBlur = () => {
+    // Regular expression for basic email validation
+    const emailRegex = /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/;
+
+    // Check the validation when the input loses focus
+    if (email.length === 0) {
+      setemailError("The email should not be empty.");
+    } else if (emailRegex.test(email)) {
+      setemailError("");
+    } else {
+      setemailError("Please enter a valid email address.");
+    }
   };
   return (
     <View
@@ -69,8 +90,10 @@ const ResetPass = ({ navigation }) => {
 
         <Input
           placeholder={"البريد الالكتروني"}
-          onChangeText={(text) => setEmail(text)}
           value={email}
+          onChangeText={handleEmailChange}
+          error={emailError}
+          onBlur={handleEmailBlur}
         >
           <MaterialIcons name={"email"} size={25} color="#AAAA" />
         </Input>

@@ -10,7 +10,7 @@ import { Button } from "../../Component/Button";
 import { Input } from "../../Component/TextInput";
 import Ellipse from "../../assets/Ellipse.png";
 import { ContextGlobal } from "../../Store";
-const API_URL = "http://192.168.1.16:3000/api";
+const API_URL = "http://192.168.43.79:3000/api";
 import Loader from "../../Component/Loader";
 import SuccessTost from "../../Component/SuccessTost";
 
@@ -20,8 +20,12 @@ const Createpassword = ({ route, navigation }) => {
   const { email } = route.params;
   const [password, setPassword] = React.useState("");
   const [loder, setLoder] = React.useState(false);
+  const [passwordError, setPasswordError] = React.useState("");
 
   const handelChangePassword = async () => {
+    if (passwordError != "") {
+      return;
+    }
     try {
       const response = await axios.post(`${API_URL}/users/newpass`, {
         email,
@@ -39,6 +43,28 @@ const Createpassword = ({ route, navigation }) => {
     } catch (error) {
       console.error("حدث خطأ أثناء تسجيل الدخول:", error);
       throw error;
+    }
+  };
+
+  const handlePasswordChange = (text) => {
+    setPassword(text);
+  };
+
+  const handlePasswordBlur = () => {
+    // Validation for a password with more than 8 characters,
+    // including numbers, lowercase and uppercase letters, and special characters
+    const passwordRegex =
+      /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()_+])[0-9a-zA-Z!@#$%^&*()_+]{9,}$/;
+
+    // Check the validation when the input loses focus
+    if (password.length === 0) {
+      setPasswordError("The password should not be empty.");
+    } else if (password.length < 9 || !passwordRegex.test(password)) {
+      setPasswordError(
+        "Password must be more than 8 characters and include numbers, lowercase and uppercase letters, and special characters."
+      );
+    } else {
+      setPasswordError("");
     }
   };
 
@@ -89,9 +115,11 @@ const Createpassword = ({ route, navigation }) => {
         </Text>
 
         <Input
-          placeholder={"البريد الالكتروني"}
+          placeholder={"كلمة المرور الجديدة"}
           value={password}
-          onChangeText={(text) => setPassword(text)}
+          onChangeText={handlePasswordChange}
+          onBlur={handlePasswordBlur}
+          error={passwordError}
           password
         >
           <FontAwesome name="lock" size={25} color="#AAAA" />

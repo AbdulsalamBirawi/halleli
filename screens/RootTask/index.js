@@ -23,7 +23,7 @@ import { ContextGlobal } from "../../Store";
 import DatePicker from "@react-native-community/datetimepicker";
 
 export default RootTask = ({ navigation }) => {
-  const api = "http://192.168.1.16:3000/api";
+  const api = "http://192.168.43.79:3000/api";
   const options = [
     { label: "بدنية", value: 1 },
     { label: "عقلية", value: 2 },
@@ -119,6 +119,9 @@ export default RootTask = ({ navigation }) => {
     setsubmited({ ...submited, delet: true });
   };
   const handelEditeTask = async () => {
+    if (descError != "" || taskNameError != "") {
+      return;
+    }
     const newTask = editeTask;
     const data = {
       desc: newTask.desc || viewTask.desc,
@@ -149,10 +152,48 @@ export default RootTask = ({ navigation }) => {
     const res = await axios.put(`${api}/task/${completeTaskId}`, {
       status: false,
     });
-    console.log(res);
   };
-  console.log(tasks);
-  console.log(viewTask);
+  const [taskNameError, setTaskNameError] = useState("");
+
+  const handleTaskNameChange = (input) => {
+    setediteTask({ ...editeTask, taskName: input });
+  };
+
+  const handleTaskNameBlur = () => {
+    // Regular expression for Arabic characters
+    const arabicRegex = /^[\u0600-\u06FFa-zA-Z\s]+$/;
+
+    if (editeTask.taskName.length < 3 || editeTask.taskName.length > 30) {
+      setTaskNameError("Task name should be between 3 and 30 characters.");
+    } else if (!arabicRegex.test(editeTask.taskName)) {
+      setTaskNameError(
+        "Task name should contain only Arabic and English characters."
+      );
+    } else {
+      setTaskNameError("");
+    }
+  };
+
+  const [descError, setDescError] = useState("");
+
+  const handleDescChange = (input) => {
+    setediteTask({ ...editeTask, desc: input });
+  };
+
+  const handleDescBlur = () => {
+    // Regular expression for Arabic characters
+    const arabicRegex = /^[\u0600-\u06FFa-zA-Z\s]+$/;
+    if (editeTask.desc.length < 3 || editeTask.desc.length > 150) {
+      setDescError("Description should be between 3 and 150 characters.");
+    } else if (!arabicRegex.test(editeTask.desc)) {
+      setDescError(
+        "Description should contain only Arabic and English characters."
+      );
+    } else {
+      setDescError("");
+    }
+  };
+
   return (
     <View>
       <Deteils
@@ -710,10 +751,7 @@ export default RootTask = ({ navigation }) => {
                           <CheckBox
                             key={option.value}
                             title={option?.label}
-                            checked={
-                              option.value === editTypeTask ||
-                              option?.label === editeTask?.typeTask
-                            }
+                            checked={option?.value === editTypeTask}
                             onPress={() => handleCheckboxChange(option.value)}
                           />
                         ))}
@@ -730,14 +768,12 @@ export default RootTask = ({ navigation }) => {
                         اسم المهمة{" "}
                       </Text>
                       <Input
-                        onChangeText={(e) => {
-                          setediteTask((x) => {
-                            return { ...x, taskName: e };
-                          });
-                        }}
+                        onChangeText={(e) => handleTaskNameChange(e)}
+                        onBlur={handleTaskNameBlur}
                         defaultValue={editeTask?.name}
                         placeholder={"اسم المهمة"}
                         backColor={"#fff"}
+                        error={taskNameError}
                       />
                     </View>
                     <View style={{ marginTop: 20, marginTop: 20 }}>
@@ -751,14 +787,12 @@ export default RootTask = ({ navigation }) => {
                         وصف المهمة{" "}
                       </Text>
                       <Input
-                        onChangeText={(e) =>
-                          setediteTask((x) => {
-                            return { ...x, desc: e };
-                          })
-                        }
+                        onChangeText={(e) => handleDescChange(e)}
+                        onBlur={handleDescBlur}
                         defaultValue={editeTask?.desc}
                         placeholder={"وصف المهمة"}
                         backColor={"#fff"}
+                        error={descError}
                       />
                     </View>
 
