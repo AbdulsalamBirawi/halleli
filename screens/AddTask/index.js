@@ -61,8 +61,6 @@ export default function AddTask({ setReload }) {
     }
   };
 
-  console.log(childrens);
-
   const [taskNameError, setTaskNameError] = useState("");
 
   const handleTaskNameChange = (input) => {

@@ -31,6 +31,9 @@ export default function AddGoal() {
     setnewGoal({ ...newGoal, typeGoal: selectedValue });
   };
   const handleSubmit = async () => {
+    if (taskNameError != "") {
+      return;
+    }
     const data = {
       typeGoal: newGoal.typeGoal || selectedValue,
       name: newGoal.name,
@@ -42,6 +45,28 @@ export default function AddGoal() {
     navigate.goBack();
     DeviceEventEmitter.emit("goal->reload", { reload: true });
   };
+
+  const [taskNameError, setTaskNameError] = useState("");
+
+  const handleTaskNameChange = (input) => {
+    setnewGoal({ ...newGoal, name: input });
+  };
+
+  const handleTaskNameBlur = () => {
+    // Regular expression for Arabic characters
+    const arabicRegex = /^[\u0600-\u06FFa-zA-Z\s]+$/;
+
+    if (newGoal.name.length < 3 || newGoal.name.length > 30) {
+      setTaskNameError("Task name should be between 3 and 30 characters.");
+    } else if (!arabicRegex.test(newGoal.name)) {
+      setTaskNameError(
+        "Task name should contain only Arabic and English characters."
+      );
+    } else {
+      setTaskNameError("");
+    }
+  };
+
   return (
     <ScrollView
       style={{
@@ -56,10 +81,11 @@ export default function AddGoal() {
         </Text>
 
         <Input
-          onChangeText={(e) => setnewGoal({ ...newGoal, name: e })}
+          onChangeText={(e) => handleTaskNameChange(e)}
+          onBlur={handleTaskNameBlur}
           placeholder={"اسم الهدف"}
           backColor={"#fff"}
-          error={newGoal.name ? false : <Text>the name is empty</Text>}
+          error={taskNameError}
         />
       </View>
 
