@@ -7,17 +7,19 @@ import {
   Modal,
   ScrollView,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useState,useContext, useEffect } from "react";
 import Card from "../../Component/VisaCard"; // Importing the Card component
 import { AntDesign, Ionicons } from "@expo/vector-icons";
 import { ListaSavings } from "../../Component/ListaSavings"; // Importing the ListaSavings component
 import icons from "../../assets/card_visa_bg.png";
 import { styles } from "./style"; // Importing styles from an external file
+import { ContextGlobal } from "../../Store";
+import axios from "axios";
 
 // SavingsScreen component that displays various elements
 const SavingsScreen = ({ route, navigation }) => {
   const { item, childData } = route.params;
-
+  const Context = useContext(ContextGlobal);
   const toggleModal = () => {
     setModalVisible(!isModalVisible);
     setisLogout(false);
@@ -29,7 +31,14 @@ const SavingsScreen = ({ route, navigation }) => {
 
   const [isModalVisible, setModalVisible] = useState(false);
   const [isLogout, setisLogout] = useState(false);
-
+  const [data, setData] = useState([]);
+  useEffect(() => {
+    (async () => {
+        const id = Context.loggedInChild?._id || item?._id
+        const ff = await axios.get(`http://192.168.1.66:3000/api/transaction-hisories?user=${id}&account=non-current`)
+        setData(ff.data)
+    })()
+}, []);
   return (
     <ScrollView style={styles.container}>
       {/* Header section */}
@@ -62,7 +71,7 @@ const SavingsScreen = ({ route, navigation }) => {
         </View>
 
         {/* Display the ListaSavings component with specific data */}
-        {/* <ListaSavings data={data} savings={true} /> */}
+        <ListaSavings data={data} savings={true} /> 
       </View>
       <Modal
         animationType="slide"

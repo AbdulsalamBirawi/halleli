@@ -3,7 +3,7 @@ import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as SecureStore from "expo-secure-store";
 
-const API_URL = "http://192.168.43.79:3000/api";
+const API_URL = "http://192.168.1.66:3000/api";
 export const ContextGlobal = React.createContext();
 
 const ContextData = (props) => {
@@ -160,7 +160,17 @@ const ContextData = (props) => {
       throw error;
     }
   };
-
+  useEffect(() => {
+    if (isParent) {
+      return
+    }
+    const int = setInterval(() => {
+      refreshChild();
+    }, 5 * 1000)
+    return ()=> {
+      clearInterval(int)
+    }
+  }, []);
   return (
     <ContextGlobal.Provider
       value={{

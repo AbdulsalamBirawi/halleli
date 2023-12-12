@@ -17,12 +17,12 @@ export const ListaSavings = ({ data, savings }) => {
           <View>
             <View style={styles.price}>
               {/* Display the item's price, with color based on 'savings' */}
-              <Text style={{ fontSize: 18, color: savings ? "green" : "red" }}>
+              <Text style={{ fontSize: 18, color: item.price > 0 ? "green" : "red" }}>
                 {item.price}ريال
               </Text>
               <View style={styles.icon}>
-                {/* Display an arrow icon, with color based on 'savings' */}
-                {savings ? (
+                {/* Display an arrow icon, with color based on 'item.price > 0' */}
+                {item.price > 0 ? (
                   <Feather name="arrow-down-left" size={20} color="green" />
                 ) : (
                   <Feather name="arrow-up-right" size={20} color="red" />

@@ -7,16 +7,20 @@ import {
   Modal,
   TouchableOpacity,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useState,useContext, useEffect } from "react";
 import Card from "../../Component/VisaCard"; // Importing the Card component
 import { Entypo, Feather, AntDesign, Ionicons } from "@expo/vector-icons";
 import icons2 from "../../assets/card_visa_bg-2.png";
 import { ListaSavings } from "../../Component/ListaSavings"; // Importing the ListaSavings component
 import { styles } from "./style"; // Importing styles from an external file
+import { ContextGlobal } from "../../Store";
+import axios from "axios";
 
 // WalletScreen component that displays various elements
 const WalletScreen = ({ route, navigation }) => {
   const { item, childData } = route.params;
+  const [data, setData] = useState([]);
+  const Context = useContext(ContextGlobal);
   let child = null;
   try {
     child = JSON.parse(childData);
@@ -36,7 +40,13 @@ const WalletScreen = ({ route, navigation }) => {
 
   const [isModalVisible, setModalVisible] = useState(false);
   const [isLogout, setisLogout] = useState(false);
-
+  useEffect(() => {
+      (async () => {
+          const id = Context.loggedInChild?._id || item?._id
+          const ff = await axios.get(`http://192.168.1.66:3000/api/transaction-hisories?user=${id}&account=current`)
+          setData(ff.data)
+      })()
+  }, [Context]);
   return (
     <ScrollView style={styles.container}>
       {/* Header section */}
@@ -81,7 +91,7 @@ const WalletScreen = ({ route, navigation }) => {
         </View>
 
         {/* Display the ListaSavings component with specific data */}
-        {/* <ListaSavings data={data} /> */}
+        <ListaSavings data={data} /> 
       </View>
       <Modal
         animationType="slide"
